@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Manage Store</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .form-section { margin-top: 20px; }
+    .table th, .table td { vertical-align: middle; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+<div class="container py-4">
+  <h3 class="mb-4">Manage Store</h3>
+
+  <!-- Filter Form -->
+  <form method="get" class="row g-2">
+    <div class="col-md-3">
+      <input type="text" name="code" placeholder="Code" class="form-control" value="{{ request.args.get('code', '') }}">
+    </div>
+    <div class="col-md-3">
+      <select name="section" class="form-select">
+        <option value="">All Sections</option>
+        <option value="NOTES" {% if request.args.get('section') == 'NOTES' %}selected{% endif %}>NOTES</option>
+        <option value="PRACTICE BOOK" {% if request.args.get('section') == 'PRACTICE BOOK' %}selected{% endif %}>PRACTICE BOOK</option>
+        <option value="PYQ" {% if request.args.get('section') == 'PYQ' %}selected{% endif %}>PYQ</option>
+      </select>
+    </div>
+    <div class="col-md-3">
+      <select name="label" class="form-select">
+        <option value="">All Labels</option>
+        <option value="Free" {% if request.args.get('label') == 'Free' %}selected{% endif %}>Free</option>
+        <option value="Paid" {% if request.args.get('label') == 'Paid' %}selected{% endif %}>Paid</option>
+      </select>
+    </div>
+    <div class="col-md-3">
+      <button type="submit" class="btn btn-primary w-100">Search</button>
+    </div>
+  </form>
+
+  <!-- Insert Form -->
+  <form method="POST" action="{{ url_for('admin_auth.add_store') }}" class="form-section row g-2">
+    <h5>Add New Content</h5>
+    <div class="col-md-2"><input name="code" class="form-control" placeholder="Code" required></div>
+    <div class="col-md-2"><input name="title" class="form-control" placeholder="Title" required></div>
+    <div class="col-md-2"><input name="subtitle" class="form-control" placeholder="Subtitle"></div>
+    <div class="col-md-1"><input name="price" class="form-control" placeholder="Price" type="number" step="0.01"></div>
+    <div class="col-md-2"><input name="details" class="form-control" placeholder="Details"></div>
+    <div class="col-md-1">
+      <select name="label" class="form-select" onchange="toggleUrl(this)">
+        <option value="Free">Free</option>
+        <option value="Paid">Paid</option>
+      </select>
+    </div>
+    <div class="col-md-2"><input name="url" class="form-control url-field" placeholder="URL (Free only)"></div>
+    <div class="col-md-2"><input name="image_url" class="form-control" placeholder="Image URL"></div>
+    <div class="col-md-2">
+      <select name="section" class="form-select">
+        <option value="NOTES">NOTES</option>
+        <option value="PRACTICE BOOK">PRACTICE BOOK</option>
+        <option value="PYQ">PYQ</option>
+      </select>
+    </div>
+    <div class="col-md-2">
+      <select name="status" class="form-select">
+        <option value="active">Active</option>
+        <option value="inactive">Inactive</option>
+      </select>
+    </div>
+    <div class="col-md-2"><button type="submit" class="btn btn-success w-100">Insert</button></div>
+  </form>
+
+  <!-- Data Table -->
+  <div class="form-section">
+    <table class="table table-bordered table-hover">
+      <thead class="table-light">
+      <tr>
+        <th>Code</th><th>Title</th><th>Subtitle</th><th>Price</th><th>Label</th>
+        <th>URL</th><th>Section</th><th>Status</th><th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for item in contents %}
+        <tr>
+          <td>{{ item.code }}</td>
+          <td>{{ item.title }}</td>
+          <td>{{ item.subtitle }}</td>
+          <td>{{ item.price }}</td>
+          <td>{{ item.label }}</td>
+          <td>{{ item.url }}</td>
+          <td>{{ item.section }}</td>
+          <td>{{ item.status }}</td>
+          <td>
+            <!-- Edit -->
+            <button class="btn btn-sm btn-warning" data-bs-toggle="modal"
+                    data-bs-target="#editModal{{ item.id }}">Edit</button>
+
+            <!-- Delete -->
+            <form action="{{ url_for('admin_auth.delete_store') }}" method="POST" style="display:inline;" onsubmit="return confirm('Delete this item?')">
+              <input type="hidden" name="id" value="{{ item.id }}">
+              <button class="btn btn-sm btn-danger">Delete</button>
+            </form>
+          </td>
+        </tr>
+
+        <!-- Edit Modal -->
+        <div class="modal fade" id="editModal{{ item.id }}" tabindex="-1">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <form action="{{ url_for('admin_auth.edit_store') }}" method="POST">
+                <div class="modal-header"><h5 class="modal-title">Edit Content</h5></div>
+                <div class="modal-body row g-2">
+                  <input type="hidden" name="id" value="{{ item.id }}">
+                  <div class="col-md-6"><input name="code" class="form-control" value="{{ item.code }}"></div>
+                  <div class="col-md-6"><input name="title" class="form-control" value="{{ item.title }}"></div>
+                  <div class="col-md-6"><input name="subtitle" class="form-control" value="{{ item.subtitle }}"></div>
+                  <div class="col-md-3"><input name="price" class="form-control" type="number" step="0.01" value="{{ item.price }}"></div>
+                  <div class="col-md-3"><input name="details" class="form-control" value="{{ item.details }}"></div>
+                  <div class="col-md-4">
+                    <select name="label" class="form-select">
+                      <option value="Free" {% if item.label == 'Free' %}selected{% endif %}>Free</option>
+                      <option value="Paid" {% if item.label == 'Paid' %}selected{% endif %}>Paid</option>
+                    </select>
+                  </div>
+                  <div class="col-md-4"><input name="url" class="form-control" value="{{ item.url }}"></div>
+                  <div class="col-md-4"><input name="image_url" class="form-control" value="{{ item.image_url }}"></div>
+                  <div class="col-md-4">
+                    <select name="section" class="form-select">
+                      <option value="NOTES" {% if item.section == 'NOTES' %}selected{% endif %}>NOTES</option>
+                      <option value="PRACTICE BOOK" {% if item.section == 'PRACTICE BOOK' %}selected{% endif %}>PRACTICE BOOK</option>
+                      <option value="PYQ" {% if item.section == 'PYQ' %}selected{% endif %}>PYQ</option>
+                    </select>
+                  </div>
+                  <div class="col-md-4">
+                    <select name="status" class="form-select">
+                      <option value="active" {% if item.status == 'active' %}selected{% endif %}>Active</option>
+                      <option value="inactive" {% if item.status == 'inactive' %}selected{% endif %}>Inactive</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="submit" class="btn btn-primary">Save Changes</button>
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  function toggleUrl(selectEl) {
+    const urlInput = selectEl.closest('form').querySelector('.url-field');
+    if (selectEl.value === 'Paid') {
+      urlInput.classList.add('hidden');
+      urlInput.value = '';
+    } else {
+      urlInput.classList.remove('hidden');
+    }
+  }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

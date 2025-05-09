@@ -1,0 +1,64 @@
+{% extends 'users/auth/base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<style>
+    .toggle-password {
+        position: absolute;
+        top: 50%;
+        right: 15px;
+        transform: translateY(-50%);
+        cursor: pointer;
+        font-size: 0.9rem;
+        color: #008080;
+        font-weight: 500;
+        user-select: none;
+    }
+
+    .form-group.position-relative {
+        position: relative;
+    }
+</style>
+
+<h3 class="text-center">Admin Account</h3>
+
+{% if step == 'email' %}
+<form action="{{ url_for('admin.admin_login') }}" method="POST">
+    <div class="form-group">
+        <input type="email" id="email" name="email" class="form-control" placeholder=" " required>
+        <label for="email" class="form-label">Email*</label>
+    </div>
+    <button type="submit" class="btn btn-primary btn-continue btn-block">Continue</button>
+</form>
+
+{% elif step == 'password' %}
+<form action="{{ url_for('admin.admin_login') }}" method="POST">
+    <div class="form-group position-relative">
+        <input type="password" id="password" name="password" class="form-control" placeholder=" " required>
+        <label for="password" class="form-label">Password*</label>
+        <span id="toggle-password" class="toggle-password" onclick="togglePassword()">Show</span>
+    </div>
+    <button type="submit" class="btn btn-primary btn-continue btn-block">Continue</button>
+</form>
+
+<div class="text-center mt-2">
+    <a href="{{ url_for('admin.admin_login', go_back=1) }}" id="go-back-link">Go Back</a>
+</div>
+{% endif %}
+
+<script>
+    function togglePassword() {
+        const passwordInput = document.getElementById("password");
+        const toggleText = document.getElementById("toggle-password");
+
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            toggleText.textContent = "Hide";
+        } else {
+            passwordInput.type = "password";
+            toggleText.textContent = "Show";
+        }
+    }
+</script>
+{% endblock %}

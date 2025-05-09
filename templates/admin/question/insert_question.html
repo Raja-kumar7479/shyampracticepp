@@ -1,0 +1,62 @@
+{% extends 'admin/question/base_1.html' %}
+
+{% block title %}Insert Question{% endblock %}
+
+{% block content %}
+  <h2>Insert New Question</h2>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }} mt-2">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <form method="POST" class="border p-4 bg-white rounded shadow-sm">
+
+    <div class="mb-3">
+      <label class="form-label">Question ID (optional)</label>
+      <input type="text" name="question_id" class="form-control" placeholder="e.g., {{ next_question_id }}">
+      <div class="form-text text-muted">Next suggested ID: <strong>{{ next_question_id }}</strong></div>
+    </div>
+
+    {% for field in ['paper_code', 'subject', 'topic', 'question_text', 'option_a', 'option_b', 'option_c', 'option_d', 'answer_text', 'paper_set', 'explanation_link'] %}
+      <div class="mb-3 question-field" id="{{ field }}_container">
+        <label class="form-label">{{ field.replace('_', ' ').title() }}</label>
+        <input type="text" name="{{ field }}" class="form-control" id="{{ field }}">
+      </div>
+    {% endfor %}
+
+    <div class="mb-3">
+      <label class="form-label">Question Type</label>
+      <select name="question_type" class="form-select" id="question_type" onchange="handleQuestionTypeChange()" required>
+        <option value="MCQ">MCQ</option>
+        <option value="MSQ">MSQ</option>
+        <option value="NAT">NAT</option>
+      </select>
+    </div>
+
+    <div class="mb-3" id="mcq_field">
+      <label class="form-label" id="mcq_label">Correct Option</label>
+      <input type="text" name="correct_option_mcq" class="form-control" placeholder="A or A,B">
+    </div>
+
+    <div class="mb-3" id="nat_field" style="display: none;">
+      <label class="form-label">Correct Value (NAT)</label>
+      <input type="number" step="0.01" name="correct_option_nat" class="form-control" placeholder="e.g., 23.89">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Year</label>
+      <input type="number" name="year" min="2000" max="2030" class="form-control" value="2025" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Image URL (optional)</label>
+      <input type="text" name="image_path" class="form-control" placeholder="https://example.com/image.jpg">
+    </div>
+
+    <button type="submit" class="btn btn-success">➕ Insert Question</button>
+  </form>
+{% endblock %}

@@ -1,0 +1,266 @@
+{% extends 'users/base.html' %}
+
+{% block content %}
+
+    <!-- Service Start -->
+     <div class="container-xxl py-5">
+        <div class="container">
+            <div class="row g-2 text-center">
+                <div class="col-12 wow fadeInUp" data-wow-delay="0.3s">
+                    <div class="row g-2 text-center">
+                      </div>
+                      <h2 style="color: #008080; font-size: 1.8rem; font-weight: 600; margin-bottom: 10px;">
+                        Reach Your Learning Goals with ShyamPractice Paper
+                      </h2>
+                      <p style="font-size: 0.95rem; color: #333; line-height: 1.6;">
+                        Get instant access to notes, practice papers, video tutorials, skill resources, and top-quality courses — all in one place.
+                      </p>                      
+                </div>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="service-item text-center pt-3 shadow rounded-4">
+                        <div class="p-4">
+                            <i class="fas fa-book-open fa-2x text-primary mb-3"></i>
+                            <h6 class="mb-2" style="color: #008080; font-weight: 600;">Learn Without Limits</h6>
+                            <p style="font-size: 0.9rem;">Access expert-led notes, tutorials, and mock papers to build your knowledge from the ground up.</p>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.3s">
+                    <div class="service-item text-center pt-3 shadow rounded-4">
+                        <div class="p-4">
+                            <i class="fas fa-wallet fa-2x text-primary mb-3"></i>
+                            <h6 class="mb-2" style="color: #008080; font-weight: 600;">Smart Learning, Big Savings</h6>
+                            <p style="font-size: 0.9rem;">Cut down costs with unlimited access to top-quality free and premium learning resources.</p>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.5s">
+                    <div class="service-item text-center pt-3 shadow rounded-4">
+                        <div class="p-4">
+                            <i class="fas fa-clock fa-2x text-primary mb-3"></i>
+                            <h6 class="mb-2" style="color: #008080; font-weight: 600;">Learn on Your Schedule</h6>
+                            <p style="font-size: 0.9rem;">Study at your own pace, switch courses anytime, and master what matters most to you.</p>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.7s">
+                    <div class="service-item text-center pt-3 shadow rounded-4">
+                        <div class="p-4">
+                            <i class="fas fa-chart-line fa-2x text-primary mb-3"></i>
+                            <h6 class="mb-2" style="color: #008080; font-weight: 600;">Advance Your Career</h6>
+                            <p style="font-size: 0.9rem;">Upskill in Data Structures, ML, and Analytics with full program access — no hidden fees.</p>
+                        </div>
+                    </div>
+                </div>
+               </div>            
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Service End -->
+    
+    <!-- About Start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s" style="min-height: 400px;">
+                    <div class="position-relative h-100">
+                        <img class="img-fluid position-absolute w-100 h-100" src="https://cdn.pixabay.com/photo/2015/10/31/12/00/friends-1015314_1280.jpg" alt="" style="object-fit: cover;">
+                    </div>
+                </div>
+                <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.3s">
+                    <h6 class="section-title bg-white text-start pe-3" style="font-size: 1rem; font-weight: 600; color: #555;">
+                        About Us
+                      </h6>
+                      
+                    <h2 class="mb-4" style="color: #008080; font-size: 1.7rem; font-weight: 600;">
+                        {% if username %}
+                        Welcome <span style="color: #FF5722; font-weight: 700;">
+                            {{ username[0]|upper + username[1:] }}
+                         </span>
+                       {% else %}
+                        Welcome <span style="color: #FF5722; font-weight: 700;">
+                            Guest
+                        </span>
+                       {% endif %}                   
+                        </span>
+                      </h2>                      
+                      <p class="mb-3" style="font-size: 0.95rem; color: #444;">
+                        At <strong style="color: #008080;">ShyamPractice Paper</strong>, we are dedicated to delivering flexible, accessible, and engaging learning experiences—tailored to match your pace, preferences, and goals.
+                    </p>
+                    <p class="mb-3" style="font-size: 0.95rem; color: #444;">
+                        Whether you're preparing for competitive exams or sharpening your skills, <strong style="color: #008080;">ShyamPractice Paper</strong> is your all-in-one destination for online courses, downloadable notes, study materials, and practice sets.
+                    </p>                    
+                    <div class="row gy-2 gx-4 mb-4">
+                        {% for feature in features %}
+                        <div class="col-sm-6">
+                            <p class="mb-0"><i class="fa fa-arrow-right me-2"></i>{{ feature }}</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <a class="btn text-light py-3 px-5 mt-2" href="about.html">Read More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- About End -->  
+    <!-- Banner-1 Start -->
+    <div class="container-xxl py-5 pt-5 bg-light">
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-lg-6 p-5 wow fadeInUp" data-wow-delay="0.3s">
+                    <h1 class="mb-3" style="color: #008080; font-weight: 700; font-size: 2.5rem;">
+                        Discover Free Online Courses
+                    </h1>
+                    <p class="mb-4" style="font-size: 1rem; color: #555;">
+                        Start your journey with <strong style="color: #008080;">ShyamPractice Paper</strong> — dive into expert-led short-term courses designed to boost your skills in trending fields, absolutely free.
+                    </p>
+                    <a class="btn btn-primary text-light py-2 px-4 rounded-pill shadow-sm" href="{{ url_for('users.course_view') }}">
+                        🚀 Start For Free
+                    </a>
+                </div>
+                <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s" style="min-height: 400px;">
+                    <div class="position-relative h-100">
+                        <img class="img-fluid position-absolute w-100 h-100" src="https://st2.depositphotos.com/1350793/8441/i/450/depositphotos_84416316-stock-photo-hand-pointing-to-online-course.jpg" alt="" style="object-fit: cover;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Banner-1 End -->
+    <div class="my-5"></div>
+    <div class="inbt"></div>
+    <div class="row g-2 text-center">
+        <div class="col-12 wow fadeInUp" data-wow-delay="0.3s">
+            <h6 class="section-title bg-white text-center px-3" style="font-size: 0.9rem; letter-spacing: 1px; color: #333;">
+                Popular Exams
+            </h6>
+            <h2 style="color: #008080; font-size: 1.8rem; font-weight: 600; margin-top: 0.5rem;">
+                Boost Your Career with Top Exams
+            </h2>
+            <p style="font-size: 0.95rem; color: #555; max-width: 600px; margin: 0.5rem auto 0;">
+                Prepare smarter, not harder—explore expert-backed resources for GATE, JEE, NEET, and more.
+            </p>
+        </div>
+    </div>
+    <div class="my-5"></div>
+    <div class="course-section" id="course-attract">
+        <div class="course-wrapper">
+            <div class="course-card">
+                <div class="course-image">
+                    <img src="https://st2.depositphotos.com/1350793/8441/i/450/depositphotos_84416316-stock-photo-hand-pointing-to-online-course.jpg" alt="Course Image">
+                </div>
+                <h2 class="course-title">Explore Our Courses</h2>
+                <p class="course-subtext">Join our courses</p>
+                <a href="{{ url_for('users.course_view') }}">
+                    <button class="enroll-btn">Enroll Now</button>
+                </a>                
+            </div>  
+        </div>
+    </div>
+    
+     <!-- FAQ Start  -->
+     <div class="container-xxl py-5 category">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h1 class="mb-5">Frequently Asked Questions</h1>
+            </div>
+            <div class="row g-2">
+                <div class="col-12">
+                    <div class="accordion" id="accordionExample">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    What is ShyamPracticePaper?
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    ShyamPracticePaper is a dedicated platform offering a wealth of resources for competitive exam preparation, including downloadable notes, practice papers, tutorials, and more. Our goal is to support learners in their journey to excel in exams like GATE, JEE, NEET, and other state and college entrance tests.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    Why should I choose ShyamPracticePaper for exam preparation?
+                                </button>
+                            </h2>
+                            <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    ShyamPracticePaper is an excellent choice for exam preparation because we provide high-quality, expertly crafted content that is tailored to help you succeed. Our resources are designed to be interactive and engaging, ensuring a comprehensive and effective learning experience.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    How many courses and resources can I access at once?
+                                </button>
+                            </h2>
+                            <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    You can access multiple courses and resources simultaneously at ShyamPracticePaper, allowing you to tailor your study plan according to your needs.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                    How can I enroll in these free online courses and access resources?
+                                </button>
+                            </h2>
+                            <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    You can easily enroll by clicking the “Sign Up” button on the top-right of the page and registering with your email address, or you can sign up using your Google Account.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                    What are the most popular resources offered by ShyamPracticePaper?
+                                </button>
+                            </h2>
+                            <div id="collapseFive" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    ShyamPracticePaper offers a wide range of resources focused on competitive exam preparation, helping learners achieve their academic and professional goals. Our most popular resources include:
+    
+                                    <ul>
+                                        <li>GATE Computer Science Practice Papers</li>
+                                        <li>JEE Main and Advanced Study Materials</li>
+                                        <li>NEET Exam Preparation Notes</li>
+                                        <li>State Board Exam Study Guides</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <style>
+    .course-image img {
+       width: 60px;
+       height: 60px;
+       object-fit: cover;
+       border-radius: 50%;
+       border: 4px solid #ffffff; /* Optional: adds a teal border */
+       box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3); /* Optional: adds depth */
+       transition: transform 0.3s ease;
+     }
+
+    .course-image img:hover {
+       transform: scale(1.05);
+     }
+    </style>
+  
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+{% endblock %}

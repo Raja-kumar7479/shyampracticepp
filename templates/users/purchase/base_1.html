@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Secure Payment{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/users/purchase/payment.css') }}">
+    {% block head %}
+    {% endblock %}
+</head>
+<body {% block body_attr %}{% endblock %}>
+    <div class="watermark-container">
+        <div class="top-left">shyampracticepaper | Secure Payment</div>
+        <div class="top-right">shyampracticepaper | Secure Payment</div>
+        <div class="bottom-left">shyampracticepaper | Secure Payment</div>
+        <div class="bottom-right">shyampracticepaper | Secure Payment</div>
+        <div class="center">shyampracticepaper | Secure Payment</div>
+        <div class="mid-left">shyampracticepaper | Secure Payment</div>
+        <div class="mid-right">shyampracticepaper | Secure Payment</div>
+        <div class="top-center">shyampracticepaper | Secure Payment</div>
+        <div class="bottom-center">shyampracticepaper | Secure Payment</div>
+    </div>
+    {% block content %}
+    {% endblock %}
+    {% block scripts %}
+    {% endblock %}
+</body>
+</html>

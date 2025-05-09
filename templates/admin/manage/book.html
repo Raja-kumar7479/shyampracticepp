@@ -1,0 +1,73 @@
+{% extends 'admin/manage/base_1.html' %}
+
+{% block content %}
+<section class="search-section">
+    <form method="GET" action="" class="search-form">
+        <label for="courseCode">Enter Course Code:</label>
+        <input type="text" id="courseCode" name="code" value="{{ code }}" required>
+        <button type="submit" class="btn btn-search">Search</button>
+    </form>
+</section>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+<div class="flash-messages">
+    <ul>
+        {% for category, message in messages %}
+        <li class="flash-{{ category }}"><strong>{{ category.title() }}:</strong> {{ message }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+{% endwith %}
+
+{% if code %}
+<section class="book-management">
+    <h3>Books for Course: {{ code }}</h3>
+
+    <form method="POST" action="{{ url_for('admin.add_book') }}" class="book-form">
+        <input type="hidden" name="code" value="{{ code }}">
+        <div class="form-group">
+            <label for="bookTitle">Title:</label>
+            <input type="text" id="bookTitle" name="title" required>
+        </div>
+        <div class="form-group">
+            <label for="bookUrl">URL:</label>
+            <input type="url" id="bookUrl" name="url" required>
+        </div>
+        <button type="submit" class="btn btn-primary" onclick="confirmAdd(event)">Add Book</button>
+    </form>
+    
+    <div class="book-list">
+        {% for book in books %}
+        <div class="book-card">
+            <form method="POST" action="{{ url_for('admin.update_book') }}" class="update-form">
+                <input type="hidden" name="code" value="{{ code }}">
+                <input type="hidden" name="old_title" value="{{ book.title }}">
+                <input type="hidden" name="old_url" value="{{ book.url }}">
+
+                <div class="book-info">
+                    <label>Title:</label>
+                    <input type="text" name="title" value="{{ book.title }}" required>
+                </div>
+
+                <div class="book-info">
+                    <label>URL:</label>
+                    <input type="url" name="url" value="{{ book.url }}" required>
+                </div>
+
+                <div class="book-actions">
+                    <button type="submit" class="update-btn" onclick="confirmUpdate(event)">Update</button>
+                    <form id="deleteForm-{{ book.title }}" method="POST" action="{{ url_for('admin.delete_book') }}">
+                        <input type="hidden" name="code" value="{{ code }}">
+                        <input type="hidden" name="title" value="{{ book.title }}">
+                        <button type="button" class="remove-btn" onclick="confirmDelete('{{ book.title }}')">Delete</button>
+                    </form>
+                </div>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+{% endblock %}

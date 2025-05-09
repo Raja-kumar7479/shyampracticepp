@@ -1,0 +1,134 @@
+{% extends 'users/auth/base.html' %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+<h3 class="text-center mb-4">Create an Account</h3>
+
+<!-- Step 1: Username -->
+{% if step == 'username' %}
+<form action="{{ url_for('users.user_signup') }}" method="POST">
+    <div class="form-group">
+        <input type="text" id="username" name="username" class="form-control" placeholder=" " required>
+        <label for="username" class="form-label">Username*</label>
+    </div>
+    <button type="submit" class="btn btn-primary btn-continue btn-block">Continue</button>
+</form>
+
+<!-- Step 2: Email -->
+{% elif step == 'email' %}
+<form action="{{ url_for('users.user_signup') }}" method="POST">
+    <div class="form-group">
+        <input type="text" name="username" class="form-control" value="{{ signup_data.username }}" readonly>
+        <label class="form-label">Username*</label>
+    </div>
+    <div class="form-group">
+        <input type="email" id="email" name="email" class="form-control" placeholder=" " required>
+        <label for="email" class="form-label">Email*</label>
+    </div>
+    <button type="submit" class="btn btn-primary btn-continue btn-block">Continue</button>
+</form>
+
+<!-- Step 3: Password -->
+{% elif step == 'password' %}
+<form action="{{ url_for('users.user_signup') }}" method="POST">
+    <div class="form-group">
+        <input type="text" name="username" class="form-control" value="{{ signup_data.username }}" readonly>
+        <label class="form-label">Username*</label>
+    </div>
+    <div class="form-group">
+        <input type="email" name="email" class="form-control" value="{{ signup_data.email }}" readonly>
+        <label class="form-label">Email*</label>
+    </div>
+    <div class="form-group position-relative">
+        <input type="password" id="password" name="password" class="form-control" placeholder=" " required>
+        <label for="password" class="form-label" id="password-label">Password*</label>
+        <span id="toggle-password" class="toggle-password" style="cursor: pointer; position: absolute; top: 10px; right: 10px;">Show</span>
+
+        <div id="password-strength" class="password-strength mt-2 text-muted small">
+            Password must contain at least:
+            <ul>
+                <li id="upper-check" style="color: red;">One uppercase letter</li>
+                <li id="number-check" style="color: red;">One number</li>
+                <li id="special-check" style="color: red;">One special character</li>
+            </ul>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary btn-continue btn-block">Continue</button>
+</form>
+
+<!-- Step 4: OTP -->
+{% elif step == 'otp' %}
+<form action="{{ url_for('users.user_email_otp_verify') }}" method="POST">
+    <div class="form-group">
+        <input type="text" class="form-control" value="{{ signup_data.username }}" readonly>
+        <label class="form-label">Username*</label>
+    </div>
+    <div class="form-group">
+        <input type="email" class="form-control" value="{{ signup_data.email }}" readonly>
+        <label class="form-label">Email*</label>
+    </div>
+    <div class="form-group">
+        <input type="text" id="otp" name="otp" class="form-control" placeholder=" " required>
+        <label for="otp" class="form-label">Enter OTP*</label>
+    </div>
+    <button type="submit" class="btn btn-primary btn-continue btn-block">Verify</button>
+</form>
+<form action="{{ url_for('users.resend_otp') }}" method="POST" class="text-center mt-2">
+    <button type="submit" class="btn btn-link resend-otp-btn">Resend OTP</button>
+</form>
+{% endif %}
+
+<!-- Go Back link -->
+{% if step != 'username' %}
+<div class="text-center mt-3">
+    <a href="{{ url_for('users.user_signup', go_back=1) }}" class="go-back-link">← Go Back</a>
+</div>
+{% endif %}
+
+<!-- Login link -->
+<div class="text-center mt-3">
+    <a href="{{ url_for('users.user_login') }}">Already have an account? Log in</a>
+</div>
+
+<!-- Password JS -->
+{% if step == 'password' %}
+<script>
+    const passwordInput = document.getElementById("password");
+    const toggle = document.getElementById("toggle-password");
+    const label = document.getElementById("password-label");
+    const upperCheck = document.getElementById("upper-check");
+    const numberCheck = document.getElementById("number-check");
+    const specialCheck = document.getElementById("special-check");
+
+    toggle.addEventListener("click", () => {
+        passwordInput.type = passwordInput.type === "password" ? "text" : "password";
+        toggle.textContent = passwordInput.type === "password" ? "Show" : "Hide";
+    });
+
+    passwordInput.addEventListener("input", () => {
+        const value = passwordInput.value;
+        const hasUpper = /[A-Z]/.test(value);
+        const hasNumber = /[0-9]/.test(value);
+        const hasSpecial = /[!@#\$%\^&\*\(\)_\+\-=\[\]\{\};':"\\|,.<>\/?]/.test(value);
+
+        upperCheck.style.color = hasUpper ? "green" : "red";
+        numberCheck.style.color = hasNumber ? "green" : "red";
+        specialCheck.style.color = hasSpecial ? "green" : "red";
+
+        if (hasUpper && hasNumber && hasSpecial) {
+            label.style.color = "green";
+            label.style.animation = "none";
+        } else {
+            label.style.color = "red";
+            label.style.animation = "blinker 1s linear infinite";
+        }
+    });
+</script>
+<style>
+    @keyframes blinker {
+        50% { opacity: 0; }
+    }
+</style>
+{% endif %}
+{% endblock %}

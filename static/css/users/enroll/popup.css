@@ -1,0 +1,270 @@
+/* 1-popup*/
+body.popup-active {
+    overflow: hidden; /* Prevent scrolling */
+    position: relative;
+}
+
+body.popup-active::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Dark overlay */
+    backdrop-filter: blur(6px); /* Blurred effect */
+    z-index: 998; /* Keep it below the popup */
+}
+
+.popup {
+    position: fixed;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000; /* Keep popups above the blurred background */
+    background: rgba(0, 0, 0, 0.3); /* Ensures only the outside is blurred */
+}
+
+.popup-content {
+    position: relative;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    width: 400px;
+    max-width: 90%;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 0.3s ease-in-out;
+    z-index: 1100;
+}
+
+.popup-content::before {
+    backdrop-filter: none !important;
+}
+
+
+.btn-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            filter: invert(22%) sepia(99%) saturate(7485%) hue-rotate(357deg) brightness(86%) contrast(117%);
+
+
+        }
+
+.popup-content:hover .close-btn {
+    opacity: 1;
+}
+
+.popup button {
+    background: linear-gradient(135deg, #4CAF50, #2E7D32);
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.popup button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+}
+
+@media (max-width: 600px) {
+    .popup-content {
+        width: 90%;
+        padding: 15px;
+    }
+
+    .popup button {
+        font-size: 14px;
+        padding: 10px;
+    }
+}
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* status changes */
+.enrolled-label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: green;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+/* 3-Flash Messages */
+  .container.mt-3 {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    z-index: 1050;
+    width: 280px;
+    max-width: 90%;
+}
+
+.alert {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2);
+    opacity: 1;
+    transition: opacity 0.4s ease-in-out, transform 0.3s ease-in-out;
+    transform: translateX(100%);
+    animation: slideIn 0.4s forwards;
+    word-break: break-word;
+    gap: 10px; /* Space between text and close button */
+    max-width: 100%;
+}
+
+.alert-success {
+    background-color: #28a745;
+    color: #fff;
+}
+
+.alert-danger {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.alert-warning {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.alert-info {
+    background-color: #17a2b8;
+    color: #fff;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+.alert .close {
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    opacity: 0.7;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: opacity 0.3s;
+    padding: 0 6px; /* Adjusted padding */
+    line-height: 1;
+}
+
+.alert .close:hover {
+    opacity: 1;
+}
+
+@media (max-width: 480px) {
+    .container.mt-3 {
+        right: 10px;
+        top: 10px;
+        width: 90%;
+    }
+    .alert {
+        font-size: 13px;
+        padding: 8px 12px;
+        gap: 5px; /* Reduced space for mobile */
+    }
+} 
+
+/**/
+/* Flash Message Styles */
+.flash-message {
+    padding: 10px 15px;
+    margin: 10px 0;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 500;
+    display: inline-block;
+    animation: fadeInOut 5s ease-in-out;
+}
+
+/* Success Message */
+.flash-message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border-left: 5px solid #28a745;
+}
+
+/* Error Message */
+.flash-message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-left: 5px solid #dc3545;
+}
+
+/* Warning Message */
+.flash-message.warning {
+    background-color: #fff3cd;
+    color: #856404;
+    border-left: 5px solid #ffc107;
+}
+
+/* Info Message */
+.flash-message.info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border-left: 5px solid #17a2b8;
+}
+
+/* Fade In & Out Animation */
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translateY(-10px); }
+    10% { opacity: 1; transform: translateY(0); }
+    90% { opacity: 1; }
+    100% { opacity: 0; transform: translateY(-10px); }
+}
+
+/* Flash Message Container */
+#flash-messages {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    z-index: 1000;
+    max-width: 300px;
+}

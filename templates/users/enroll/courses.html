@@ -1,0 +1,117 @@
+{% extends "users/base.html" %}
+{% block content %}
+    <!-- Categories Start -->
+    <div class="my-5"></div>
+    <div class="inbt">
+        <div class="row g-2 text-center">
+            <div class="col-12 wow fadeInUp" data-wow-delay="0.3s">
+                <h6 class="section-title bg-white text-center px-3">Enroll Now</h6>
+                <h1 style="color: #008080; font-size: 1.9rem; font-weight: 500; margin-bottom: 5px;">
+                    Take the first step towards <span style="font-weight: 700;">success</span> with our courses
+                </h1>
+            </div>
+        </div>
+    </div>
+     <div class="exam-container">
+        <div class="box-wrapper">
+            <div class="exam-container">
+                {% set enrolled_courses = [] %}
+                {% set non_enrolled_courses = [] %}
+    
+                {% for course in courses %}
+                    {% if enrollments[course.name] %}
+                        {% set _ = enrolled_courses.append(course) %}
+                    {% else %}
+                        {% set _ = non_enrolled_courses.append(course) %}
+                    {% endif %}
+                {% endfor %}
+    
+                <!-- First show enrolled courses -->
+                {% for course in enrolled_courses %}
+                    <div class="exam-box">
+                        <div class="exam-icon">
+                            <span class="enrolled-label">Enrolled</span>  <!-- Always visible -->
+                            <div class="exam-code">{{ course.code }}</div> 
+                        </div> 
+                        <div class="card-body">
+                            <h3 class="card-title">{{ course.name }}</h3>
+                            <p class="card-text">{{ course.description }}</p>
+                            <button class="btn btn-success open-btn" data-course="{{ course.name }}">Active</button>
+                        </div>
+                    </div>
+                {% endfor %}
+    
+                <!-- Then show non-enrolled courses -->
+                {% for course in non_enrolled_courses %}
+                    <div class="exam-box">
+                        <div class="exam-icon">
+                            <div class="exam-code">{{ course.code }}</div> 
+                        </div> 
+                        <div class="card-body">
+                            <h3 class="card-title">{{ course.name }}</h3>
+                            <p class="card-text">{{ course.description }}</p>
+                            <button class="btn btn-primary enroll-btn" data-course="{{ course.name }}">Enroll</button>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Categories End -->
+
+    <!-- Confirmation Popup -->
+    <div class="popup" id="confirm-popup">
+        <div class="popup-content">
+            <span class="btn-close" onclick="closePopup('confirm-popup')"></span>
+            <h4>Do you want to enroll in <span id="confirm-course-name"></span>?</h4>
+            <button class="btn btn-primary" onclick="showPopup('details-popup')">OK</button>
+            <button class="btn btn-secondary" onclick="closePopup('confirm-popup')">✖</button>
+        </div>
+    </div>
+
+    <!-- Enrollment Limit Exceeded Popup -->
+    <div class="popup" id="enrollment-limit-popup">
+        <div class="popup-content">
+            <span class="btn-close" onclick="closePopup('enrollment-limit-popup')"></span>
+            <h4>Enrollment Limit Reached</h4>
+            <p id="enrollment-limit-message"></p>
+            <button class="btn btn-secondary" onclick="closePopup('enrollment-limit-popup')">OK</button>
+        </div>
+    </div>
+
+    <!-- Course Details Popup -->
+    <div class="popup" id="details-popup">
+        <div class="popup-content">
+            <span class="btn-close" onclick="closePopup('details-popup')"></span>
+            <h4>Course Details</h4>
+            <ul>
+                <li>Best content at a negligible amount.</li>
+                <li>Access to all GATE topper notes.</li>
+                <li>Previous year question papers.</li>
+                <li>Live doubt-solving sessions.</li>
+                <li>Mock tests with real-time evaluation.</li>
+            </ul>
+            <button class="btn btn-primary" onclick="showPhonePopup()">Continue</button>
+        </div>
+    </div>
+
+    <!-- Enrollment Form Popup -->
+    <div class="popup" id="enrollment-popup">
+        <div class="popup-content">
+            <span class="btn-close" onclick="closePopup('enrollment-popup')"></span>
+            <h4>Enter your details</h4>
+            <form id="enroll-form" method="POST" action="/final_enroll">
+                <div class="form-group">
+                    <label id="captcha-label">Enter CAPTCHA</label>
+                    <input type="text" name="captcha" required>
+                    <span id="captcha-error" class="error-message"></span> <!-- Error message will appear here -->
+                </div>
+                <input type="hidden" name="course_name" id="final-course-name">
+                <button class="btn btn-primary" type="submit">Verify & Enroll</button>
+            </form>
+        </div>
+    </div>
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+{% endblock %}

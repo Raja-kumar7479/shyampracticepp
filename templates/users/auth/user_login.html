@@ -1,0 +1,54 @@
+{% extends 'users/auth/base.html' %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<h3 class="text-center">Login Account</h3>
+
+{% if step == 'email' %}
+<form action="{{ url_for('users.user_login') }}" method="POST">
+    <div class="form-group">
+        <input type="email" id="email" name="email" class="form-control" placeholder=" " required>
+        <label for="email" class="form-label">Email*</label>
+    </div>
+    <button type="submit" class="btn btn-primary btn-continue btn-block">Continue</button>
+</form>
+
+{% elif step == 'password' %}
+<form action="{{ url_for('users.user_login') }}" method="POST">
+    <div class="form-group">
+        <input type="password" id="password" name="password" class="form-control" placeholder=" " required>
+        <label for="password" class="form-label">Password*</label>
+        <span id="toggle-password" class="toggle-password">Show</span>
+    </div>
+    <button type="submit" class="btn btn-primary btn-continue btn-block">Continue</button>
+</form>
+
+<div class="text-center mt-3">
+    <a href="{{ url_for('users.forgot_password') }}" id="forgot-password-link">Forgot Password?</a>
+</div>
+<div class="text-center mt-2">
+    <a href="{{ url_for('users.user_login', go_back=True) }}" id="go-back-link">Go Back</a>
+</div>
+{% endif %}
+
+<div class="text-center mt-3">
+    <a href="{{ url_for('users.user_signup') }}" id="login-link">Don't have an account? Register</a>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const toggle = document.getElementById('toggle-password');
+        const input = document.getElementById('password');
+        if (toggle && input) {
+            toggle.addEventListener('click', () => {
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    toggle.innerText = 'Hide';
+                } else {
+                    input.type = 'password';
+                    toggle.innerText = 'Show';
+                }
+            });
+        }
+    });
+    </script>    
+{% endblock %}

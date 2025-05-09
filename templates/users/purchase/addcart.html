@@ -1,0 +1,243 @@
+{% extends "users/purchase/base_2.html" %}
+
+{% block title %}Cart -{{ course_code }}{% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block content %}
+<div class="cart-container">
+  {% if added_courses %}
+  <div class="cart-content">
+    <div class="row">
+      <!-- Left Column: Courses -->
+      <div class="col-md-8">
+        <table class="cart-table">
+          <thead>
+            <tr>
+              <th>{{ field_labels['title'] }}</th>
+              <th>{{ field_labels['price'] }}</th>
+              <th>{{ field_labels['manage'] }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for course in added_courses %}
+            <tr>
+              <td>
+                <div class="product-title">{{ course.title }}</div>
+                <div class="product-subtitle">{{ course.subtitle }}</div>
+              </td>
+              <td>₹{{ "%.2f"|format(course.price) }}</td>
+              <td>
+                <form method="POST" action="{{ url_for('users.add_cart', course_code=course_code, unique_code=unique_code) }}">
+                  <input type="hidden" name="course_to_remove" value="{{ course.title }}">
+                  <button class=" remove-btn" type="submit" name="remove">
+                    <i class="icon lucide-trash-2"></i> Remove
+                  </button>
+                </form>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Right Column: Summary -->
+      <div class="col-md-4">
+        <div class="summary-section">
+          <h3 class="summary-title">Order Summary</h3>
+          <div class="summary-item">
+            <span>Subtotal:</span>
+            <span>₹{{ "%.2f"|format(total_price) }}</span>
+          </div>
+
+          {% if discount > 0 %}
+          <div class="summary-item discount">
+            <span>Discount ({{ discount }}%):</span>
+            <span>-₹{{ "%.2f"|format(discount_amount) }}</span>
+          </div>
+          {% endif %}
+
+          <div class="summary-item summary-total">
+            <span>Total:</span>
+            <span>₹{{ "%.2f"|format(discounted_total) }}</span>
+          </div>
+
+          <button onclick="openPhonePopup()" class="proceed-pay-btn">
+            <i class="icon lucide-arrow-right-circle"></i> Proceed to Pay
+          </button>
+
+          {% if discount > 0 %}
+          <div class="applied-coupon mt-3">
+            <p><strong>Coupon Applied:</strong> {{ session.get('coupon_applied') }} ({{ discount }}% OFF)</p>
+            {% if session.get('coupon_expiry') %}
+              <p><small>Expires: {{ session.get('coupon_expiry') }}</small></p>
+            {% endif %}
+            <form method="POST" action="{{ url_for('users.add_cart', course_code=course_code, unique_code=unique_code) }}">
+              <button class="remove-btn" type="submit" name="remove_coupon">
+                <i class="icon lucide-x"></i> Remove Coupon
+              </button>
+            </form>
+          </div>
+          {% endif %}
+
+          <button onclick="showCouponPopup()" class="coupon-btn mt-2">
+            <i class="icon lucide-percent"></i> 
+            {% if discount > 0 %}Change Coupon{% else %}Apply Coupon{% endif %}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% else %}
+
+  <div class="empty-cart text-center my-5">
+    <h3>Oops, {{ session['username'] }}! Your cart is empty</h3>
+    <p>Looks like you haven’t added anything yet. Let’s fix that!</p>
+    <a href="{{ url_for('users.course_shop', course_code=course_code, unique_code=unique_code) }}"
+      class="nav-item nav-link cart-link mx-auto d-flex align-items-center justify-content-center"
+      style="font-weight: 600;">
+     <i class="fas fa-store me-2"></i>Shop Now
+    </a>
+  </div>  
+  {% endif %}
+</div>
+
+<div id="overlay" class="overlay" onclick="closeAllPopups()"></div>
+
+<!-- Coupon Popup -->
+<div id="coupon-popup" class="popup animate__animated animate__fadeIn">
+  <div class="popup-content">
+    <button class="close-btn" onclick="closeCouponPopup()">×</button>
+    <h3><i class="icon lucide-percent"></i> Available Coupons</h3>
+    {% if coupons %}
+      {% for coupon in coupons %}
+      <div class="coupon-item">
+        <form method="POST" action="{{ url_for('users.add_cart', course_code=course_code, unique_code=unique_code) }}">
+          <input type="hidden" name="coupon_code" value="{{ coupon.coupon_code }}">
+          <p><strong>{{ coupon.coupon_code }}</strong> - {{ coupon.discount }}% OFF</p>
+          {% if coupon.min_purchase %}
+          <p>Min Purchase: ₹{{ "%.2f"|format(coupon.min_purchase) }}</p>
+          {% endif %}
+          <p>Valid until: {{ coupon.formatted_expiry }}</p>
+          <button class="coupon-btn mt-2" type="submit" name="apply_coupon">Apply Coupon</button>
+        </form>
+      </div>
+      {% endfor %}
+    {% else %}
+      <p>No active coupons available at this time.</p>
+    {% endif %}
+  </div>
+</div>
+
+<!-- Phone Number Popup -->
+<div id="phonePopup" class="popup animate__animated animate__fadeIn">
+  <div class="popup-content">
+    <button class="close-btn" onclick="closeAllPopups()">×</button>
+    <h2 class="popup-title">
+      <i class="icon lucide-phone"></i> Enter Your Phone Number
+    </h2>
+    <form id="phoneForm" method="POST" action="{{ url_for('users.validate_phone', course_code=course_code, unique_code=unique_code) }}">
+      <div class="phone-input">
+        <span>+91</span>
+        <input type="text" name="phone_number" id="phone_number" maxlength="10" required pattern="[1-9]{1}[0-9]{9}" placeholder="10-digit phone number">
+      </div>
+      <button type="submit" class="continue-btn">Continue to Payment</button>
+    </form>
+  </div>
+</div>
+
+<!-- Billing Popup -->
+<div id="billingPopup" class="billing-popup-container animate__animated animate__fadeIn">
+  <div class="popup-content">
+    <button class="close-btn" onclick="closeAllPopups()">×</button>
+    <h2><i class="icon lucide-file-text"></i> Billing Details</h2>
+
+    <div class="mb-4">
+      <h5>Customer Information</h5>
+      <div class="row">
+        <div class="col-md-6"><p><strong>Username:</strong> {{ username }}</p></div>
+        <div class="col-md-6"><p><strong>Email:</strong> {{ email }}</p></div>
+      </div>
+      <p><strong>Phone Number:</strong> <span id="billingPhoneNumber">{{ phone }}</span></p>
+    </div>
+
+    <div class="mb-4">
+      <h5>Order Summary</h5>
+      <div class="table-responsive">
+        <table class="table">
+          <thead><tr><th>{{ field_labels['title'] }}</th><th>{{ field_labels['price'] }}</th></tr></thead>
+          <tbody>
+            {% for course in added_courses %}
+            <tr>
+              <td>{{ course.title }} <br><small>{{ course.subtitle }}</small></td>
+              <td>₹{{ "%.2f"|format(course.price) }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="summary-item summary-total mb-3">
+      <span>Total Amount:</span>
+      <span>₹{{ "%.2f"|format(discounted_total) }}</span>
+    </div>
+
+    <form method="GET" action="{{ url_for('users.payment', course_code=course_code, unique_code=unique_code) }}">
+      <button type="submit" class="continue-btn">
+        <i class="icon lucide-credit-card"></i> Proceed to Payment Gateway
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  function showCouponPopup() {
+    document.getElementById('overlay').style.display = 'block';
+    document.getElementById('coupon-popup').style.display = 'block';
+  }
+
+  function closeCouponPopup() {
+    document.getElementById('coupon-popup').style.display = 'none';
+    document.getElementById('overlay').style.display = 'none';
+  }
+
+  function openPhonePopup() {
+    document.getElementById('overlay').style.display = 'block';
+    document.getElementById('phonePopup').style.display = 'block';
+  }
+
+  function closeAllPopups() {
+    document.getElementById('overlay').style.display = 'none';
+    ['coupon-popup', 'phonePopup', 'billingPopup'].forEach(id => {
+      document.getElementById(id).style.display = 'none';
+    });
+  }
+
+  document.getElementById('phoneForm').addEventListener('submit', function(e) {
+    const phone = document.getElementById('phone_number').value.trim();
+    const phonePattern = /^[1-9][0-9]{9}$/;
+    if (!phonePattern.test(phone)) {
+      e.preventDefault();
+      alert('Please enter a valid 10-digit phone number starting with 1-9.');
+    }
+  });
+
+  window.addEventListener('load', function() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('show_billing') === 'true') {
+      document.getElementById('overlay').style.display = 'block';
+      document.getElementById('billingPopup').style.display = 'block';
+
+      params.delete('show_billing');
+      const newUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+      window.history.replaceState({}, document.title, newUrl);
+    }
+  });
+</script>
+{% endblock %}

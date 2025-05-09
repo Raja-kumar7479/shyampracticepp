@@ -1,0 +1,83 @@
+{% extends 'admin/question/base_2.html' %}
+
+{% block title %}Show Questions (Inline Editing){% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Show & Manage Questions</h2>
+
+<form method="POST" class="form-inline mb-4">
+    <input type="text" name="paper_code" class="form-control mr-2" placeholder="Paper Code" value="{{ paper_code or '' }}" required>
+    <input type="text" name="subject" class="form-control mr-2" placeholder="Subject" value="{{ subject or '' }}">
+    <input type="text" name="topic" class="form-control mr-2" placeholder="Topic" value="{{ topic or '' }}">
+    <button type="submit" class="btn btn-primary">Show Questions</button>
+</form>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+{% for q in questions %}
+<div class="question-box">
+    {% if q.last_updated and (now - q.last_updated).total_seconds() < 86400 %}
+    <div class="updated-tag">Updated</div>
+    {% endif %}
+
+    <div class="question-metadata">
+        <strong>ID:</strong>
+        <span class="editable" contenteditable="true" data-id="{{ q.question_id }}" data-field="question_id">{{ q.question_id }}</span> |
+        <strong>Subject:</strong>
+        <span class="editable" contenteditable="true" data-id="{{ q.question_id }}" data-field="subject">{{ q.subject }}</span> |
+        <strong>Topic:</strong>
+        <span class="editable" contenteditable="true" data-id="{{ q.question_id }}" data-field="topic">{{ q.topic }}</span> |
+        <strong>Year:</strong>
+        <span class="editable" contenteditable="true" data-id="{{ q.question_id }}" data-field="year">{{ q.year }}</span> |
+        <strong>Type:</strong>
+        <span class="editable" contenteditable="true" data-id="{{ q.question_id }}" data-field="question_type">{{ q.question_type }}</span> |
+        <strong>Set:</strong>
+        <span class="editable" contenteditable="true" data-id="{{ q.question_id }}" data-field="paper_set">{{ q.paper_set }}</span>
+    </div>
+
+    <p><strong>Q:</strong>
+        <span class="editable" contenteditable="true" data-id="{{ q.question_id }}" data-field="question_text">{{ q.question_text }}</span>
+    </p>
+
+    {% if q.image_path %}
+        <img id="img-{{ q.question_id }}" class="preview"
+             src="{{ q.image_path }}?v={{ q.last_updated.timestamp() if q.last_updated else '1' }}"
+             alt="Question Image">
+    {% endif %}
+
+    <p><strong>Image URL:</strong>
+        <span class="editable" contenteditable="true" data-id="{{ q.question_id }}" data-field="image_path">{{ q.image_path or '' }}</span>
+    </p>
+
+    <ul>
+        <li>A. <span class="editable" contenteditable="true" data-id="{{ q.question_id }}" data-field="option_a">{{ q.option_a }}</span></li>
+        <li>B. <span class="editable" contenteditable="true" data-id="{{ q.question_id }}" data-field="option_b">{{ q.option_b }}</span></li>
+        <li>C. <span class="editable" contenteditable="true" data-id="{{ q.question_id }}" data-field="option_c">{{ q.option_c }}</span></li>
+        <li>D. <span class="editable" contenteditable="true" data-id="{{ q.question_id }}" data-field="option_d">{{ q.option_d }}</span></li>
+    </ul>
+
+    <p><strong>Answer:</strong>
+        <span class="editable" contenteditable="true" data-id="{{ q.question_id }}" data-field="correct_option">{{ q.correct_option }}</span> -
+        <span class="editable" contenteditable="true" data-id="{{ q.question_id }}" data-field="answer_text">{{ q.answer_text }}</span>
+    </p>
+
+    <p><strong>Explanation Link:</strong>
+        <span class="editable" contenteditable="true" data-id="{{ q.question_id }}" data-field="explanation_link">{{ q.explanation_link or '' }}</span>
+    </p>
+
+    <div class="question-actions mt-2">
+       <button class="btn btn-danger btn-sm" onclick="deleteQuestion('{{ q.question_id }}', this)">Delete</button>
+       <button class="btn btn-success btn-sm" onclick="saveChanges(this, '{{ q.question_id }}')">Save Changes</button>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

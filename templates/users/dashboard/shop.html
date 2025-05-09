@@ -1,0 +1,86 @@
+{% extends "users/dashboard/base.html" %}
+{% block title %}GATE CSE Courses - Shyampracticepaper{% endblock %}
+
+{% block content %}
+<div class="wrapper">
+    {% set sections = ['NOTES', 'PRACTICE BOOK', 'PYQ'] %}
+    {% for section in sections %}
+        {% set filtered = courses | selectattr("section", "equalto", section) | list %}
+        {% if filtered %}
+            <h2 class="section-title">{{ section.replace('_', ' ') }}</h2>
+            <div class="course-container">
+                {% for course in filtered %}
+                    {% set course_key = course.title ~ '|' ~ course.subtitle %}
+                    <div class="card-custom">
+                        <div class="image-wrapper">
+                            <img src="{{ course.image_url }}" alt="{{ course.title }}">
+                            <div class="badge-label {% if course.label == 'Free' %}free{% else %}paid{% endif %}">
+                                {{ course.label }}
+                            </div>
+                            {% if purchase_status_map[course_key] %}
+                                <div class="purchased-label">Purchased</div>
+                            {% endif %}
+                        </div>
+                        <div class="card-body">
+                            <div class="card-title">{{ course.title }}</div>
+                            <div class="subtitle">{{ course.subtitle }}</div>
+                            <div class="info">
+                                <span class="price">₹{{ course.price }}</span>
+                                <button class="btn btn-details open-details"
+                                        data-title="{{ course.title }}"
+                                        data-details="{{ course.details }}">
+                                    Details
+                                </button>
+                            </div>
+
+                            {% if course.label == 'Free' %}
+                                <a href="{{ course.url }}" target="_blank" class="btn btn-open">Open</a>
+                            {% elif course.label == 'Paid' %}
+                                {% if purchase_status_map[course_key] %}
+                                    <button class="btn btn-secondary" disabled>Purchased</button>
+                                {% else %}
+                                    <form method="POST" action="{{ url_for('users.add_cart', course_code=course_code, unique_code=unique_code) }}">
+                                        <input type="hidden" name="title" value="{{ course.title }}">
+                                        <input type="hidden" name="subtitle" value="{{ course.subtitle }}">
+                                        <input type="hidden" name="price" value="{{ course.price }}">
+                                        <button type="submit" name="add_cart" class="btn btn-cart">Add Cart</button>
+                                    </form>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>
+
+<!-- Modal -->
+<div id="details-modal" class="modal-overlay">
+    <div class="modal-content">
+        <span id="close-modal" class="close-btn">&times;</span>
+        <h4 id="modal-title"></h4>
+        <p id="modal-details"></p>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('.open-details').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.getElementById('modal-title').textContent = btn.getAttribute('data-title');
+            document.getElementById('modal-details').textContent = btn.getAttribute('data-details');
+            document.getElementById('details-modal').style.display = 'flex';
+        });
+    });
+
+    document.getElementById('close-modal').addEventListener('click', () => {
+        document.getElementById('details-modal').style.display = 'none';
+    });
+
+    document.getElementById('details-modal').addEventListener('click', (e) => {
+        if (e.target === e.currentTarget) {
+            e.currentTarget.style.display = 'none';
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,121 @@
+{% extends 'users/purchase/base_1.html' %}
+
+{% block title %}Secure Payment{% endblock %}
+{% block body_attr %}onload="initiatePayment()"{% endblock %}
+
+{% block content %}
+<!-- Watermark -->
+<div id="watermark-container">
+  <div class="floating-watermark">💳 Shyampracticepaper - Secure Payment</div>
+</div>
+
+<!-- Initial Loader -->
+<div id="loader-overlay">
+  <div class="spinner-container">
+    <div class="spinner"></div>
+    <div class="loader-text mt-3">Preparing Payment...</div>
+  </div>
+</div>
+
+<!-- Post Payment Spinner -->
+<div id="post-payment-loader" style="display: none;">
+  <div class="spinner-container">
+    <div class="spinner"></div>
+    <div class="loader-text mt-3">Please wait... Do not refresh or close the page.</div>
+  </div>
+</div>
+
+<!-- Payment Success Form -->
+<form id="payment_success_form" method="POST"
+      action="{{ url_for('users.payment_success', course_code=course_code, unique_code=unique_code) }}?razorpay_order_id={{ razorpay_order_id }}">
+  <input type="hidden" name="razorpay_payment_id" id="payment_id">
+  <input type="hidden" name="razorpay_signature" id="razorpay_signature">
+  <input type="hidden" name="razorpay_order_id" id="order_id" value="{{ razorpay_order_id }}">
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+const razorpayColors = ['#673ab7', '#4caf50', '#ff9800', '#e91e63', '#2196f3'];
+let colorIndex = 0;
+let rzp = null;
+let colorInterval = null;
+
+function initiatePayment() {
+  setTimeout(() => {
+    document.getElementById('loader-overlay').classList.add('fade-out');
+    setTimeout(() => {
+      openRazorpay();
+    }, 1000);
+  }, 2000);
+}
+
+function openRazorpay() {
+  colorInterval = setInterval(() => {
+    if (rzp) {
+      const nextColor = razorpayColors[colorIndex % razorpayColors.length];
+      rzp.options.theme.color = nextColor;
+      colorIndex++;
+    }
+  }, 2000);
+
+  const options = {
+    key: "{{ razorpay_key_id }}",
+    amount: "{{ amount }}",
+    currency: "INR",
+    name: "💳 Shyampracticepaper",
+    description: "Secure Payment for Course",
+    image: "{{ url_for('static', filename='images/logo.png') }}",
+    order_id: "{{ razorpay_order_id }}",
+    handler: function (response) {
+      clearInterval(colorInterval);
+
+      // Set values
+      document.getElementById('payment_id').value = response.razorpay_payment_id;
+      document.getElementById('razorpay_signature').value = response.razorpay_signature;
+
+      fadeOutWatermark();
+      showPostPaymentLoader();
+
+      // Submit form after short delay
+      setTimeout(() => {
+        document.getElementById('payment_success_form').submit();
+      }, 2000);
+    },
+    prefill: {
+      name: "{{ username }}",
+      email: "{{ email }}",
+      contact: "{{ phone }}"
+    },
+    theme: {
+      color: "#673ab7"
+    },
+    modal: {
+      ondismiss: function () {
+        clearInterval(colorInterval);
+        window.location.href = "{{ url_for('users.add_cart', course_code=course_code, unique_code=unique_code) }}";
+      }
+    }
+  };
+
+  rzp = new Razorpay(options);
+  rzp.open();
+}
+
+function fadeOutWatermark() {
+  const wm = document.getElementById('watermark-container');
+  if (wm) {
+    wm.classList.add('fade-out');
+  }
+}
+
+function showPostPaymentLoader() {
+  const loader = document.getElementById('post-payment-loader');
+  if (loader) {
+    loader.style.display = 'flex';
+  }
+}
+</script>
+
+{% endblock %}

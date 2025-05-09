@@ -1,0 +1,75 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}Questions{% endblock %}</title>
+    <meta name="google-translate-customization" content="9f841e7780177523-3214ceb76f765f38-gc38c6fe6f9d06436-c">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    
+    <link rel="icon" href="{{ url_for('static', filename='img/icon.png') }}">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='lib/animate/animate.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='lib/owlcarousel/assets/owl.carousel.min.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/users/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/users/index/index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/users/question/question.css') }}">
+   
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
+        <a href="/" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
+            <img src="https://t3.ftcdn.net/jpg/06/30/32/92/240_F_630329225_iWTaN7xP9EkkIzWngnIuQSXFlHlidMWy.jpg" alt="Logo" style="height: 30px; margin-right: 10px;">
+            <p class="m-0 fw-bold">Shyam<span>Practice</span>Paper</p>
+        </a>
+        <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav ms-auto p-4 p-lg-0">
+                <a href="{{ url_for('users.browse_by_topic', unique_code = unique_code,paper_code=paper_code) }}" class="nav-item nav-link">Topic-wise</a>
+                <a href="{{ url_for('users.browse_by_subject',unique_code = unique_code, paper_code=paper_code) }}" class="nav-item nav-link">Subject-wise</a>
+                <a href="{{ url_for('users.browse_by_year', unique_code = unique_code,paper_code=paper_code) }}" class="nav-item nav-link">Year-wise</a>
+                {% if username %}
+                  <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle no-caret" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <div class="profile-circle" id="profileCircle">
+                            {{ (username[:2] or 'US') | upper }}
+                        </div>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-padding" aria-labelledby="navbarDropdownMenuLink">
+                        <li><a class="dropdown-item" href="{{ url_for('users.logout') }}">Logout</a></li>
+                    </ul>
+                  </div>
+                {% else %}
+                  <a class="nav-link" href="{{ url_for('users.user_login') }}">Login</a>
+                {% endif %}
+            </div>
+          </div>          
+    </nav>
+    <div class="container py-5" id="main-container">
+       {% block content %}{% endblock %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='lib/wow/wow.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/easing/easing.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/waypoints/waypoints.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/owlcarousel/owl.carousel.min.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='js/users/navbar/navbar.js') }}"></script>    
+</body>
+</html>
