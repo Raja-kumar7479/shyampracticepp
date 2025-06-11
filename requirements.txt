@@ -18,3 +18,19 @@ pyScss==1.4.0
 Werkzeug==3.0.1
 Flask-Limiter==2.9.1
 bcrypt==4.2.1
+
+# Newly added
+setuptools
+Flask-Session
+redis
+beautifulsoup4
+
+'''
+
+pip install setuptools
+pip install Flask-Session
+pip install Flask-Session redis
+pip install beautifulsoup4
+
+
+'''

@@ -1,4 +1,3 @@
-# routes/admin_courses.py
 from flask import render_template, request, redirect, url_for, flash
 from extensions import admin_login_required
 from admin.manage_course.enroll_course_db import UserOperation

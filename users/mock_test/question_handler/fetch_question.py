@@ -1,6 +1,4 @@
-import json
-import traceback
-from flask import flash, jsonify, redirect, render_template, request, session, url_for
+from flask import jsonify 
 from users.mock_test.handler_db.user_db import UserOperation
 from users.mock_test.utils_dashboard import (get_user_session,
                                              )

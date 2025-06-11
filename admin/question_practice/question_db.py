@@ -3,7 +3,7 @@ from mysql.connector import Error
 from contextlib import contextmanager
 import datetime
 import logging
-from config import Config # Make sure Config is imported
+from config import Config 
 
 logging.basicConfig(
     level=logging.INFO,

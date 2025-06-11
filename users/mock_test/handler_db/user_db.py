@@ -73,9 +73,9 @@ class UserOperation:
                     td.total_questions, td.total_marks AS question_marks, td.total_duration_minutes AS duration, td.year,
                     COALESCE(utl.status, 'not_started') AS user_test_status, 
                     utl.attempt_number 
-                FROM study_materials sm
+                FROM test_details sm
                 JOIN test_description td ON sm.test_id = td.test_id
-                LEFT JOIN user_test_log utl ON sm.test_id = utl.test_id AND utl.email = %s # LEFT JOIN to include tests not yet started by the user
+                LEFT JOIN user_test_log utl ON sm.test_id = utl.test_id AND utl.email = %s 
                 WHERE sm.code = %s AND sm.label = 'Free'
                 ORDER BY td.test_number
             """
@@ -89,7 +89,7 @@ class UserOperation:
             query = """
                 SELECT sm.test_code, sm.test_key, td.subject_title,
                         td.total_questions, td.total_marks, td.total_duration_minutes
-                FROM study_materials sm
+                FROM test_details sm
                 JOIN test_description td ON sm.test_id = td.test_id
                 WHERE sm.test_id = %s
             """
@@ -103,7 +103,7 @@ class UserOperation:
     def validate_test_credentials(self, test_id, test_key, test_code):
         try:
             query = """
-                SELECT test_id FROM study_materials
+                SELECT test_id FROM test_details
                 WHERE test_id = %s AND test_key = %s AND test_code = %s
             """
             result = self.fetch_one(query, (test_id, test_key, test_code))
@@ -215,7 +215,7 @@ class UserOperation:
         try:
             query = """
                 SELECT sm.code, sm.stream, td.subject_title, td.total_duration_minutes
-                FROM study_materials sm
+                FROM test_details sm
                 JOIN test_description td ON sm.test_id = td.test_id
                 WHERE sm.test_id = %s
             """

@@ -13,11 +13,11 @@ class UserOperation:
         )
 
     def get_all_study_materials(self):
-        query = "SELECT * FROM study_materials"
+        query = "SELECT * FROM test_details"
         return self._fetch_all(query)
 
     def is_test_id_or_key_or_code_duplicate(self, test_id, test_key, test_code, material_id=None):
-        query = "SELECT id FROM study_materials WHERE (test_id = %s OR test_key = %s OR test_code = %s)"
+        query = "SELECT id FROM test_details WHERE (test_id = %s OR test_key = %s OR test_code = %s)"
         params = [test_id, test_key, test_code]
         if material_id:
             query += " AND id != %s"
@@ -26,7 +26,7 @@ class UserOperation:
 
     def insert_study_material(self, data):
         query = """
-            INSERT INTO study_materials
+            INSERT INTO test_details
             (name, code, status, label, stream, test_id, test_key, test_code)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
         """
@@ -37,15 +37,15 @@ class UserOperation:
         self._execute_query(query, params)
 
     def update_study_material_field(self, id, field, value):
-        # Basic whitelist for fields to prevent direct injection of column names
+       
         allowed_fields = ['name', 'code', 'status', 'label', 'stream', 'test_id', 'test_key', 'test_code']
         if field not in allowed_fields:
             raise ValueError(f"Invalid field for update: {field}")
-        query = f"UPDATE study_materials SET {field} = %s WHERE id = %s"
+        query = f"UPDATE test_details SET {field} = %s WHERE id = %s"
         self._execute_query(query, (value, id))
 
     def delete_study_material(self, id):
-        query = "DELETE FROM study_materials WHERE id = %s"
+        query = "DELETE FROM test_details WHERE id = %s"
         self._execute_query(query, (id,))
 
     def get_test_descriptions_by_test_id(self, test_id):

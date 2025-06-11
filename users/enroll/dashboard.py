@@ -1,11 +1,5 @@
-import base64
-import hashlib
-import uuid
 from flask import flash, jsonify, redirect, render_template, request, session, url_for
-import mysql
-from config import Config
 from users.enroll.user_db import UserOperation
-from users.enroll.utils_enroll import generate_secure_code
 from extensions import login_required
 
 from users import users_bp

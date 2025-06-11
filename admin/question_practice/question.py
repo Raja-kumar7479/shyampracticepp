@@ -4,7 +4,6 @@ from extensions import admin_login_required
 from admin.question_practice.question_db import UserOperation
 from admin import admin_bp
 from admin.question_practice.utils_question import validate_question_form
-import re 
 
 user_op = UserOperation()
 

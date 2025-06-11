@@ -1,7 +1,6 @@
 """
 
 1-
-
 CREATE TABLE auth (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(100) NOT NULL,
@@ -11,8 +10,13 @@ CREATE TABLE auth (
     auth_type ENUM('manual', 'google', 'both'),
     is_verified BOOLEAN DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    INDEX idx_email (email),           
+    INDEX idx_username (username),     
+    INDEX idx_auth_type (auth_type),   
+    INDEX idx_created_at (created_at) 
+) ENGINE=InnoDB;
 
 2-
 
@@ -20,10 +24,15 @@ CREATE TABLE enrollment (
     id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(100) NOT NULL,                    
     course VARCHAR(100) NOT NULL,                   
-    unique_code TEXT NOT NULL,                     
+    unique_code TEXT NOT NULL,                      
     enrollment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (email) REFERENCES auth(email) ON DELETE CASCADE
-);
+
+    FOREIGN KEY (email) REFERENCES auth(email) ON DELETE CASCADE,
+
+    INDEX idx_email (email),               
+    INDEX idx_course (course),             
+    INDEX idx_enrollment_date (enrollment_date) 
+) ENGINE=InnoDB;
 
 
 3-
@@ -38,8 +47,15 @@ CREATE TABLE coupon (
     expiry_date DATE,
     valid_until DATE,
     email VARCHAR(255),
-    FOREIGN KEY (email) REFERENCES auth(email) ON DELETE CASCADE
-);
+    FOREIGN KEY (email) REFERENCES auth(email) ON DELETE SET NULL,
+
+    UNIQUE INDEX idx_coupon_code (coupon_code),     
+    INDEX idx_email (email),                        
+    INDEX idx_status (status),                      
+    INDEX idx_expiry (expiry_date),               
+    INDEX idx_valid_until (valid_until)
+) ENGINE=InnoDB;
+
 
 4-
 
@@ -68,11 +84,11 @@ CREATE TABLE purchase (
   INDEX idx_payment_id (payment_id),
   INDEX idx_course_code (course_code),
   INDEX idx_purchase_code (purchase_code)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  FOREIGN KEY (email) REFERENCES auth(email) ON DELETE CASCADE
+) ENGINE=InnoDB;
 
 
 5-
-
 
 CREATE TABLE content (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -84,14 +100,18 @@ CREATE TABLE content (
     label ENUM('Free', 'Paid') NOT NULL,
     status VARCHAR(20) DEFAULT 'active',
     image_url TEXT,
-    section NOT NULL,
+    section VARCHAR(100) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
+    UNIQUE INDEX idx_code (code),               
+    INDEX idx_label (label),                    
+    INDEX idx_status (status),                  
+    INDEX idx_section (section),                
+    INDEX idx_created_at (created_at)
+) ENGINE=InnoDB;
 
 6-
-
 
 CREATE TABLE questions (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -99,19 +119,30 @@ CREATE TABLE questions (
     subject VARCHAR(100),
     topic VARCHAR(100),
     question_id INT NOT NULL,
-    question_text TEXT,
+    question_text TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     image_path TEXT,
-    option_a TEXT,
-    option_b TEXT,
-    option_c TEXT,
-    option_d TEXT,
+    option_a TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+    option_b TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+    option_c TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+    option_d TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     correct_option VARCHAR(5),
-    answer_text TEXT,
+    answer_text TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     question_type ENUM('MCQ', 'MSQ', 'NAT') NOT NULL,
     year INT,
     paper_set VARCHAR(100),
     explanation_link TEXT,
-    last_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
+    last_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    UNIQUE INDEX idx_question_id (question_id),
+    INDEX idx_subject (subject),
+    INDEX idx_topic (topic),
+    INDEX idx_question_type (question_type),
+    INDEX idx_year (year),
+    INDEX idx_paper_code (paper_code),
+    INDEX idx_paper_set (paper_set)
+) ENGINE=InnoDB
+DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_unicode_ci;
+
 
 """

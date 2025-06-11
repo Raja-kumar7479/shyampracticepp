@@ -24,7 +24,7 @@ class TestHandler:
             logger.exception(f"Failed to update test completion for {email}, test {test_id}")
 
     def _get_total_marks_for_test(self, test_id):
-        """Helper to fetch the total possible marks for a test."""
+       
         try:
             query = "SELECT SUM(correct_marks) as total_marks FROM test_questions WHERE test_id = %s"
             result = user_op.fetch_one(query, (test_id,))
@@ -34,7 +34,7 @@ class TestHandler:
             return 0.0
         
     def _calculate_percentage(self, net_score, total_test_marks):
-        """Helper to calculate percentage."""
+        
         if total_test_marks is None or total_test_marks == 0:
             return 0.0
         try:

@@ -1,7 +1,4 @@
-
 from flask import flash, jsonify, redirect, render_template, request, session, url_for
-import mysql
-from config import Config
 from users.enroll.user_db import UserOperation
 
 from users import users_bp

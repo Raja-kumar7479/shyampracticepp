@@ -1,9 +1,9 @@
 
-from flask import flash, jsonify,redirect, render_template, request, session, url_for
+from flask import jsonify, render_template, request, session, url_for
 from admin.manage_purchase.purchase_db import PurchaseOperation
 from admin import admin_bp
 from flask_mail import Mail
-from collections import defaultdict
+
 
 mail = Mail()
 

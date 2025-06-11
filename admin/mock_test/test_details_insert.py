@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import render_template, request, jsonify
 from admin.mock_test.test_details_db import UserOperation
 from extensions import admin_login_required
 from admin import admin_bp
