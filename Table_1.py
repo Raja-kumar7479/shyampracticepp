@@ -143,4 +143,5 @@ CREATE TABLE test_attempt_details (
 ) ENGINE=InnoDB;
 
 
+
 """
