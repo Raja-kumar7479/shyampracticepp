@@ -1,11 +1,11 @@
 {% extends "users/dashboard/base.html" %}
-{% block title %}GATE CSE Courses - Shyampracticepaper{% endblock %}
+{% block title %}Paid GATE CSE Courses - Shyampracticepaper{% endblock %}
+
 
 {% block content %}
 <div class="wrapper">
-    {% set sections = ['NOTES', 'PRACTICE BOOK', 'PYQ'] %}
     {% for section in sections %}
-        {% set filtered = courses | selectattr("section", "equalto", section) | list %}
+        {% set filtered = courses | selectattr("section", "equalto", section) | selectattr("label", "equalto", "Paid") | list %}
         {% if filtered %}
             <h2 class="section-title">{{ section.replace('_', ' ') }}</h2>
             <div class="course-container">
@@ -14,9 +14,7 @@
                     <div class="card-custom">
                         <div class="image-wrapper">
                             <img src="{{ course.image_url }}" alt="{{ course.title }}">
-                            <div class="badge-label {% if course.label == 'Free' %}free{% else %}paid{% endif %}">
-                                {{ course.label }}
-                            </div>
+                            <div class="badge-label paid">Paid</div>
                             {% if purchase_status_map[course_key] %}
                                 <div class="purchased-label">Purchased</div>
                             {% endif %}
@@ -32,20 +30,19 @@
                                     Details
                                 </button>
                             </div>
+                            {% if purchase_status_map[course_key] %}
+                                <button class="btn btn-secondary" disabled>Purchased</button>
+                            {% else %}
+                            <form method="POST" action="{{ url_for('users.add_cart', course_code=course_code, unique_code=unique_code) }}">
+    <input type="hidden" name="title" value="{{ course.title }}">
+    <input type="hidden" name="subtitle" value="{{ course.subtitle }}">
+    <input type="hidden" name="price" value="{{ course.price }}">
+    <input type="hidden" name="section" value="{{ course.section }}">
+    <input type="hidden" name="section_id" value="{{ course.section_id }}">
+    <button type="submit" name="add_cart" class="btn btn-cart">Add Cart</button>
+</form>
 
-                            {% if course.label == 'Free' %}
-                                <a href="{{ course.url }}" target="_blank" class="btn btn-open">Open</a>
-                            {% elif course.label == 'Paid' %}
-                                {% if purchase_status_map[course_key] %}
-                                    <button class="btn btn-secondary" disabled>Purchased</button>
-                                {% else %}
-                                    <form method="POST" action="{{ url_for('users.add_cart', course_code=course_code, unique_code=unique_code) }}">
-                                        <input type="hidden" name="title" value="{{ course.title }}">
-                                        <input type="hidden" name="subtitle" value="{{ course.subtitle }}">
-                                        <input type="hidden" name="price" value="{{ course.price }}">
-                                        <button type="submit" name="add_cart" class="btn btn-cart">Add Cart</button>
-                                    </form>
-                                {% endif %}
+                                
                             {% endif %}
                         </div>
                     </div>
@@ -55,7 +52,7 @@
     {% endfor %}
 </div>
 
-<!-- Modal -->
+
 <div id="details-modal" class="modal-overlay">
     <div class="modal-content">
         <span id="close-modal" class="close-btn">&times;</span>

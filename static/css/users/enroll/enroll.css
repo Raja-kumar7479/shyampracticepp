@@ -8,6 +8,14 @@ body {
     padding: 0;
 }
 
+.section-title {
+    font-size: 1.0rem;
+    font-weight: 500;
+    color: var(--primary-color);
+    padding: 5px 15px;
+    margin-bottom: 1rem;
+}
+
 /* Container Layout */
 .ccard, .ccardbox {
     display: flex;
@@ -73,81 +81,83 @@ body {
     font-size: 0.7rem;
     border-radius: 12px;
 }
-
-/* Exam Grid */
 .exam-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.box-wrapper {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-    gap: 18px;
-    padding: 30px 20px;
-    max-width: 1140px;
-    margin: auto;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+    justify-content: center;
 }
 
 .exam-box {
-    background: #ffffff;
-    border-radius: 14px;
-    padding: 18px;
-    text-align: center;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    min-height: 280px;
-    transition: 0.3s ease;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 128, 128, 0.1);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    position: relative;
+    border: 1px solid rgba(0, 128, 128, 0.2);
 }
 
 .exam-box:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 15px 35px rgba(0, 128, 128, 0.2);
 }
 
 .exam-icon {
-    width: 65px;
-    height: 65px;
-    border-radius: 50%;
-    margin: 0 auto 15px;
-    border: 2px solid #009999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
+    background: linear-gradient(135deg, #008080, #00b3b3);
+    color: white;
+    padding: 20px;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
 }
 
-.exam-icon img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+.exam-code {
+    font-size: 1.8rem;
+    letter-spacing: 2px;
 }
 
-.exam-box h2 {
-    font-size: 1.2rem;
-    margin-bottom: 8px;
-    color: #333;
+.card-body {
+    padding: 25px;
 }
 
-.exam-box p {
-    font-size: 0.9rem;
-    color: #666;
-    margin-bottom: 12px;
+.card-title {
+    color: #008080;
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+    font-weight: 600;
 }
 
-.exam-box button {
-    background: #00b3b3;
+.card-text {
+    color: #555;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.enroll-btn {
+    background: linear-gradient(135deg, #008080, #00b3b3);
     color: white;
     border: none;
-    padding: 8px 18px;
-    border-radius: 25px;
-    font-size: 0.9rem;
-    font-weight: 500;
+    padding: 10px 25px;
+    border-radius: 50px;
     cursor: pointer;
-    transition: 0.3s;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    width: 100%;
+    font-size: 1rem;
 }
 
-.exam-box button:hover {
-    background: #ffffff;
-    color: #00b3b3;
-    border: 1px solid #00b3b3;
+.enroll-btn:hover {
+    background: linear-gradient(135deg, #006666, #008080);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 128, 128, 0.3);
 }
 
 /* Course Section */
@@ -318,6 +328,41 @@ body {
 
 .enroll-btn:hover {
     background-color: #006666;
+}
+
+
+.dashboard-btn {
+    background-color: #008080;
+    color: #ffffff;
+    border: none;
+    padding: 0.6rem 1.4rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0, 128, 128, 0.2);
+    margin-top: 0.8rem;
+    display: inline-block;
+    text-align: center;
+}
+
+.dashboard-btn:hover {
+    background-color: #006666;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0, 128, 128, 0.3);
+}
+
+.dashboard-btn:active {
+    transform: scale(0.98);
+}
+
+@media (max-width: 576px) {
+    .dashboard-btn {
+        width: 100%;
+        font-size: 0.95rem;
+        padding: 0.55rem 1.2rem;
+    }
 }
 
 /* Responsive adjustments */

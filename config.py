@@ -1,7 +1,9 @@
 import os
+from datetime import timedelta
 class Config:
     # Core Security
-    SECRET_KEY = os.environ.get('SECRET_KEY', os.urandom(24)) 
+    SECRET_KEY = os.environ.get('SECRET_KEY', os.urandom(24))
+    TEST_TOKEN_SECRET = os.getenv('TEST_TOKEN_SECRET')
 
     # MySQL Configuration
     DATABASE_HOST = os.environ.get('DATABASE_HOST', 'localhost')
@@ -21,13 +23,22 @@ class Config:
     RAZORPAY_KEY_ID = os.getenv('RAZORPAY_KEY_ID')
     RAZORPAY_KEY_SECRET = os.getenv('RAZORPAY_KEY_SECRET')
 
-    # Session Security 
-    SESSION_COOKIE_HTTPONLY = True
-    SESSION_COOKIE_SECURE = True  
-    SESSION_COOKIE_SAMESITE = 'Lax'
+    # google OAuth
+    GOOGLE_CLIENT_ID = os.getenv("CLIENT_ID")
+    GOOGLE_CLIENT_SECRET = os.getenv("CLIENT_SECRET")
+    REDIRECT_URI = os.getenv("REDIRECT_URI")
 
     # Email Rate Limiting 
     EMAIL_RATE_LIMIT = '5/hour'
 
     # Token Expiry
-    RECEIPT_TOKEN_EXPIRY_SECONDS = 300 
+    RECEIPT_TOKEN_EXPIRY_SECONDS = 300
+    
+    # Session Security
+    SESSION_TYPE = 'filesystem'
+    SESSION_PERMANENT = True
+    PERMANENT_SESSION_LIFETIME = timedelta(minutes=30)
+
+    SESSION_COOKIE_HTTPONLY = True
+    SESSION_COOKIE_SECURE = True
+    SESSION_COOKIE_SAMESITE = 'Lax'

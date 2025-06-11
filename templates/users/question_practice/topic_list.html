@@ -1,0 +1,27 @@
+{% extends 'users/question_practice/base.html' %}
+{% block title %}Select Topic{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-3 fw-semibold text-center small-heading">
+        Topics in <span class="fw-bold" style="color: #008080;">{{ subject }}</span> ({{ paper_code }})
+    </h2>
+    {% if topics %}
+        <div class="row g-3">
+            {% for t in topics %}
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <a class="btn w-100 py-3 shadow-sm border-0"
+                       style="background-color: #f7fefe; color: #008080; font-weight: 600; border-radius: 12px;
+                              transition: all 0.3s ease;"
+                       href="{{ url_for('users.show_topic_questions',unique_code = unique_code, paper_code=paper_code, subject=subject, topic=t.topic) }}">
+                        {{ t.topic }}
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-warning mt-4">
+            No topics available for this subject.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

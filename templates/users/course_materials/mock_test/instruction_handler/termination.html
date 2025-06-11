@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Assessment Termination</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+    rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Times New Roman', Times, serif;
+      background-color: #fff;
+      text-align: center;
+      padding: 30px;
+      position: relative;
+    }
+    .warning-img {
+      margin-top: 40px;
+      margin-bottom: 20px;
+    }
+    .red-dot {
+      font-size: 30px;
+      color: #e74c3c;
+      line-height: 1;
+    }
+    .note-text {
+      color: #e74c3c;
+      font-weight: bold;
+    }
+    .instruction-text {
+      color: #555;
+      font-size: 16px;
+      line-height: 1.7;
+      margin-top: 20px;
+      margin-bottom: 40px;
+    }
+    .separator {
+      border-top: 1px solid #ddd;
+      margin: 40px auto;
+      width: 90%;
+    }
+    .how-to {
+      font-weight: bold;
+      font-size: 20px;
+      color: #333;
+      margin-bottom: 10px;
+    }
+    .bottom-note {
+      color: #555;
+      font-size: 16px;
+    }
+    .language-select {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 14px;
+    }
+    .language-select select {
+      margin-left: 5px;
+    }
+
+   .watermark {
+    position: fixed;
+    color: rgba(0, 0, 0, 0.08);
+    font-size: 24px;
+    font-weight: bold;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+.watermark.top-left {
+    top: 10px;
+    left: 10px;
+}
+
+.watermark.top-right {
+    top: 10px;
+    right: 10px;
+}
+
+.watermark.bottom-left {
+    bottom: 10px;
+    left: 10px;
+}
+
+.watermark.bottom-right {
+    bottom: 10px;
+    right: 10px;
+}
+
+.watermark.center {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-30deg);
+    font-size: 48px;
+    opacity: 0.05;
+}
+
+    .highlighted-reason {
+    background-color: #ffe6e6;
+    color: #cc0000;
+    border: 1px solid #cc0000;
+    padding: 12px 16px;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 20px auto;
+    max-width: 700px;
+    border-radius: 6px;
+    text-align: center;
+}
+
+  </style>
+</head>
+<body>
+
+  
+
+  <div class="warning-img">
+    <img src="https://cdn-icons-png.flaticon.com/512/564/564619.png" width="90" alt="Warning Icon">
+  </div>
+
+  <div class="red-dot">•</div>
+
+<!-- Jinja2 mapping of reason -->
+{% set reason_map = {
+    "tab_switch": "You switched tabs during the test.",
+    "right_click": "Right-clicking is not allowed during the test.",
+    "devtools_open": "Developer Tools were detected during the test.",
+    "mouse_leave": "Mouse moved outside the test window.",
+    "page_exit_attempt": "You tried to refresh or close the test window.",
+    "unknown": "A policy violation was detected."
+} %}
+
+<div class="note-text mt-2">Termination Reason:</div>
+<div class="highlighted-reason">
+    {{ reason_map.get(violation_type, reason_map['unknown']) }}
+</div>
+
+<div class="note-text mt-2">Note :</div>
+<div class="instruction-text">
+  System records every single interruption during the Assessment.<br>
+  Interruption may be recorded in the system due to one of the following reasons:<br>
+  1) You attempted to minimize or toggle the Assessment Console.<br>
+  2) You pressed restricted keys on your keyboard, which are not permitted during the Assessment.<br>
+  3) You tried to move out of the Assessment Console, which is strictly prohibited.<br>
+  4) You refreshed or attempted to reload the page.<br>
+  <span style="background-color: yellow; font-weight: bold;">
+    5) Copying and pasting the test URL into a different browser tab or window is not allowed, nor is opening it without fullscreen mode.
+  </span><br><br>
+
+  <span style="color: red; font-weight: bold;">
+    ⚠️ Please take this test seriously. Repeated violations will result in permanent termination of your attempt.
+  </span><br><br>
+
+  <span style="color: #2c7a7b; font-weight: bold;">
+    🌟 Give your best effort — your dedication today shapes your success tomorrow!
+  </span><br><br>
+
+  This window will close automatically, and you will be able to re-launch the Assessment only after it is unlocked. Please avoid switching applications or navigating away from the console at any time during the Assessment.
+</div>
+
+  <div class="separator"></div>
+
+  <div class="how-to">How to proceed</div>
+  <div class="instruction-text">
+    This window will close down now.
+  </div>
+  <div class="bottom-note">
+    Please ensure that you do not move out of Assessment window during the assessment. Use only mouse to navigate.
+  </div>
+
+  <script>
+    const positions = ['top-left', 'top-right', 'bottom-left', 'bottom-right', 'center'];
+
+    positions.forEach(pos => {
+        const watermark = document.createElement('div');
+        watermark.classList.add('watermark', pos);
+        watermark.innerText = 'shyampreacticepaper';
+        document.body.appendChild(watermark);
+    });
+</script>
+
+
+</body>
+</html>

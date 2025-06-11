@@ -1,0 +1,113 @@
+{% extends 'admin/question_practice/base_1.html' %}
+
+{% block title %}Insert Question{% endblock %}
+
+{% block content %}
+    <h2>Insert New Question</h2>
+
+    <div id="alertPlaceholder"></div> {# Placeholder for AJAX success/error messages #}
+
+    <form class="border p-4 bg-white rounded shadow-sm" id="questionInsertForm">
+
+        <div class="mb-3">
+            <label class="form-label">Question ID (optional)</label>
+            <input type="text" name="question_id" class="form-control" placeholder="e.g., {{ next_question_id }}" id="question_id_input">
+            <div class="form-text text-muted">Next suggested ID: <strong><span id="next_question_id_display">{{ next_question_id }}</span></strong></div>
+        </div>
+
+        <div class="mb-3 question-field" id="paper_code_container">
+            <label class="form-label">Paper Code</label>
+            <input type="text" name="paper_code" class="form-control" id="paper_code" required>
+        </div>
+
+        <div class="mb-3 question-field" id="subject_container">
+            <label class="form-label">Subject</label>
+            <input type="text" name="subject" class="form-control" id="subject" required>
+        </div>
+
+        <div class="mb-3 question-field" id="topic_container">
+            <label class="form-label">Topic</label>
+            <input type="text" name="topic" class="form-control" id="topic" required>
+        </div>
+
+        <div class="mb-3 text-end">
+            <button type="button" class="btn btn-info" id="setSectionBtn">Set Paper/Subject/Topic</button>
+            <button type="button" class="btn btn-warning hidden-field" id="resetTopicBtn">Reset Topic</button>
+            <button type="button" class="btn btn-danger hidden-field" id="resetAllBtn">Reset All</button>
+        </div>
+
+        <div id="question_fields_group" class="hidden-field">
+            <div class="mb-3">
+                <label class="form-label">Question Text</label>
+                <div id="question_text_editor"></div>
+                <input type="hidden" name="question_text" id="question_text_hidden_input">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Main Image URL (Auto-filled from Q Text)</label>
+                <input type="url" name="image_path" class="form-control" id="image_path_input" readonly placeholder="Will be auto-filled if an image is inserted in Q Text">
+                <small class="form-text text-muted">The URL of the first image embedded in the Question Text will be automatically filled here. Only ONE image is supported this way.</small>
+            </div>
+
+            <div class="mb-3 question-field" id="option_a_container">
+                <label class="form-label">Option A</label>
+                <input type="text" name="option_a" class="form-control" id="option_a">
+            </div>
+            <div class="mb-3 question-field" id="option_b_container">
+                <label class="form-label">Option B</label>
+                <input type="text" name="option_b" class="form-control" id="option_b">
+            </div>
+            <div class="mb-3 question-field" id="option_c_container">
+                <label class="form-label">Option C</label>
+                <input type="text" name="option_c" class="form-control" id="option_c">
+            </div>
+            <div class="mb-3 question-field" id="option_d_container">
+                <label class="form-label">Option D</label>
+                <input type="text" name="option_d" class="form-control" id="option_d">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Question Type</label>
+                <select name="question_type" class="form-select" id="question_type" required>
+                    <option value="MCQ">MCQ (Single Correct)</option>
+                    <option value="MSQ">MSQ (Multiple Correct)</option>
+                    <option value="NAT">NAT (Numerical Answer)</option>
+                </select>
+            </div>
+
+            <div class="mb-3" id="correct_option_mcq_msq_field">
+                <label class="form-label" id="mcq_msq_label">Correct Option</label>
+                <input type="text" name="correct_option" class="form-control" placeholder="For MCQ: A, B, C or D | For MSQ: A,B,C (no spaces)" required>
+            </div>
+
+            <div class="mb-3" id="correct_option_nat_field" style="display: none;">
+                <label class="form-label">Correct Value (NAT)</label>
+                <input type="number" step="any" name="correct_option_nat_placeholder" class="form-control" placeholder="e.g., 23.89 or 5">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Answer Text (optional)</label>
+                <input type="text" name="answer_text" class="form-control" id="answer_text">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Explanation Link (optional)</label>
+                <input type="url" name="explanation_link" class="form-control" id="explanation_link" placeholder="https://example.com/explanation.pdf">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Paper Set (optional)</label>
+                <input type="text" name="paper_set" class="form-control" id="paper_set">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Year</label>
+                <input type="number" name="year" min="2000" max="2030" class="form-control" value="{{ now.year if now else '2025' }}" required>
+            </div>
+
+            <button type="submit" class="btn btn-success">➕ Insert Question</button>
+        </div>
+    </form>
+{% endblock %}
+{% block scripts %}
+{% endblock %}

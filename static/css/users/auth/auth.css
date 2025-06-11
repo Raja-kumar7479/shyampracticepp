@@ -259,3 +259,25 @@ h3.text-center {
 .footer a:hover {
     color: #008080;
 }
+
+/*goggle link */
+
+ #google-login-link {
+    background-color: #ffffff;
+    color: rgb(40, 38, 38);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 8px 16px;
+    text-decoration: none;
+    border: 1px solid #ccc !important;  
+}
+
+#google-login-link:hover {
+    background-color: #ffffff;
+    color: rgb(27, 24, 24);
+}
+#google-login-link img {
+    height: 25px;
+}

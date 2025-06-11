@@ -6,7 +6,9 @@
     <title>{% block title %}Welcome{% endblock %}</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="{{ url_for('static', filename='css/users/auth/auth.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/users/flash.css') }}">
     
     <style>
         .hidden { display: none; }
@@ -16,7 +18,7 @@
 </head>
 <body>
 
-     <div id="flash-container">
+    <div id="flash-container">
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
       {% for category, message in messages %}
@@ -25,8 +27,8 @@
         </div>
       {% endfor %}
     {% endif %}
-   {% endwith %}
-  </div>
+  {% endwith %}
+</div>
 
     <div class="container-fluid d-flex justify-content-center align-items-center" style="height: 100vh;">
         <div class="signup-container">
@@ -42,6 +44,7 @@
     <!-- JavaScript Libraries -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="{{ url_for('static', filename='js/users/flash.js') }}"></script>
 
     {% block extra_js %}{% endblock %}
 

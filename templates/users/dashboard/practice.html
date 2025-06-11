@@ -2,12 +2,14 @@
 {% block title %}{{ course_name }} - Dashboard | Shyampracticepaper{% endblock %}
 
 {% block content %}
+
+{% if question_sections %}
 <div class="my-5"></div>
 
 <div class="inbt"></div>
 <div class="row g-2 text-center">
   <div class="col-12">
-    <h1 class="qa-topic-heading">Practice Questions for GATE {{ course_code }}</h1>
+    <h1 class="qa-topic-heading">Practice Questions for {{course_name}} {{ course_code }}</h1>
   </div>
 </div>
 
@@ -25,25 +27,77 @@
     {% endfor %}
   </div>
 </div>
+{% endif %}
 
-<!-- Books Section -->
-<div class="row g-2 text-center mt-5">
-  <div class="col-12">
-    <h1 class="qa-topic-heading">Recommended Books for GATE {{ course_code }}</h1>
-  </div>
-</div>
-
-<div class="cs-container">
-  <div class="cs-grid">
-    {% for book in books %}
-    <div class="cs-card">
-      <div class="cs-title">{{ book.title }}</div>
-      <a href="{{ book.url }}" class="view-btn">View</a>
+{% if courses %}
+<div class="wrapper mt-5">
+  <div class="inbt"></div>
+  <div class="row g-2 text-center">
+    <div class="col-12">
+      <h1 class="qa-topic-heading">Explore Free Courses for {{ course_name }} {{ course_code }}</h1>
     </div>
+  </div>
+
+  <div class="course-container">
+    {% for course in courses %}
+      {% if course.label == 'Free' %}
+      <div class="card-custom">
+        <div class="image-wrapper">
+          {% if course.image_url %}
+            <img src="{{ course.image_url }}" alt="{{ course.title }}">
+          {% else %}
+            <img src="{{ url_for('static', filename='default-course.jpg') }}" alt="Default Image">
+          {% endif %}
+          <div class="badge-label free">Free</div>
+        </div>
+        <div class="card-body">
+          <div class="card-title">{{ course.title }}</div>
+          <div class="subtitle">{{ course.subtitle }}</div>
+
+          <div class="btn-group" style="display: flex; justify-content: space-between; margin-top: 10px;">
+          <a href="{{ url_for('users.open_' + (course.section | lower | replace(' ', '_')), course_code=course_code, unique_code=unique_code) }}" target="_blank" class="free-course-open">Open</a>
+            <button class="free-course-details open-details"
+                    data-title="{{ course.title }}"
+                    data-details="{{ course.details }}">
+              Details
+            </button>
+          </div>
+        </div>
+      </div>
+      {% endif %}
     {% endfor %}
   </div>
 </div>
 
+
+<div id="details-modal" class="modal-overlay">
+  <div class="modal-content">
+    <span id="close-modal" class="close-btn">&times;</span>
+    <h4 id="modal-title"></h4>
+    <p id="modal-details"></p>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('.open-details').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.getElementById('modal-title').textContent = btn.getAttribute('data-title');
+      document.getElementById('modal-details').textContent = btn.getAttribute('data-details');
+      document.getElementById('details-modal').style.display = 'flex';
+    });
+  });
+
+  document.getElementById('close-modal').addEventListener('click', () => {
+    document.getElementById('details-modal').style.display = 'none';
+  });
+
+  document.getElementById('details-modal').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) {
+      e.currentTarget.style.display = 'none';
+    }
+  });
+</script>
+{% endif %}
 <div style="margin-bottom: 60px;"></div>
 
 {% endblock %}

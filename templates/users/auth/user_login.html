@@ -34,6 +34,12 @@
 <div class="text-center mt-3">
     <a href="{{ url_for('users.user_signup') }}" id="login-link">Don't have an account? Register</a>
 </div>
+<div class="text-center mt-4">
+    <a href="{{ url_for('users.google_login') }}" id="google-login-link" class="btn d-flex align-items-center justify-content-center">
+        <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google Logo">
+        <span>Continue with Google</span>
+    </a>
+</div>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const toggle = document.getElementById('toggle-password');

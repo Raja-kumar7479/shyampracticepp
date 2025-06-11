@@ -1,15 +1,16 @@
-from functools import wraps
-from flask import  render_template, request, redirect, url_for, flash, session
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from flask_mail import Mail
-from users.auth.utils_signup import (
-    clear_signup_session, is_valid_email, is_password_secure,
-    generate_otp, send_signup_email_otp
-)
 from flask_limiter.util import get_remote_address
 from extensions import limiter
+from users.auth.utils_signup import (
+    clear_signup_session, is_valid_email, is_password_secure,
+    generate_otp, validate_otp, send_signup_email_otp,send_signup_success_email
+)
 from users.auth.user_db import UserOperation
-import bcrypt
 import time
+import bcrypt
+from functools import wraps
+
 from users import users_bp
 
 mail = Mail()
@@ -20,10 +21,7 @@ def limit_by_signup_email(limit="3 per minute"):
         @wraps(f)
         def wrapped(*args, **kwargs):
             email = session.get('signup_data', {}).get('email')
-            if email:
-                key_func = lambda: email
-            else:
-                key_func = get_remote_address
+            key_func = (lambda: email) if email else get_remote_address
             return limiter.limit(limit, key_func=key_func)(f)(*args, **kwargs)
         return wrapped
     return decorator
@@ -31,22 +29,18 @@ def limit_by_signup_email(limit="3 per minute"):
 @users_bp.route("/user_signup", methods=['GET', 'POST'])
 def user_signup():
     if 'email' in session and 'username' in session:
-        flash("You are already logged in.", 'info')
-        return redirect(url_for('index'))
+        flash("You're already logged in.", 'info')
+        return redirect(url_for('users.login_success'))
 
-    if 'signup_data' not in session:
-        session['signup_data'] = {}
-
+    session.setdefault('signup_data', {})
     signup_data = session['signup_data']
 
     if request.args.get('go_back'):
-        if 'password' in signup_data:
-            signup_data.pop('password')
-        elif 'email' in signup_data:
-            signup_data.pop('email')
-        elif 'username' in signup_data:
-            signup_data.pop('username')
-        session.modified = True
+        for field in ('password', 'email', 'username'):
+            if field in signup_data:
+                signup_data.pop(field)
+                session.modified = True
+                break
         return redirect(url_for('users.user_signup'))
 
     if request.method == 'POST':
@@ -74,15 +68,14 @@ def user_signup():
             if not is_password_secure(password):
                 flash("Password must include uppercase, number, and special character.", 'signup_alerts')
             else:
-                signup_data['password'] = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
+                hashed_pw = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
+                signup_data['password'] = hashed_pw
 
                 otp_value = generate_otp()
                 session['otp_data'] = {
                     'otp': otp_value,
-                    'email': signup_data['email'],
-                    'username': signup_data['username'],
-                    'password': signup_data['password'],
-                    'timestamp': time.time()
+                    'timestamp': time.time(),
+                    **signup_data
                 }
                 session['otp_last_sent'] = time.time()
 
@@ -90,7 +83,7 @@ def user_signup():
                     send_signup_email_otp(signup_data['username'], signup_data['email'], otp_value, mail)
                     flash("OTP sent to your email.", 'signup_success')
                     return redirect(url_for('users.user_email_otp_verify'))
-                except Exception as e:
+                except Exception:
                     flash("Failed to send OTP. Try again.", 'signup_alerts')
 
     step = 'username'
@@ -107,76 +100,58 @@ def user_email_otp_verify():
     otp_data = session.get('otp_data')
     signup_data = session.get('signup_data', {})
 
-    # Go back option
     if request.args.get('go_back'):
-        if otp_data:
-            session['signup_data'] = {
-                'username': otp_data.get('username'),
-                'email': otp_data.get('email')
-            }
-            session.pop('otp_data', None)
-            session.pop('otp_attempts', None)
+        session['signup_data'] = {
+            'username': otp_data.get('username'),
+            'email': otp_data.get('email')
+        }
+        session.pop('otp_data', None)
+        session.pop('otp_attempts', None)
         return redirect(url_for('users.user_signup'))
 
-    # Already logged in
-    if 'email' in session and 'username' in session:
-        flash("You're already signed up!", 'signup_success')
-        return redirect(url_for('index'))
-
-    # OTP session missing or corrupted
-    if not otp_data or not all(k in otp_data for k in ('otp', 'email', 'username', 'password', 'timestamp')):
+    if not otp_data or time.time() - otp_data.get('timestamp', 0) > 300:
         clear_signup_session()
-        flash("OTP session expired or invalid. Please start signup again.", 'signup_alerts')
+        flash("OTP expired or session invalid. Please restart signup.", 'signup_alerts')
         return redirect(url_for('users.user_signup'))
 
-    # OTP expired (5 minutes)
-    if time.time() - otp_data['timestamp'] > 300:
-        clear_signup_session()
-        flash("OTP expired. Please restart signup.", 'signup_alerts')
-        return redirect(url_for('users.user_signup'))
-
-    # Ensure session email matches OTP email (no tampering)
     if otp_data['email'] != signup_data.get('email'):
         clear_signup_session()
-        flash("Email mismatch detected. Signup process restarted for security.", 'signup_alerts')
+        flash("Email mismatch. Signup restarted for safety.", 'signup_alerts')
         return redirect(url_for('users.user_signup'))
 
     if request.method == 'POST':
         user_otp = request.form.get('otp', '').strip()
-
         if not user_otp:
-            flash("Please enter the OTP.", 'signup_alerts')
-
-        elif user_otp != otp_data['otp']:
-            session['otp_attempts'] = session.get('otp_attempts', 0) + 1
-
-            if session['otp_attempts'] >= 5:
-                clear_signup_session()
-                flash("Too many failed attempts. Please start the signup again.", 'signup_alerts')
-                return redirect(url_for('users.user_signup'))
-
-            flash("Incorrect OTP. Try again.", 'signup_alerts')
-
+            flash("Enter OTP.", 'signup_alerts')
         else:
-            # Check again if user already exists before inserting
-            if user_op.get_user_by_email(otp_data['email']):
+            is_valid, message = validate_otp(user_otp)
+            if not is_valid:
+                session['otp_attempts'] = session.get('otp_attempts', 0) + 1
+                if session['otp_attempts'] >= 5:
+                    clear_signup_session()
+                    flash("Too many attempts. Restart signup.", 'signup_alerts')
+                    return redirect(url_for('users.user_signup'))
+                flash(message, 'signup_alerts')
+            else:
+                if user_op.get_user_by_email(otp_data['email']):
+                    clear_signup_session()
+                    flash("User already exists. Please log in.", 'signup_alerts')
+                    return redirect(url_for('login'))
+
+                user_op.user_signup_insert(
+                    otp_data['username'],
+                    otp_data['password'],
+                    otp_data['email'],
+                    is_verified=True
+                )
+
+                send_signup_success_email(otp_data['username'], otp_data['email'], mail)
+
+                session['username'] = otp_data['username']
+                session['email'] = otp_data['email']
                 clear_signup_session()
-                flash("User already exists. Please log in.", 'signup_alerts')
-                return redirect(url_for('login'))
-
-            user_op.user_signup_insert(
-                otp_data['username'],
-                otp_data['password'],
-                otp_data['email'],
-                is_verified=True
-            )
-
-            session['username'] = otp_data['username']
-            session['email'] = otp_data['email']
-
-            clear_signup_session()
-            flash("Signup complete! Welcome.", 'signup_success')
-            return redirect(url_for('index'))
+                flash("Signup successful!", 'signup_success')
+                return redirect(url_for('users.login_success'))
 
     return render_template("users/auth/user_signup.html", step='otp', signup_data=signup_data)
 
@@ -186,29 +161,25 @@ def resend_otp():
     signup_data = session.get('signup_data', {})
     otp_data = session.get('otp_data', {})
 
-    # Check essential fields
-    if not all(k in signup_data for k in ('email', 'username')) or otp_data.get('email') != signup_data.get('email'):
+    if not signup_data or otp_data.get('email') != signup_data.get('email'):
         clear_signup_session()
-        flash("Session invalid or expired. Please restart signup.", 'signup_alerts')
+        flash("Session error. Restart signup.", 'signup_alerts')
         return redirect(url_for('users.user_signup'))
 
-    # Wait at least 60 seconds between resends
-    if 'otp_last_sent' in session and time.time() - session['otp_last_sent'] < 60:
-        wait_time = int(60 - (time.time() - session['otp_last_sent']))
-        flash(f"Please wait {wait_time} seconds before resending OTP.", 'signup_alerts')
+    if time.time() - session.get('otp_last_sent', 0) < 60:
+        flash("Wait 60 seconds before resending OTP.", 'signup_alerts')
         return redirect(url_for('users.user_email_otp_verify'))
 
-    # Generate and send new OTP
-    otp_value = generate_otp()
-    session['otp_data']['otp'] = otp_value
-    session['otp_data']['timestamp'] = time.time()  # Reset OTP validity
+    new_otp = generate_otp()
+    session['otp_data']['otp'] = new_otp
+    session['otp_data']['timestamp'] = time.time()
     session['otp_last_sent'] = time.time()
-    session['otp_attempts'] = 0  # Reset OTP attempt counter
+    session['otp_attempts'] = 0
 
     try:
-        send_signup_email_otp(signup_data['username'], signup_data['email'], otp_value, mail)
-        flash("A new OTP has been sent to your email.", 'signup_success')
+        send_signup_email_otp(signup_data['username'], signup_data['email'], new_otp, mail)
+        flash("New OTP sent to email.", 'signup_success')
     except Exception:
-        flash("Failed to resend OTP. Please try again later.", 'signup_alerts')
+        flash("OTP send failed. Try later.", 'signup_alerts')
 
     return redirect(url_for('users.user_email_otp_verify'))

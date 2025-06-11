@@ -1,0 +1,108 @@
+body {
+    background-color: #f8f9fa;
+    color: #333;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+.container-fluid {
+    max-width: 1600px;
+}
+
+h2, h4 {
+    color: #0056b3;
+    border-bottom: 2px solid #dee2e6;
+    padding-bottom: 10px;
+}
+
+.card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.card-header {
+    background-color: #e9ecef;
+    border-bottom: 1px solid #ddd;
+    font-weight: 600;
+    color: #495057;
+}
+
+.form-control, .form-select {
+    border-radius: 5px;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+.btn {
+    border-radius: 5px;
+    font-weight: 500;
+    padding: 8px 16px;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover, .btn-primary:disabled {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+}
+
+
+.table {
+    background-color: #fff;
+}
+
+.table thead th {
+    background-color: #f2f2f2;
+    color: #333;
+    border-bottom-width: 2px;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #e9ecef;
+}
+
+#materialsTable tr.selected-row,
+#descriptionTable tr.selected-row {
+    background-color: #d1ecf1 !important;
+    font-weight: bold;
+}
+
+hr {
+    border-top: 1px solid #ccc;
+}
+
+.hidden {
+    display: none;
+}
+
+.correct-option-label {
+    font-weight: bold;
+    margin: 1rem 0 0.5rem;
+}

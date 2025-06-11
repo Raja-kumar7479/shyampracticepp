@@ -2,7 +2,6 @@ import logging
 import mysql.connector
 from config import Config
 
-
 logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(levelname)s] %(message)s')
 logger = logging.getLogger(__name__)
 
@@ -15,15 +14,13 @@ class UserOperation:
             database=Config.DATABASE_NAME
         )
 
-    def check_enrollment(self, email, course_name):
+    def check_enrollment(self, email, course_code):
         try:
             db = self.connection()
             cursor = db.cursor(buffered=True)
-            query = "SELECT EXISTS (SELECT 1 FROM enrollment WHERE email = %s AND course = %s)"
-            cursor.execute(query, (email, course_name))
-            result = cursor.fetchone()[0]
-            logger.info(f"Enrollment check for {email} in {course_name}: {result}")
-            return result
+            query = "SELECT EXISTS (SELECT 1 FROM enrollment WHERE email = %s AND code = %s)"
+            cursor.execute(query, (email, course_code))
+            return cursor.fetchone()[0]
         except Exception as e:
             logger.exception("Error checking enrollment")
             return 0
@@ -31,14 +28,13 @@ class UserOperation:
             cursor.close()
             db.close()
 
-    def enroll_user(self, email, course_name, unique_code):
+    def enroll_user(self, email, course_code, course_name, unique_code):
         try:
             db = self.connection()
             cursor = db.cursor()
-            query = "INSERT INTO enrollment (email, course, unique_code) VALUES (%s, %s, %s)"
-            cursor.execute(query, (email, course_name, unique_code))
+            query = "INSERT INTO enrollment (email, code, name, unique_code) VALUES (%s, %s, %s, %s)"
+            cursor.execute(query, (email, course_code, course_name, unique_code))
             db.commit()
-            logger.info(f"User {email} enrolled in {course_name}")
         except Exception as e:
             logger.exception("Error enrolling user")
         finally:
@@ -47,32 +43,34 @@ class UserOperation:
 
     def get_enrolled_courses(self, email):
         try:
-            db = self.connection()
-            cursor = db.cursor(dictionary=True)
-            query = "SELECT course FROM enrollment WHERE email = %s"
-            cursor.execute(query, (email,))
-            return [row['course'] for row in cursor.fetchall()]
+          db = self.connection()
+          cursor = db.cursor(dictionary=True)
+          query = "SELECT code, unique_code FROM enrollment WHERE email = %s"
+          cursor.execute(query, (email,))
+          return cursor.fetchall() 
         except Exception as e:
-            logger.exception("Error getting enrolled courses")
-            return []
+          logger.exception("Error getting enrolled courses")
+          return []
         finally:
-            cursor.close()
-            db.close()
+          cursor.close()
+          db.close()
 
-    def get_user_unique_code(self, email, course_name):
+    
+    def get_user_unique_code(self, email, course_code):
         try:
-            db = self.connection()
-            cursor = db.cursor(dictionary=True)
-            query = "SELECT unique_code FROM enrollment WHERE email = %s AND course = %s"
-            cursor.execute(query, (email, course_name))
-            result = cursor.fetchone()
-            return result['unique_code'] if result else None
+          db = self.connection()
+          cursor = db.cursor(dictionary=True)
+          query = "SELECT unique_code FROM enrollment WHERE email = %s AND code = %s"
+          cursor.execute(query, (email, course_code))
+          result = cursor.fetchone()
+          return result['unique_code'] if result else None
         except Exception as e:
-            logger.exception("Error fetching user unique code")
-            return None
+          logger.exception("Error fetching user unique code")
+          return None
         finally:
-            cursor.close()
-            db.close()
+          cursor.close()
+          db.close()
+
 
     def get_all_courses(self):
         try:
@@ -114,26 +112,7 @@ class UserOperation:
             cursor.close()
             db.close()
 
-    def get_courses_by_code(self, code):
-        try:
-            db = self.connection()
-            cursor = db.cursor(dictionary=True)
-            query = """
-                SELECT * FROM content 
-                WHERE code = %s AND status = 'active' 
-                ORDER BY 
-                    FIELD(section, 'NOTES', 'PRACTICE BOOK', 'PYQ'),
-                    FIELD(label, 'Free', 'Paid')
-            """
-            cursor.execute(query, (code,))
-            return cursor.fetchall()
-        except Exception as e:
-            logger.exception("Error fetching courses by code")
-            return []
-        finally:
-            cursor.close()
-            db.close()
-
+    
     def is_course_purchased_securely(self, email, course_code, title, subtitle):
         try:
             db = self.connection()
@@ -168,3 +147,61 @@ class UserOperation:
         finally:
             cursor.close()
             db.close()
+    
+    
+    
+    def get_course_details(self, course_code):
+        try:
+          db = self.connection()
+          cursor = db.cursor(dictionary=True)
+          query = "SELECT code, name, description FROM courses WHERE code = %s"
+          cursor.execute(query, (course_code,))
+          return cursor.fetchone()
+        except Exception as e:
+          logger.exception("Error fetching course details")
+          return None
+        finally:
+         cursor.close()
+         db.close()
+    
+
+
+    def get_courses_by_code(self, code):
+        try:
+            db = self.connection()
+            cursor = db.cursor(dictionary=True)
+            query = """
+                SELECT * FROM content 
+                WHERE code = %s AND status = 'active' 
+                ORDER BY 
+                    FIELD(section, 'NOTES', 'PRACTICE BOOK', 'PYQ','MOCK TEST'),
+                    FIELD(label, 'Free', 'Paid')
+            """
+            cursor.execute(query, (code,))
+            return cursor.fetchall()
+        except Exception as e:
+            logger.exception("Error fetching courses by code")
+            return []
+        finally:
+            cursor.close()
+            db.close()
+
+
+    def get_sections_by_code(self, code):
+        try:
+           db = self.connection()
+           cursor = db.cursor()
+           query = """
+            SELECT DISTINCT section ,section_id 
+            FROM content 
+            WHERE code = %s AND status = 'active'
+        """
+           cursor.execute(query, (code,))
+           return [row[0] for row in cursor.fetchall()]
+        except Exception as e:
+           logger.exception("Error fetching sections")
+           return []
+        finally:
+          cursor.close()
+          db.close()
+    

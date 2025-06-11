@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Test Feedback</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .table-responsive {
+            max-height: 80vh; 
+            overflow-y: auto;
+        }
+        th, td {
+            white-space: nowrap; 
+            overflow: hidden;
+            text-overflow: ellipsis; 
+            max-width: 200px; 
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+    <h2>Manage Test Feedback</h2>
+    <hr>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flashes">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <div class="mb-3 text-right">
+        <button id="truncateFeedbackBtn" class="btn btn-danger">Delete All Feedback</button>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped" id="feedbackTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Test ID</th>
+                    <th>Email</th>
+                    <th>Software Feedback</th>
+                    <th>Content Feedback</th>
+                    <th>Speed Feedback</th>
+                    <th>Suggestions</th>
+                    <th>Submission Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for feedback in feedbacks %}
+                <tr>
+                    <td>{{ feedback.id }}</td>
+                    <td>{{ feedback.test_id }}</td>
+                    <td>{{ feedback.email }}</td>
+                    <td>{{ feedback.feedback_software }}</td>
+                    <td>{{ feedback.feedback_content }}</td>
+                    <td>{{ feedback.feedback_speed }}</td>
+                    <td>{{ feedback.suggestions }}</td>
+                    <td>{{ feedback.submission_time }}</td>
+                </tr>
+                {% endfor %}
+                {% if not feedbacks %}
+                <tr>
+                    <td colspan="8" class="text-center">No feedback data available.</td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+</script>
+<script src="{{ url_for('static', filename='js/admin/course_materials/mock_test/manage_feedback.js') }}"></script>
+</body>
+</html>

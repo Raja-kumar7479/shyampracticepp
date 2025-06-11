@@ -7,7 +7,6 @@ from users.enroll.user_db import UserOperation
 from users import users_bp
 user_op =UserOperation()
 
-
 @users_bp.route('/course_shop/<course_code>/<unique_code>')
 def course_shop(course_code, unique_code):
     if 'email' not in session:
@@ -22,6 +21,7 @@ def course_shop(course_code, unique_code):
 
     courses = user_op.get_courses_by_code(course_code)
     enrolled_courses = user_op.get_enrolled_courses(email)
+    sections = user_op.get_sections_by_code(course_code)
 
     purchase_status_map = {}
     purchase_code_map = {}
@@ -40,8 +40,8 @@ def course_shop(course_code, unique_code):
     return render_template(
         'users/dashboard/shop.html',
         courses=courses,
+        sections=sections,
         email=email,
-        
         enrolled_courses=enrolled_courses,
         purchase_status_map=purchase_status_map,
         purchase_code_map=purchase_code_map,

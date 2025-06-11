@@ -1,0 +1,45 @@
+{% extends "users/enroll/base_1.html" %}
+{% block content %}
+
+{% if enrolled_courses %}
+<div class="my-5"></div>
+<div class="inbt">
+    <div class="row g-2 text-center">
+        <div class="col-12">
+            <h6 class="section-title bg-white text-center px-3">Your Enrolled Courses</h6>
+            <h1 style="color: #008080; font-size: 1.8rem;">
+                Access your <strong>Active Courses</strong>
+            </h1>
+        </div>
+    </div>
+</div>
+
+<div class="exam-container mb-5">
+    <div class="box-wrapper">
+        {% for course in enrolled_courses %}
+        <div class="exam-box">
+            <div class="exam-icon">
+                <span class="enrolled-label">Enrolled</span>
+                <div class="exam-code">{{ course.code }}</div>
+            </div>
+            <div class="card-body">
+                <h3 class="card-title">{{ course.name }}</h3>
+                <p class="card-text">{{ course.description }}</p>
+                <button class="dashboard-btn"
+                    onclick="location.href='/dashboard/{{ course.code }}/{{ course.unique_code }}'">
+                    Go to Dashboard
+                </button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% else %}
+<div class="text-center my-5">
+    <h4>No active courses enrolled yet.</h4>
+    <p>You can explore available courses from the <a href="/courses">Courses</a> page.</p>
+</div>
+{% endif %}
+
+<a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+{% endblock %}

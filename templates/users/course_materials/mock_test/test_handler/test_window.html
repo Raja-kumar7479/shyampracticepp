@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Exam - {{ course_info.subject_title }}</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+  <link href="{{ url_for('static', filename='css/users/course_materials/mock_test/test_window.css') }}" rel="stylesheet" />
+  <style>
+  </style>
+</head>
+
+<body>
+<header class="header-1">
+  <div class="header-left" id="exam-header-title">
+    {{ course_info.code }} {{ course_info.stream }}
+  </div>
+  <div class="header-right">
+    <span id="view-instructions-btn" class="clickable"><i class="fas fa-circle-info"></i> View Instructions</span>
+    <span id="view-question-paper-btn" class="clickable" style="margin-left: 15px;"><i class="fas fa-file-alt"></i> Question Paper</span>
+  </div>
+</header>
+
+<div class="content">
+  <aside class="left-panel">
+    <div class="breadcrumb">
+      <span id="breadcrumb-course-stream">{{ course_info.code }} {{ course_info.stream }}{{test_token}} <i class="fas fa-info-circle"></i></span>
+     <i class="fas fa-calculator calculator-icon" title="Calculator"></i>
+
+    </div>
+    <div class="exam-header">
+      <div class="section-label">Sections</div>
+      <div class="time-left"><strong id="time-left-display">Time Left : --:--:--</strong></div>
+    </div>
+    <div class="section-tabs" id="section-tabs-container">
+      {% for section in sections_data %}
+      <div class="tab" data-section-id="{{ section.section_id }}" onclick="testManager.selectSection('{{ section.section_id }}')">
+        {{ section.section_name }} <i class="fas fa-circle-info"></i>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="question-header">
+      <div><strong>Question Type:</strong> <span id="question-type-display">---</span></div>
+      <div>
+        Marks for correct answer: <span class="correct-mark" id="correct-marks-display">-</span> |
+        Negative Marks: <span class="negative-mark" id="negative-marks-display">-</span>
+      </div>
+    </div>
+    <div class="question-number-header">
+      <strong id="question-number-display">Question No. -</strong>
+    </div>
+    <div class="question-box" id="question-box-container">
+      <div id="question-text-area"></div>
+      <div id="question-image-area"></div>
+      <div class="question-options" id="question-options-area"></div>
+    </div>
+    <div class="question-actions">
+      <div class="left-actions">
+        <button id="mark-review-next-btn">Mark for Review & Next</button>
+        <button id="clear-response-btn">Clear Response</button>
+      </div>
+      <div class="right-action">
+        <button id="save-next-btn">Save & Next</button>
+      </div>
+    </div>
+  </aside>
+
+  <aside class="right-panel">
+    <div class="user-header">
+      <img src="" class="profile-img" alt="User"/>
+      <div class="username">{{ username }}</div>
+    </div>
+    <section class="status-section" id="status-panel">
+      <div class="status-grid">
+        <div class="status-item"><div class="shield green-shield" id="answered-count">0</div> Answered</div>
+        <div class="status-item"><div class="shield red-shield" id="not-answered-count">1</div> Not Answered</div>
+        <div class="status-item"><div class="box gray-box" id="not-visited-count">9</div> Not Visited</div>
+        <div class="status-item"><div class="circle purple-circle" id="marked-review-count">0</div> Marked for Review</div>
+      </div>
+      <div class="status-item centered-item">
+        <div class="purple-green-circle" id="answered-marked-count-container">
+          <span class="center-icon">✓</span>
+          <span id="answered-marked-count">0</span>
+        </div>
+        Answered & Marked for Review (will also be evaluated)
+      </div>
+    </section>
+    <div id="question-palette-container"></div>
+    <div class="submit-section">
+      <button class="submit-btn" id="submit-test-btn">Submit</button>
+    </div>
+  </aside>
+</div>
+
+<script>
+  const testId = "{{ test_id }}";
+  const courseCode = "{{ course_code }}";
+  const uniqueCode = "{{ unique_code }}";
+  const userId = "{{ email }}";
+  const initialDurationSeconds = "{{ duration_seconds | safe }}";
+  const sectionsData = JSON.parse('{{ sections_data | tojson | safe }}');
+</script>
+
+<script src="{{ url_for('static', filename='js/users/course_materials/mock_test/test_proctoring.js') }}"></script>
+<script src="{{ url_for('static', filename='js/users/course_materials/mock_test/test_window.js') }}"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+  const container = document.getElementById("question-box-container");
+  if (!container) return;
+
+  const rows = 5;
+  const cols = 4;
+
+  for (let i = 0; i < rows; i++) {
+    for (let j = 0; j < cols; j++) {
+      const watermark = document.createElement("div");
+      watermark.className = "watermark";
+      watermark.innerText = "shyampracticepaper";
+
+      watermark.style.position = "absolute";
+      watermark.style.top = `${i * 20}%`;
+      watermark.style.left = `${j * 25}%`;
+      watermark.style.opacity = "0.1";
+      watermark.style.pointerEvents = "none";
+
+      container.appendChild(watermark);
+    }
+  }
+});
+</script>
+<script>
+const proctor = new ProctoringSystem(testId, userId);
+
+document.addEventListener("DOMContentLoaded", () => {
+  testManager.init(testId, courseCode, uniqueCode);
+});
+
+</script>
+
+</body>
+</html>

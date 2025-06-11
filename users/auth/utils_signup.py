@@ -1,9 +1,8 @@
 import pyotp
 import time
-from flask import session, current_app as app
-from flask_mail import Message
+from flask import session
 import re
-import bcrypt
+from flask_mail import Message
 
 OTP_VALIDITY_PERIOD = 300
 
@@ -17,11 +16,6 @@ def is_password_secure(password):
         any(c.isdigit() for c in password) and
         any(c in "!@#$%^&*()-_=+[{]}\|;:'\",<.>/?`~" for c in password)
     )
-def clear_signup_session():
-    """Clear temporary signup data and OTP-related session keys."""
-    keys_to_clear = ['signup_data', 'otp', 'otp_secret', 'otp_last_sent', 'otp_verified', 'signup_step']
-    for key in keys_to_clear:
-        session.pop(key, None)
 
 def generate_otp():
     otp_secret = pyotp.random_base32()
@@ -33,88 +27,150 @@ def generate_otp():
 def validate_otp(user_otp):
     otp_data = session.get('otp')
     if not otp_data or time.time() > otp_data['expiry']:
-        clear_signup_session()
-        return False, "OTP expired or invalid. Please start over."
-    return (user_otp == otp_data['value']), "Invalid OTP."
+        return False, "OTP expired or invalid."
+    return user_otp == otp_data['value'], "Invalid OTP."
 
+def clear_signup_session():
+    for key in ['signup_data', 'otp_data', 'otp', 'otp_secret', 'otp_last_sent', 'otp_attempts']:
+        session.pop(key, None)
 
 def send_signup_email_otp(username, email, otp_value, mail):
-    msg = Message('Signup OTP Verification',
-                  sender='your-email@example.com',
-                  recipients=[email])
+    msg = Message(
+        subject='Signup OTP Verification',
+        sender='your-email@example.com',  
+        recipients=[email]
+    )
 
     msg.html = f"""
     <html>
       <head>
         <style>
           body {{
-            font-family: 'Helvetica', Arial, sans-serif;
-            margin: 0;
+            background: #f4f4f4;
+            font-family: Arial, sans-serif;
             padding: 0;
-            background-color: #f7f7f7;
+            margin: 0;
           }}
-          .email-container {{
-            max-width: 600px;
-            margin: 30px auto;
-            background-color: #ffffff;
+          .email-box {{
+            background: #ffffff;
+            max-width: 500px;
+            margin: 40px auto;
             padding: 30px;
-            border-radius: 10px;
-            border: 1px solid #ddd;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-          }}
-          .header {{
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             text-align: center;
-            font-size: 28px;
+          }}
+          h2 {{
             color: #333333;
-            font-weight: bold;
             margin-bottom: 20px;
           }}
-          .otp-box {{
-            text-align: center;
-            background-color: #f1f8ff;
-            border: 2px solid #4e79c6;
-            color: #4e79c6;
-            font-size: 40px;
+          .otp {{
+            font-size: 36px;
             font-weight: bold;
-            padding: 20px;
-            margin: 20px auto;
-            width: 220px;
-            border-radius: 8px;
+            background: #e6f0ff;
+            color: #1a73e8;
+            padding: 15px 25px;
+            display: inline-block;
+            border-radius: 6px;
+            margin: 20px 0;
+            letter-spacing: 4px;
           }}
-          .content {{
-            font-size: 16px;
+          p {{
+            font-size: 15px;
             color: #666666;
             line-height: 1.6;
-            text-align: center;
           }}
           .footer {{
-            font-size: 14px;
-            color: #999999;
-            text-align: center;
             margin-top: 30px;
+            font-size: 13px;
+            color: #aaaaaa;
+            border-top: 1px solid #eeeeee;
             padding-top: 20px;
-            border-top: 1px solid #e0e0e0;
           }}
-          .company-name {{
+          .brand {{
+            color: #1a73e8;
             font-weight: bold;
-            color: #4e79c6;
           }}
         </style>
       </head>
       <body>
-        <div class="email-container">
-          <div class="header">OTP Verification</div>
-          <p class="content">Hi <strong>{username}</strong>,</p>
-          <p class="content">Thank you for signing up with Shyam Practice Paper. Please use the OTP below to complete your registration process.</p>
-          <div class="otp-box">{otp_value}</div>
-          <p class="content">This OTP will expire in <strong>5 minutes</strong>. Please make sure to use it within this time frame.</p>
+        <div class="email-box">
+          <h2>Verify Your Email</h2>
+          <p>Hello <strong>{username}</strong>,</p>
+          <p>Thank you for signing up at <span class="brand">Shyam Practice Paper</span>.<br>
+          Use the OTP below to complete your signup:</p>
+          <div class="otp">{otp_value}</div>
+          <p>This OTP is valid for <strong>5 minutes</strong>.</p>
           <div class="footer">
-            <p class="content">If you didn't request this, please ignore this email.</p>
-            <p class="company-name">Shyam Practice Paper</p>
-            <p>&copy; 2025 All Rights Reserved</p>
+            <p>If you did not request this, please ignore this email.</p>
+            <p>&copy; 2025 <span class="brand">Shyam Practice Paper</span>. All rights reserved.</p>
           </div>
         </div>
       </body>
     </html>
     """
+    
+    mail.send(msg)
+
+def send_signup_success_email(username, email, mail):
+    msg = Message(
+        subject='Welcome to Shyam Practice Paper!',
+        sender='your-email@example.com',  # replace with your actual sender
+        recipients=[email]
+    )
+
+    msg.html = f"""
+    <html>
+      <head>
+        <style>
+          body {{
+            background-color: #f8f8f8;
+            font-family: Arial, sans-serif;
+            padding: 0;
+            margin: 0;
+          }}
+          .container {{
+            max-width: 500px;
+            margin: 30px auto;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+          }}
+          h2 {{
+            color: #008080;
+            margin-bottom: 20px;
+          }}
+          p {{
+            font-size: 16px;
+            color: #333333;
+            line-height: 1.6;
+          }}
+          .username {{
+            color: #008080;
+            font-weight: bold;
+          }}
+          .footer {{
+            margin-top: 30px;
+            font-size: 13px;
+            color: #999999;
+          }}
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <h2>Signup Successful!</h2>
+          <p>Hi <span class="username">{username}</span>,</p>
+          <p>Welcome to <strong>Shyam Practice Paper</strong>.<br>
+          Your account has been created successfully.</p>
+          <p>You're now ready to explore our platform and start practicing!</p>
+          <div class="footer">
+            <p>&copy; 2025 Shyam Practice Paper. All rights reserved.</p>
+          </div>
+        </div>
+      </body>
+    </html>
+    """
+
     mail.send(msg)

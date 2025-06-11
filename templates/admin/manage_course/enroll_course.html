@@ -1,0 +1,72 @@
+{% extends 'admin/manage_course/base.html' %}
+
+{% block title %}Manage Courses{% endblock %}
+
+{% block content %}
+<div class="manage-courses-container">
+    <!-- Page Heading -->
+    <header class="page-header">
+        <h2>Manage Courses</h2>
+    </header>
+
+    <!-- Flash messages -->
+    <div class="messages">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, msg in messages %}
+                    <div class="alert {{ category }}">{{ msg }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Add Course Section -->
+    <section class="add-course">
+        <h3>Add New Course</h3>
+        <form action="{{ url_for('admin.add_course') }}" method="POST" onsubmit="showAlertBeforeAdd(event)" class="course-form">
+            <input type="text" name="code" placeholder="Course Code" required>
+            <input type="text" name="name" placeholder="Course Name" required>
+            <input type="text" name="description" placeholder="Description" required>
+            <button type="submit" class="btn btn-success">Add Course</button>
+        </form>
+    </section>
+
+    <!-- Course Table -->
+    <section class="course-table">
+        <h3>Existing Courses</h3>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for course in courses %}
+                    <tr>
+                        <td>{{ course.code }}</td>
+                        <td>
+                            <form action="{{ url_for('admin.update_course', code=course.code) }}" method="POST" onsubmit="showAlertBeforeUpdate(event)">
+                                <input type="text" name="name" value="{{ course.name }}">
+                        </td>
+                        <td>
+                                <input type="text" name="description" value="{{ course.description }}">
+                        </td>
+                        <td class="action-buttons">
+                                <button type="submit" class="update-btn">Update</button>
+                            </form>
+                            <form id="deleteForm-{{ course.code }}" action="{{ url_for('admin.delete_course', code=course.code) }}" method="POST">
+                                <button type="button" class="remove-btn" onclick="showAlertAndSubmitDelete('{{ course.code }}')">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>
+{% endblock %}

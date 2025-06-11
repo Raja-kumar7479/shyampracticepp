@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage User Test Logs</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .table-responsive {
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        th, td {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 180px;
+        }
+        .highlighted-count {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #007bff;
+            padding: 10px 15px;
+            border-radius: 5px;
+            background-color: #e9f5ff;
+            display: inline-block;
+            margin-bottom: 15px;
+            transition: all 0.3s ease-in-out;
+        }
+        .highlighted-count.fade-in {
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+    <h2>Manage User Test Logs</h2>
+    <hr>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flashes">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <div class="alert alert-info d-flex align-items-center" role="alert">
+        Total students attempted test: <span id="liveTestAttemptCount" class="highlighted-count ml-2">{{ unique_attempts_count }}</span>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped" id="testLogTable">
+            <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>Username</th>
+                    <th>Test ID</th>
+                    <th>Start Time</th>
+                    <th>End Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in test_logs %}
+                <tr>
+                    <td>{{ log.email }}</td>
+                    <td>{{ log.username }}</td>
+                    <td>{{ log.test_id }}</td>
+                    <td>{{ log.start_time if log.start_time else 'N/A' }}</td>
+                    <td>{{ log.end_time if log.end_time else 'N/A' }}</td>
+                </tr>
+                {% endfor %}
+                {% if not test_logs %}
+                <tr>
+                    <td colspan="5" class="text-center">No user test log data available.</td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const liveTestAttemptCountSpan = document.getElementById('liveTestAttemptCount');
+
+        function fetchLiveCount() {
+            fetch('/get_unique_test_attempts_count')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.unique_attempts_count !== undefined) {
+                        liveTestAttemptCountSpan.textContent = data.unique_attempts_count;
+                        liveTestAttemptCountSpan.classList.add('fade-in');
+                        setTimeout(() => {
+                            liveTestAttemptCountSpan.classList.remove('fade-in');
+                        }, 500);
+                    } else {
+                        console.error('API response missing unique_attempts_count:', data);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching live count:', error);
+                });
+        }
+
+        fetchLiveCount();
+        setInterval(fetchLiveCount, 10000);
+    });
+</script>
+</body>
+</html>

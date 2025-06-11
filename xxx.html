@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Scientific Calculator</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+  font-family: Arial, sans-serif;
+  background: #f2f2f2;
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.calculator {
+  width: 575px;
+  background: #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+.title-bar {
+  background: #4285f4;
+  color: white;
+  padding: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.help, .min, .close {
+  background: #58c7f3;
+  border: none;
+  color: white;
+  margin-left: 5px;
+  cursor: pointer;
+  border-radius: 5px;
+  padding: 3px 10px;
+}
+
+input[type="text"] {
+  width: 100%;
+  font-size: 22px;
+  padding: 10px;
+  border: none;
+  outline: none;
+  box-sizing: border-box;
+}
+
+#result {
+  background: #fff;
+  text-align: right;
+  font-weight: bold;
+}
+
+.mode {
+  display: flex;
+  gap: 10px;
+  padding: 8px;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.mode button {
+  padding: 5px 10px;
+  border: 1px solid #aaa;
+  background: #e0e0e0;
+  cursor: pointer;
+}
+
+.buttons {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+  padding: 10px;
+}
+
+button {
+  padding: 15px;
+  font-size: 16px;
+  border: 1px solid #aaa;
+  background: #fff;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+button.operator {
+  background-color: #f44336;
+  color: white;
+}
+
+button.equal {
+  background-color: #4CAF50;
+  color: white;
+  grid-column: span 1;
+  height: 100%;
+}
+
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <div class="title-bar">
+      <span>Scientific Calculator</span>
+      <button class="help">Help</button>
+      <button class="min">_</button>
+      <button class="close">X</button>
+    </div>
+    <input type="text" id="expression" readonly />
+    <input type="text" id="result" value="0" readonly />
+
+    <div class="mode">
+      <button onclick="setMode('mod')">mod</button>
+      <label><input type="radio" name="angle" value="deg" checked />Deg</label>
+      <label><input type="radio" name="angle" value="rad" />Rad</label>
+    </div>
+
+    <div class="buttons" id="buttons">
+      <!-- Buttons will be rendered by JavaScript -->
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+const expressionInput = document.getElementById('expression');
+const resultInput = document.getElementById('result');
+const buttonsContainer = document.getElementById('buttons');
+
+const isDeg = () => document.querySelector('input[name="angle"]:checked').value === 'deg';
+
+const buttons = [
+  'sinh', 'cosh', 'tanh', 'Exp', '(', ')', '←',
+  'sinh⁻¹', 'cosh⁻¹', 'tanh⁻¹', 'log₂x', 'ln', 'log', '7',
+  'π', 'e', 'n!', 'logₓy', 'eˣ', '10ˣ', '8',
+  'sin', 'cos', 'tan', 'xʸ', 'x³', 'x²', '9',
+  'sin⁻¹', 'cos⁻¹', 'tan⁻¹', '∛x', '√x', '|x|', 'C',
+  'MC', 'MR', 'MS', 'M+', 'M-', '.', '+/-', '%',
+  '1', '2', '3', '/', '*', '1/x', '0',
+  '4', '5', '6', '-', '+', '=', ''
+];
+
+let memory = 0;
+
+function renderButtons() {
+  buttons.forEach(label => {
+    const btn = document.createElement('button');
+    btn.innerText = label;
+    if (label === 'C' || label === '←') btn.classList.add('operator');
+    if (label === '=') btn.classList.add('equal');
+    btn.onclick = () => handleButton(label);
+    buttonsContainer.appendChild(btn);
+  });
+}
+
+function handleButton(label) {
+  const exp = expressionInput.value;
+
+  switch (label) {
+    case 'C':
+      expressionInput.value = '';
+      resultInput.value = '0';
+      break;
+    case '←':
+      expressionInput.value = exp.slice(0, -1);
+      break;
+    case '=':
+      try {
+        const evaluated = evaluateExpression(exp);
+        resultInput.value = evaluated;
+      } catch (e) {
+        resultInput.value = 'Error';
+      }
+      break;
+    case '+/-':
+      if (resultInput.value !== '0') {
+        resultInput.value = -parseFloat(resultInput.value);
+      }
+      break;
+    case 'π':
+      expressionInput.value += Math.PI;
+      break;
+    case 'e':
+      expressionInput.value += Math.E;
+      break;
+    case 'n!':
+      const fact = n => (n <= 1 ? 1 : n * fact(n - 1));
+      expressionInput.value = fact(parseFloat(resultInput.value));
+      break;
+    case '1/x':
+      expressionInput.value = 1 / parseFloat(resultInput.value);
+      break;
+    case '|x|':
+      expressionInput.value = Math.abs(parseFloat(resultInput.value));
+      break;
+    case '√x':
+      expressionInput.value = Math.sqrt(parseFloat(resultInput.value));
+      break;
+    case '∛x':
+      expressionInput.value = Math.cbrt(parseFloat(resultInput.value));
+      break;
+    case 'x²':
+      expressionInput.value += '**2';
+      break;
+    case 'x³':
+      expressionInput.value += '**3';
+      break;
+    case 'xʸ':
+      expressionInput.value += '**';
+      break;
+    case 'log':
+      expressionInput.value += 'Math.log10(';
+      break;
+    case 'ln':
+      expressionInput.value += 'Math.log(';
+      break;
+    case 'eˣ':
+      expressionInput.value += 'Math.exp(';
+      break;
+    case '10ˣ':
+      expressionInput.value += '10**';
+      break;
+    case 'sin':
+    case 'cos':
+    case 'tan':
+      expressionInput.value += `Math.${label}(${isDeg() ? 'Math.PI/180*' : ''}`;
+      break;
+    case 'sin⁻¹':
+      expressionInput.value += `${isDeg() ? '180/Math.PI*' : ''}Math.asin(`;
+      break;
+    case 'cos⁻¹':
+      expressionInput.value += `${isDeg() ? '180/Math.PI*' : ''}Math.acos(`;
+      break;
+    case 'tan⁻¹':
+      expressionInput.value += `${isDeg() ? '180/Math.PI*' : ''}Math.atan(`;
+      break;
+    case 'MC':
+      memory = 0;
+      break;
+    case 'MR':
+      expressionInput.value += memory;
+      break;
+    case 'MS':
+      memory = parseFloat(resultInput.value);
+      break;
+    case 'M+':
+      memory += parseFloat(resultInput.value);
+      break;
+    case 'M-':
+      memory -= parseFloat(resultInput.value);
+      break;
+    default:
+      expressionInput.value += label;
+  }
+}
+
+function evaluateExpression(expr) {
+  return Function('"use strict";return (' + expr + ')')();
+}
+
+renderButtons();
+
+  </script>
+</body>
+</html>

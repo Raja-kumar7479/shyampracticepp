@@ -17,9 +17,12 @@
     <ul class="sidebar-menu">
       <li><a href="#" class="active"><i class="fas fa-fw fa-tachometer-alt"></i><span class="sidebar-text">Dashboard</span></a></li>
       <li><a href="{{ url_for('admin.insert_question') }}"><i class="fas fa-fw fa-plus-circle"></i><span class="sidebar-text">Insert Question</span></a></li>
-      <li><a href="{{ url_for('admin.show_questions') }}"><i class="fas fa-fw fa-edit"></i><span class="sidebar-text">Update Question</span></a></li>
+      <li><a href="{{ url_for('admin.manage_study_materials') }}"><i class="fas fa-fw fa-plus-circle"></i><span class="sidebar-text">Test Question</span></a></li>
       <li><a href="{{ url_for('admin.manage_courses') }}"><i class="fas fa-fw fa-book"></i><span class="sidebar-text">Manage Courses</span></a></li>
-      <li><a href="{{ url_for('admin.manage_books') }}"><i class="fas fa-fw fa-book-open"></i><span class="sidebar-text">Manage Books</span></a></li>
+      <li><a href="{{ url_for('admin.manage_content') }}"><i class="fas fa-fw fa-book-open"></i><span class="sidebar-text">Manage content</span></a></li>
+      <li><a href="{{ url_for('admin.manage_feedback') }}"><i class="fas fa-fw fa-book-open"></i><span class="sidebar-text">Test Feedback</span></a></li>
+      <li><a href="{{ url_for('admin.manage_test_logs') }}"><i class="fas fa-fw fa-book-open"></i><span class="sidebar-text">Test Details</span></a></li>
+       <li><a href="{{ url_for('admin.manage_purchases') }}"><i class="fas fa-fw fa-book-open"></i><span class="sidebar-text">Purchase Details</span></a></li>
       <div class="sidebar-divider"></div>
       <li><a href="{{ url_for('admin.admin_logout') }}"><i class="fas fa-fw fa-sign-out-alt"></i><span class="sidebar-text">Logout</span></a></li>
     </ul>

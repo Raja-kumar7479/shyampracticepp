@@ -276,3 +276,37 @@ body {
     padding: 7px 14px;
   }
 }
+
+
+.free-course-open,
+.free-course-details {
+  padding: 6px 14px;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+  font-size: 12px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+/* Open button (left) */
+.free-course-open {
+  background-color: #008080;
+  color: white;
+}
+
+.free-course-open:hover {
+  background-color: #006666;
+  color:white;
+}
+
+/* Details button (right) */
+.free-course-details {
+  background-color: #2563eb;
+  color: white;
+}
+
+.free-course-details:hover {
+  background-color: #1d4ed8;
+  color: white;
+}
+

@@ -34,7 +34,7 @@ class UserOperation:
         cursor = None
         try:
             with self.connection() as db:
-                cursor = db.cursor(buffered=True)
+                cursor = db.cursor(dictionary=True, buffered=True)
                 query = "SELECT * FROM auth WHERE email = %s"
                 cursor.execute(query, (email,))
                 return cursor.fetchone()
@@ -45,23 +45,7 @@ class UserOperation:
             if cursor:
                 cursor.close()
 
-    def user_signup_insert(self, username, password, email, is_verified=False):
-        db = None
-        cursor = None
-        try:
-            with self.connection() as db:
-                cursor = db.cursor()
-                query = """
-                    INSERT INTO auth (username, password, email, is_verified)
-                    VALUES (%s, %s, %s, %s)
-                """
-                cursor.execute(query, (username, password, email, is_verified))
-                db.commit()
-        except Exception as e:
-            logger.exception("Error inserting user")
-        finally:
-            if cursor:
-                cursor.close()
+   
 
     def update_user_password(self, email, new_password):
         db = None
@@ -131,3 +115,55 @@ class UserOperation:
         finally:
             if cursor:
                 cursor.close()
+    
+
+    def insert_user_google(self, username, email, oauth_id):
+        try:
+          with self.connection() as db:
+            cursor = db.cursor(buffered=True)
+            query = """
+                INSERT INTO auth (username, email, oauth_id, auth_type, is_verified)
+                VALUES (%s, %s, %s, 'google', TRUE)
+            """
+            cursor.execute(query, (username, email, oauth_id))
+            db.commit()
+            cursor.close()
+            logger.info("Google user inserted: %s", email)
+        except Exception as e:
+          logger.exception("Error inserting Google user: %s", e)
+
+    def user_signup_insert(self, username, password, email, is_verified=False):
+        try:
+          with self.connection() as db:
+            cursor = db.cursor(buffered=True)
+            query = """
+                INSERT INTO auth (username, password, email, is_verified, auth_type)
+                VALUES (%s, %s, %s, %s, 'manual')
+            """
+            cursor.execute(query, (username, password, email, is_verified))
+            db.commit()
+            cursor.close()
+            logger.info("Manual signup user inserted: %s", email)
+        except Exception as e:
+          logger.exception("Error inserting manual signup user: %s", e)
+    
+
+    def update_auth_type_to_both(self, email, oauth_id):
+        cursor = None
+        try:
+          with self.connection() as conn:
+            cursor = conn.cursor(buffered=True)
+            query = """
+                UPDATE auth
+                SET auth_type = 'both', oauth_id = %s
+                WHERE email = %s
+            """
+            cursor.execute(query, (oauth_id, email))
+            conn.commit()
+            return True
+        except Exception as e:
+           logger.exception(f"Error updating auth_type to 'both' for email: {email} — {str(e)}")
+           return False
+        finally:
+          if cursor:
+            cursor.close()

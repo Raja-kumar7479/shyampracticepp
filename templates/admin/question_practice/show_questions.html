@@ -1,0 +1,111 @@
+{% extends 'admin/question_practice/base_2.html' %}
+
+{% block title %}Show Questions (Inline Editing){% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Show & Manage Questions</h2>
+
+<div id="alertPlaceholder"></div>
+
+
+<form method="POST" class="mb-4 d-flex align-items-end flex-wrap">
+    <div class="me-2 mb-2">
+        <label for="paper_code_filter" class="form-label visually-hidden">Paper Code</label>
+        <input type="text" name="paper_code" id="paper_code_filter" class="form-control" placeholder="Paper Code" value="{{ paper_code or '' }}" required>
+    </div>
+    <div class="me-2 mb-2">
+        <label for="subject_filter" class="form-label visually-hidden">Subject</label>
+        <input type="text" name="subject" id="subject_filter" class="form-control" placeholder="Subject" value="{{ subject or '' }}">
+    </div>
+    <div class="me-2 mb-2">
+        <label for="topic_filter" class="form-label visually-hidden">Topic</label>
+        <input type="text" name="topic" id="topic_filter" class="form-control" placeholder="Topic" value="{{ topic or '' }}">
+    </div>
+    <div class="mb-2">
+        <button type="submit" class="btn btn-primary me-2">Show Questions</button>
+        <a href="{{ url_for('admin.show_questions', paper_code='', subject='', topic='') }}" class="btn btn-secondary">Clear Filter</a>
+    </div>
+</form>
+
+{% for q in questions %}
+<div class="card mb-4 question-box" id="question-box-{{ q.question_id }}">
+    <div class="card-body">
+        {% if q.last_updated and (now - q.last_updated).total_seconds() < 86400 %}
+        <span class="badge bg-success updated-tag float-end">Updated Recently</span>
+        {% endif %}
+
+        <div class="question-metadata mb-2">
+            <strong>ID:</strong>
+            <span class="editable-text" contenteditable="true" data-id="{{ q.question_id }}" data-field="question_id">{{ q.question_id }}</span> |
+            <strong>Subject:</strong>
+            <span class="editable-text" contenteditable="true" data-id="{{ q.question_id }}" data-field="subject">{{ q.subject }}</span> |
+            <strong>Topic:</strong>
+            <span class="editable-text" contenteditable="true" data-id="{{ q.question_id }}" data-field="topic">{{ q.topic }}</span> |
+            <strong>Year:</strong>
+            <span class="editable-text" contenteditable="true" data-id="{{ q.question_id }}" data-field="year">{{ q.year }}</span> |
+            <strong>Type:</strong>
+            <span class="editable-text" contenteditable="true" data-id="{{ q.question_id }}" data-field="question_type">{{ q.question_type }}</span> |
+            <strong>Set:</strong>
+            <span class="editable-text" contenteditable="true" data-id="{{ q.question_id }}" data-field="paper_set">{{ q.paper_set }}</span>
+        </div>
+
+        <div class="mb-3">
+            <strong>Q:</strong>
+            <span class="question-content-wrapper editable-html" contenteditable="true" data-id="{{ q.question_id }}" data-field="question_text">
+                {{ q.display_question_text | safe }}
+            </span>
+        </div>
+        <div class="mb-3">
+            <strong>Image URL (Reference):</strong>
+            <span class="editable-text" contenteditable="true" data-id="{{ q.question_id }}" data-field="image_path">{{ q.image_path or '' }}</span>
+            {% if q.image_path %}
+                <button type="button" class="btn btn-sm btn-outline-info ms-2" onclick="previewImage('{{ q.image_path }}')">Preview Image</button>
+            {% endif %}
+        </div>
+
+        <ul class="list-unstyled">
+            <li>A. <span class="editable-text" contenteditable="true" data-id="{{ q.question_id }}" data-field="option_a">{{ q.option_a }}</span></li>
+            <li>B. <span class="editable-text" contenteditable="true" data-id="{{ q.question_id }}" data-field="option_b">{{ q.option_b }}</span></li>
+            <li>C. <span class="editable-text" contenteditable="true" data-id="{{ q.question_id }}" data-field="option_c">{{ q.option_c }}</span></li>
+            <li>D. <span class="editable-text" contenteditable="true" data-id="{{ q.question_id }}" data-field="option_d">{{ q.option_d }}</span></li>
+        </ul>
+
+        <div class="mb-3">
+            <strong>Answer:</strong>
+            <span class="editable-text" contenteditable="true" data-id="{{ q.question_id }}" data-field="correct_option">{{ q.correct_option }}</span> -
+            <span class="editable-text" contenteditable="true" data-id="{{ q.question_id }}" data-field="answer_text">{{ q.answer_text }}</span>
+        </div>
+
+        <div class="mb-3">
+            <strong>Explanation Link:</strong>
+            <span class="editable-text" contenteditable="true" data-id="{{ q.question_id }}" data-field="explanation_link">{{ q.explanation_link or '' }}</span>
+        </div>
+
+        <div class="question-actions mt-2">
+            <button class="btn btn-danger btn-sm" onclick="deleteQuestion('{{ q.question_id }}', this)">Delete</button>
+            <button class="btn btn-success btn-sm" onclick="saveChanges(this, '{{ q.question_id }}')">Save Changes</button>
+        </div>
+    </div>
+</div>
+{% else %}
+    <div class="alert alert-info" role="alert">
+        No questions found for the specified filters.
+    </div>
+{% endfor %}
+
+<div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-labelledby="imagePreviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imagePreviewModalLabel">Image Preview</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="modalImage" src="" class="img-fluid" alt="Question Image Preview">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+{% endblock %}

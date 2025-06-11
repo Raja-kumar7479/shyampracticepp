@@ -38,7 +38,7 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto p-4 p-lg-0">
                 <a href="/" class="nav-item nav-link">Home</a>
-                <a href="" class="nav-item nav-link">Courses</a>
+                <a href="{{ url_for('users.course_view') }}" class="nav-item nav-link">Course</a>
                 <a href="" class="nav-item nav-link">Contact</a>
                 {% if username %}
                   <div class="nav-item dropdown">
@@ -48,6 +48,7 @@
                         </div>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end dropdown-padding" aria-labelledby="navbarDropdownMenuLink">
+                        <li><a class="dropdown-item" href="{{ url_for('users.my_courses') }}">Enroll Course</a></li>
                         <li><a class="dropdown-item" href="{{ url_for('users.logout') }}">Logout</a></li>
                     </ul>
                   </div>

@@ -30,7 +30,7 @@ def limit_by_session_email(limit="5 per minute"):
 def forgot_password():
     if 'email' in session and 'username' in session:
         flash("You are already logged in.", 'info')
-        return redirect(url_for('index'))  # change 'dashboard' as needed
+        return redirect(url_for('users.login_success'))  # change 'dashboard' as needed
 
     step = session.get('step', 'email')
     go_back = request.args.get('go_back')

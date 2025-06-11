@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Scientific Calculator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/users/course_materials/test_calculator/calclayout.css') }}">
+</head>
+<body>
+    {% block content %}{% endblock %}
+
+    <script src="{{ url_for('static', filename='js/users/course_materials/test_calculator/calfunlayout.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/users/course_materials/test_calculator/caljquerymin.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/users/course_materials/test_calculator/caljquery-1.min.js') }}"></script>
+</body>
+</html>

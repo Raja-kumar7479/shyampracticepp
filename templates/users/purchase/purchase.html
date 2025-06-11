@@ -1,5 +1,10 @@
 {% extends 'users/purchase/base_3.html' %}
 
+{% block head %}
+<style>
+</style>
+{% endblock %}
+
 {% block body %}
 <div class="wrapper">
   <div class="sidebar collapsed" id="sidebar">
@@ -7,8 +12,7 @@
       +91-{{ phone }}
       <span class="close-btn" onclick="toggleSidebar()">&times;</span>
     </div>
-    <a href="{{ url_for('users.purchase_dashboard', course_code=course_name, unique_code=unique_code) }}">
-    <a href="#"><i class="fas fa-user-circle"></i><span>Profile</span></a>
+    <a href="{{ url_for('users.purchase_dashboard', course_code=course_name, unique_code=unique_code) }}"><i class="fas fa-user-circle"></i><span>Profile</span></a>
     <a href="{{ url_for('users.course_shop', course_code=course_code, unique_code=unique_code) }}"><i class="fas fa-home"></i><span>Add to Cart</span></a>
     <a href="{{ url_for('users.logout') }}"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
   </div>
@@ -24,34 +28,40 @@
       </button>
     </div>
 
-    {% if purchases %}
-    <div class="course-grid">
-      {% for purchase in purchases %}
-      <div class="course-card">
-        <div>
-          <div class="course-title">{{ purchase.title }}</div>
-          <div class="course-subtitle">{{ purchase.subtitle }}</div>
-          <div class="purchase-info">
-            <strong>Purchased:</strong> {{ purchase.payment_date.strftime('%d-%m-%Y') }}
-          </div>
+    {% if grouped_purchases %}
+      {% for section, section_purchases in grouped_purchases.items() %}
+        <div class="section-header">
+          <h4>{{ section }}</h4>
         </div>
-        <div class="mt-3">
-          <a href="#" class="btn btn-sm btn-primary btn-course">
-            <i class="fas fa-file-pdf me-1"></i>Open
-          </a>
-          {% if purchase.download_link %}
-          <a href="{{ purchase.download_link }}" class="btn btn-sm btn-outline-secondary btn-course" download>
-            <i class="fas fa-file-invoice me-1"></i>Receipt
-          </a>
-          {% endif %}
+        <div class="course-grid">
+          {% for purchase in section_purchases %}
+            <div class="course-card">
+              <div>
+                <div class="course-title">{{ purchase.title }}</div>
+                <div class="course-subtitle">{{ purchase.subtitle }}</div>
+                <div class="purchase-info">
+                  <strong>Purchased:</strong> {{ purchase.payment_date.strftime('%d-%m-%Y') }}
+                </div>
+              </div>
+              <div class="course-actions">
+                <a href="{{ url_for('users.open_' + purchase.section_id|lower|replace(' ', '_'), course_code=course_code, unique_code=unique_code) }}"
+                   target="_blank" class="btn btn-sm btn-primary btn-course">
+                  <i class="fas fa-file-pdf me-1"></i>Open
+                </a>
+                {% if purchase.download_link %}
+                  <a href="{{ purchase.download_link }}" class="btn btn-sm btn-outline-secondary btn-course" download>
+                    <i class="fas fa-file-invoice me-1"></i>Receipt
+                  </a>
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
         </div>
-      </div>
       {% endfor %}
-    </div>
     {% else %}
-    <div class="no-purchases">
-      <p>You have not purchased any courses yet.</p>
-    </div>
+      <div class="no-purchases">
+        <p>You have not purchased any courses yet.</p>
+      </div>
     {% endif %}
   </div>
 </div>
@@ -59,8 +69,10 @@
 <script>
   function toggleSidebar() {
     const sidebar = document.getElementById("sidebar");
+    const main = document.getElementById("main");
     sidebar.classList.toggle("collapsed");
     sidebar.classList.toggle("show");
+    main.classList.toggle("main-collapsed");
   }
 
   function toggleMode() {
@@ -69,5 +81,33 @@
     icon.classList.toggle("fa-sun");
     icon.classList.toggle("fa-moon");
   }
+
+  window.addEventListener('load', () => {
+    const sidebar = document.getElementById("sidebar");
+    const main = document.getElementById("main");
+    if (window.innerWidth > 768) {
+      sidebar.classList.remove("collapsed");
+      sidebar.classList.add("show");
+      main.classList.remove("main-collapsed");
+    } else {
+      sidebar.classList.add("collapsed");
+      sidebar.classList.remove("show");
+      main.classList.add("main-collapsed");
+    }
+  });
+
+  window.addEventListener('resize', () => {
+    const sidebar = document.getElementById("sidebar");
+    const main = document.getElementById("main");
+    if (window.innerWidth > 768) {
+      sidebar.classList.remove("collapsed");
+      sidebar.classList.add("show");
+      main.classList.remove("main-collapsed");
+    } else {
+      sidebar.classList.add("collapsed");
+      sidebar.classList.remove("show");
+      main.classList.add("main-collapsed");
+    }
+  });
 </script>
 {% endblock %}
