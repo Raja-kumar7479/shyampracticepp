@@ -142,6 +142,4 @@ CREATE TABLE test_attempt_details (
     FOREIGN KEY (test_id) REFERENCES study_materials(test_id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
-
-
 """
