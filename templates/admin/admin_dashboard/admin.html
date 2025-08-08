@@ -1,0 +1,81 @@
+{% extends "admin/admin_dashboard/base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block head %}
+{% endblock %}
+{% block body %}
+<div id="sidebar">
+    <div class="close-sidebar"><i class="fas fa-times"></i></div>
+    <div class="sidebar-user">
+        <img src="https://ui-avatars.com/api/?name={{ username|urlencode }}&background=2c3e50&color=fff" alt="User Avatar">
+        <div class="username">{{ username }}</div>
+        <div class="email">{{ email }}</div>
+    </div>
+    <ul class="sidebar-menu">
+        <li><a href="#" class="active"><i class="fas fa-fw fa-tachometer-alt"></i><span class="sidebar-text">Dashboard</span></a></li>
+        <li class="has-submenu">
+            <a href="#"><i class="fas fa-fw fa-plus-circle"></i><span class="sidebar-text">Questions</span><i class="fas fa-chevron-down submenu-indicator"></i></a>
+            <ul class="sidebar-submenu">
+                <li><a href="{{ url_for('admin.manage_practice_papers') }}">Insert Question</a></li>
+                <li><a href="{{ url_for('admin.manage_tests') }}">Test Question</a></li>
+            </ul>
+        </li>
+        <li class="has-submenu">
+            <a href="#"><i class="fas fa-fw fa-book"></i><span class="sidebar-text">Courses</span><i class="fas fa-chevron-down submenu-indicator"></i></a>
+            <ul class="sidebar-submenu">
+                <li><a href="{{ url_for('admin.manage_courses') }}">Manage Courses</a></li>
+                <li><a href="{{ url_for('admin.manage_course_content') }}">Manage Course Content</a></li>
+            </ul>
+        </li>
+        <li class="has-submenu">
+            <a href="#"><i class="fas fa-fw fa-file-alt"></i><span class="sidebar-text">Content</span><i class="fas fa-chevron-down submenu-indicator"></i></a>
+            <ul class="sidebar-submenu">
+                <li><a href="{{ url_for('admin.manage_notes_upload') }}">Manage Notes</a></li>
+                <li><a href="{{ url_for('admin.manage_practice_questions') }}">Manage Practice Questions</a></li>
+            </ul>
+        </li>
+        <li class="has-submenu">
+            <a href="#"><i class="fas fa-fw fa-chart-bar"></i><span class="sidebar-text">Reports</span><i class="fas fa-chevron-down submenu-indicator"></i></a>
+            <ul class="sidebar-submenu">
+                <li><a href="{{ url_for('admin.manage_feedback') }}">Test Feedback</a></li>
+                <li><a href="{{ url_for('admin.manage_test_logs') }}">Test Details</a></li>
+                <li><a href="{{ url_for('admin.manage_purchases') }}">Purchase Details</a></li>
+            </ul>
+        </li>
+        <div class="sidebar-divider"></div>
+        <li><a href="{{ url_for('admin.admin_logout') }}"><i class="fas fa-fw fa-sign-out-alt"></i><span class="sidebar-text">Logout</span></a></li>
+    </ul>
+</div>
+
+<div id="content">
+    <nav class="topbar">
+        <button class="toggle-sidebar"><i class="fas fa-bars"></i></button>
+        <div class="d-flex align-items-center">
+            <span class="badge bg-primary me-3 fs-6 rounded-pill">{{ role }}</span>
+            <a href="{{ url_for('admin.admin_logout') }}" class="btn btn-sm btn-danger rounded-pill">
+                <i class="fas fa-sign-out-alt me-1"></i> Logout
+            </a>
+        </div>
+    </nav>
+    <main class="main-content">
+        <div class="welcome-card mb-4">
+            <h1>Welcome back, {{ username }}!</h1>
+            <p>Here is your overview for today.</p>
+            <p id="last-updated"></p>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="info-widget" style="--i:1;">
+                <div class="icon text-primary"><i class="fas fa-clock"></i></div>
+                <div id="live-timer"></div>
+                <div id="date-display"></div>
+            </div>
+            <div class="info-widget" style="--i:2;">
+                <div class="icon text-success"><i class="fas fa-lightbulb"></i></div>
+                <p id="motivational-quote"></p>
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}

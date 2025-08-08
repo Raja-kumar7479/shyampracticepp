@@ -1,27 +1,52 @@
-from flask import flash,redirect, render_template,session, url_for
-from users.checkout.user_db import UserOperation
-from users.checkout.utils_payment import (get_session_user,is_valid_session,calculate_final_price,)
+from flask import (
+    jsonify,
+    request,
+    session,
+    flash,redirect, render_template,url_for
+)
 from users import users_bp
+from users.checkout.user_db import UserOperation
+from extensions import user_login_required
+import logging
 import razorpay
 import os
 
-user_op = UserOperation()
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
+user_op = UserOperation()
 
 RAZORPAY_KEY_ID = os.environ.get("RAZORPAY_KEY_ID")
 RAZORPAY_SECRET = os.environ.get("RAZORPAY_SECRET")
 
 razorpay_client = razorpay.Client(auth=(RAZORPAY_KEY_ID, RAZORPAY_SECRET))
 
+def get_session_user():
+    username = session.get('user_username')
+    email = session.get('user_email')
+    phone = session.get('user_phone')
+    return username, email, phone
+
+def is_valid_session(username, email, phone):
+    return username and email and phone
+
+def calculate_final_price(cart_courses, discount):
+    total_price = sum(c.get('price', 0) for c in cart_courses)
+    discount_amount = round(total_price * discount / 100, 2)
+    final_amount = round(total_price - discount_amount, 2)
+    return total_price, discount_amount, final_amount
+
+
 @users_bp.route('/payment/<course_code>/<unique_code>', methods=['GET'])
+@user_login_required
 def payment(course_code, unique_code):
     username, email, phone = get_session_user()
 
     if not is_valid_session(username, email, phone):
-        flash("Session expired. Please login again.", "login")
+        flash("Session expired. Please login again.", "login_warning")
         return redirect(url_for('users.user_login'))
 
-    user_cart_key = f'{email}_{course_code}_cart'
+    user_cart_key = f'user_{email}_cart'
     cart_courses = session.get(user_cart_key)
 
     if not cart_courses:
@@ -39,7 +64,7 @@ def payment(course_code, unique_code):
             'payment_capture': 1
         })
     except Exception as e:
-        flash("Payment gateway error. Try again.", "cart_warning")
+        flash("Payment gateway error. Try again.", "cart_error")
         return redirect(url_for('users.course_shop', course_code=course_code, unique_code=unique_code))
 
     session['razorpay_order_id'] = razorpay_order['id']

@@ -2,76 +2,66 @@
 
 {% block content %}
 
-    <!-- Service Start -->
-     <div class="container-xxl py-5">
-        <div class="container">
-            <div class="row g-2 text-center">
-                <div class="col-12 wow fadeInUp" data-wow-delay="0.3s">
-                    <div class="row g-2 text-center">
-                      </div>
-                      <h2 style="color: #008080; font-size: 1.8rem; font-weight: 600; margin-bottom: 10px;">
-                        Reach Your Learning Goals with ShyamPractice Paper
-                      </h2>
-                      <p style="font-size: 0.95rem; color: #333; line-height: 1.6;">
-                        Get instant access to notes, practice papers, video tutorials, skill resources, and top-quality courses — all in one place.
-                      </p>                      
-                </div>
-            </div>
-            <div class="row g-4">
-                <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.1s">
-                    <div class="service-item text-center pt-3 shadow rounded-4">
-                        <div class="p-4">
-                            <i class="fas fa-book-open fa-2x text-primary mb-3"></i>
-                            <h6 class="mb-2" style="color: #008080; font-weight: 600;">Learn Without Limits</h6>
-                            <p style="font-size: 0.9rem;">Access expert-led notes, tutorials, and mock papers to build your knowledge from the ground up.</p>
-                        </div>
-                    </div>
-                </div>
-            
-                <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.3s">
-                    <div class="service-item text-center pt-3 shadow rounded-4">
-                        <div class="p-4">
-                            <i class="fas fa-wallet fa-2x text-primary mb-3"></i>
-                            <h6 class="mb-2" style="color: #008080; font-weight: 600;">Smart Learning, Big Savings</h6>
-                            <p style="font-size: 0.9rem;">Cut down costs with unlimited access to top-quality free and premium learning resources.</p>
-                        </div>
-                    </div>
-                </div>
-            
-                <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.5s">
-                    <div class="service-item text-center pt-3 shadow rounded-4">
-                        <div class="p-4">
-                            <i class="fas fa-clock fa-2x text-primary mb-3"></i>
-                            <h6 class="mb-2" style="color: #008080; font-weight: 600;">Learn on Your Schedule</h6>
-                            <p style="font-size: 0.9rem;">Study at your own pace, switch courses anytime, and master what matters most to you.</p>
-                        </div>
-                    </div>
-                </div>
-            
-                <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.7s">
-                    <div class="service-item text-center pt-3 shadow rounded-4">
-                        <div class="p-4">
-                            <i class="fas fa-chart-line fa-2x text-primary mb-3"></i>
-                            <h6 class="mb-2" style="color: #008080; font-weight: 600;">Advance Your Career</h6>
-                            <p style="font-size: 0.9rem;">Upskill in Data Structures, ML, and Analytics with full program access — no hidden fees.</p>
-                        </div>
-                    </div>
-                </div>
-               </div>            
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Service End -->
-    
-    <!-- About Start -->
-    <div class="about-section">
-  <div class="about-box">
+<!-- Service Section Start -->
 
+  <div class="container shyam-section">
+    <div class="shyam-title">
+      Reach Your Learning Goals with ShyamPractice Paper
+    </div>
+    <div class="shyam-subtitle">
+      Get instant access to notes, practice papers, video tutorials, skill resources, and top-quality courses — all in one place.
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+      <div class="col">
+        <div class="shyam-card">
+          <div class="shyam-icon"><i class="fas fa-book-open"></i></div>
+          <div class="shyam-card-title">Learn Without Limits</div>
+          <div class="shyam-card-text">
+            Access expert-led notes, tutorials, and mock papers to build your knowledge from the ground up.
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="shyam-card">
+          <div class="shyam-icon"><i class="fas fa-wallet"></i></div>
+          <div class="shyam-card-title">Smart Learning, Big Savings</div>
+          <div class="shyam-card-text">
+            Cut down costs with unlimited access to top-quality free and premium learning resources.
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="shyam-card">
+          <div class="shyam-icon"><i class="fas fa-clock"></i></div>
+          <div class="shyam-card-title">Learn on Your Schedule</div>
+          <div class="shyam-card-text">
+            Study at your own pace, switch courses anytime, and master what matters most to you.
+          </div>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="shyam-card">
+          <div class="shyam-icon"><i class="fas fa-chart-line"></i></div>
+          <div class="shyam-card-title">Advance Your Career</div>
+          <div class="shyam-card-text">
+            Upskill in Data Structures, ML, and Analytics with full program access — no hidden fees.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- Service Section End -->
+
+<!-- About Section Start -->
+<section class="about-section">
+  <div class="about-box">
     <div class="about-image">
       <img src="https://cdn.pixabay.com/photo/2015/10/31/12/00/friends-1015314_1280.jpg" alt="Learning Group">
     </div>
-
     <div class="about-text">
       <h5 class="about-subtitle">About Us</h5>
       <h2 class="about-title">
@@ -81,201 +71,100 @@
         Welcome <span class="highlight-name">Guest</span>
         {% endif %}
       </h2>
-
       <p class="about-description">
-        At <strong class="brand-name">ShyamPractice Paper</strong>, we are dedicated to delivering flexible, accessible, and engaging learning experiences—tailored to match your pace, preferences, and goals.
+        At <strong class="brand-name">ShyamPractice Paper</strong>, we are committed to flexible, accessible, and engaging learning—tailored to your goals.
       </p>
-
       <p class="about-description">
-        Whether you're preparing for competitive exams or sharpening your skills, <strong class="brand-name">ShyamPractice Paper</strong> is your all-in-one destination for online courses, downloadable notes, study materials, and practice sets.
+        Whether preparing for exams or sharpening skills, <strong class="brand-name">ShyamPractice Paper</strong> is your destination for online courses, notes, study materials, and practice sets.
       </p>
-
       <div class="about-features">
         {% for feature in features %}
         <div class="feature-item">
-          <i class="fa fa-check-circle feature-icon"></i>
-          {{ feature }}
+          <i class="fa fa-check-circle feature-icon"></i> {{ feature }}
         </div>
         {% endfor %}
       </div>
-
-      <a href="" class="about-btn">Read More</a>
+      <a href="#" class="about-btn">Read More</a>
     </div>
-
   </div>
-</div>
+</section>
+<!-- About Section End -->
 
-    <!-- About End -->  
-    <!-- Banner-1 Start -->
-   <section class="learning-hero">
-        <div class="hero-container">
-            <div class="hero-content animate__animated animate__fadeInLeft">
-                <span class="hero-badge">Mock Tests for GATE, JEE, NEET & More</span>
-                <h1 class="hero-title">Boost Your Preparation with Interactive Learning</h1>
-                <p class="hero-description">
-                    Access high-quality mock tests and study resources for GATE, JEE, NEET, and other competitive exams. Learn from expert-curated content and improve your scores with real-time practice.
-                </p>
-                <div class="hero-cta">
-                    <a href="{{ url_for('users.course_view') }}" class="cta-primary">
-                        <i class="fas fa-rocket"></i> Explore Courses
-                    </a>
-                </div>
-                
-                <div class="hero-stats">
-                    <div class="stat-item">
-                        <div class="stat-number">10K+</div>
-                        <div class="stat-label">Active Learners</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">100+</div>
-                        <div class="stat-label">Courses</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-number">50+</div>
-                        <div class="stat-label">Mock Tests (GATE, JEE, NEET, etc.)</div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="hero-image animate__animated animate__fadeInRight">
-                <div class="image-slider-container">
-                    <div class="image-slider">
-                        <div class="slide">
-                            <img src="{{ url_for('static', filename='img/users/login.png') }}" alt="Learning Platform">
-                        </div>
-                        <div class="slide">
-                            <img src="{{ url_for('static', filename='img/users/instruction.png') }}" alt="Mock Tests">
-                        </div>
-
-                        <div class="slide">
-                            <img src="{{ url_for('static', filename='img/users/mocktestinterface.png') }}" alt="Performance Analytics">
-                        </div>
-                        <div class="slide">
-                            <img src="{{ url_for('static', filename='img/users/result.png') }}" alt="Performance Analytics">
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="floating-card card-1">
-                    <i class="fas fa-certificate"></i>
-                    <span>Free Mock Tests</span>
-                </div>
-                <div class="floating-card card-2">
-                    <i class="fas fa-users"></i>
-                    <span>Handwritten Notes</span>
-                </div>
-                <div class="floating-card card-3">
-                    <i class="fas fa-laptop-code"></i>
-                    <span>Enroll in Top Courses</span>
-                </div>
-            </div>
-        </div>
-    </section>
-     <!-- FAQ Start  -->
-     <div class="container-xxl py-5 category">
-  <div class="container">
-    <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-      <h2 style="color: #008080; font-size: 1.8rem; font-weight: 600; margin-top: 0.7rem;">
-        Frequently Asked Questions (FAQ)
-      </h2>
-    </div>
-    <div class="row g-2">
-      <div class="col-12">
-        <div class="accordion" id="accordionExample">
-
-          <!-- FAQ 1 -->
-          <div class="accordion-item">
-            <h2 class="accordion-header">
-              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                What is ShyamPracticePaper?
-              </button>
-            </h2>
-            <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
-              <div class="accordion-body">
-                ShyamPracticePaper is a dedicated platform designed to empower students preparing for competitive exams such as <strong>GATE, JEE, NEET</strong>, and state-level entrance tests. We offer a mix of <strong>free and paid resources</strong> including real-time mock tests, downloadable notes, video tutorials, and topic-wise practice questions to help learners prepare smartly and efficiently.
-              </div>
-            </div>
-          </div>
-
-          <!-- FAQ 2 -->
-          <div class="accordion-item">
-            <h2 class="accordion-header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                Why should I choose ShyamPracticePaper for exam preparation?
-              </button>
-            </h2>
-            <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-              <div class="accordion-body">
-                Our platform offers <strong>expert-designed content</strong> tailored for each exam. You’ll benefit from:
-                <ul>
-                  <li>Real-time mock test environments to simulate actual exams</li>
-                  <li>Topic-wise, subject-wise, and year-wise practice sets</li>
-                  <li>Interactive learning materials crafted by educators</li>
-                  <li>Both free and affordable paid premium content</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <!-- FAQ 3 -->
-          <div class="accordion-item">
-            <h2 class="accordion-header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                How many courses and resources can I access at once?
-              </button>
-            </h2>
-            <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-              <div class="accordion-body">
-                You can access <strong>multiple courses and mock test series simultaneously</strong>. Our flexible system lets you combine study materials across different subjects and exams — whether you're targeting a specific subject like Physics or brushing up on full-syllabus tests.
-              </div>
-            </div>
-          </div>
-
-          <!-- FAQ 4 -->
-          <div class="accordion-item">
-            <h2 class="accordion-header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                How can I enroll and access the free or paid resources?
-              </button>
-            </h2>
-            <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-              <div class="accordion-body">
-                Just click the “<strong>Sign Up</strong>” button at the top-right of the page. You can register using your email address or sign in with your Google account. Once logged in, you can browse through:
-                <ul>
-                  <li><strong>Free resources</strong>: practice sets, mock exams, and revision materials</li>
-                  <li><strong>Premium resources</strong>: full courses, previous year paper sets, topic-wise quizzes</li>
-                  <li><strong>Mock test shop</strong>: pick mock tests by exam type, topic, year, or difficulty</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <!-- FAQ 5 -->
-          <div class="accordion-item">
-            <h2 class="accordion-header">
-              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                What are the most popular resources offered by ShyamPracticePaper?
-              </button>
-            </h2>
-            <div id="collapseFive" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-              <div class="accordion-body">
-                We are proud to offer a rich collection of student-favorite resources, including:
-                <ul>
-                  <li><strong>GATE CS & EC Practice Papers</strong> with previous year analysis</li>
-                  <li><strong>JEE Main & Advanced Chapter-wise Tests</strong></li>
-                  <li><strong>NEET Biology and Chemistry Rapid Revision Sheets</strong></li>
-                  <li><strong>State Board Class 10 & 12 Final Prep Sets</strong></li>
-                  <li><strong>Shop for Mock Tests</strong> by year, topic, or subject — free and premium available</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-        </div>
+<!-- Hero Banner Start -->
+<section class="learning-hero">
+  <div class="hero-container">
+    <div class="hero-content animate__animated animate__fadeInLeft">
+      <span class="hero-badge">Mock Tests for GATE, JEE, NEET & More</span>
+      <h1 class="hero-title">Boost Your Preparation with Interactive Learning</h1>
+      <p class="hero-description">
+        Access mock tests and study resources for competitive exams. Learn from expert content and improve your scores with real-time practice.
+      </p>
+      <div class="hero-cta">
+        <a href="{{ url_for('users.course_view') }}" class="cta-primary">
+          <i class="fas fa-rocket"></i> Explore Courses
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item"><div class="stat-number">10K+</div><div class="stat-label">Active Learners</div></div>
+        <div class="stat-item"><div class="stat-number">100+</div><div class="stat-label">Courses</div></div>
+        <div class="stat-item"><div class="stat-number">50+</div><div class="stat-label">Mock Tests</div></div>
       </div>
     </div>
+
+    <div class="hero-image animate__animated animate__fadeInRight">
+      <div class="image-slider-container">
+        <div class="image-slider">
+          {% set images = ['login.png', 'instruction.png', 'mocktestinterface.png', 'result.png'] %}
+          {% for img in images %}
+          <div class="slide">
+            <img src="{{ url_for('static', filename='img/users/' ~ img) }}" alt="Slide {{ loop.index }}">
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="floating-card card-1"><i class="fas fa-certificate"></i><span>Free Mock Tests</span></div>
+      <div class="floating-card card-2"><i class="fas fa-users"></i><span>Handwritten Notes</span></div>
+      <div class="floating-card card-3"><i class="fas fa-laptop-code"></i><span>Enroll in Top Courses</span></div>
+    </div>
   </div>
-</div>
-<style>
-</style>
+</section>
+<!-- Hero Banner End -->
+
+<!-- FAQ Section Start -->
+<section class="container-xxl py-5 category">
+  <div class="container">
+    <div class="text-center wow fadeInUp mb-4" data-wow-delay="0.1s">
+      <h2 class="fw-semibold" style="color: #008080;">Frequently Asked Questions (FAQ)</h2>
+    </div>
+    <div class="accordion" id="accordionExample">
+      {% set faqs = [
+        ('What is ShyamPracticePaper?', "ShyamPracticePaper is a platform for GATE, JEE, NEET and other exams offering free and paid resources like mock tests, notes, and tutorials."),
+        ('Why should I choose ShyamPracticePaper?', "We offer expert-designed content, real-time mock environments, topic-wise sets, and affordable pricing."),
+        ('How many courses and resources can I access?', "You can access multiple courses and mock series at once—across subjects and exams."),
+        ('How can I enroll and access resources?', "Sign up using your email or Google. Then browse free resources, premium content, and our mock test shop."),
+        ('What are the most popular resources?', "GATE CS/EC papers, JEE chapter-wise tests, NEET revision sheets, and state board prep sets.")
+      ] %}
+      {% for question, answer in faqs %}
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button {{ 'collapsed' if not loop.first }}" type="button"
+            data-bs-toggle="collapse" data-bs-target="#collapse{{ loop.index }}"
+            aria-expanded="{{ 'true' if loop.first else 'false' }}"
+            aria-controls="collapse{{ loop.index }}">
+            {{ question }}
+          </button>
+        </h2>
+        <div id="collapse{{ loop.index }}" class="accordion-collapse collapse {{ 'show' if loop.first }}"
+          data-bs-parent="#accordionExample">
+          <div class="accordion-body">
+            {{ answer | safe }}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+<!-- FAQ Section End -->
+
 {% endblock %}

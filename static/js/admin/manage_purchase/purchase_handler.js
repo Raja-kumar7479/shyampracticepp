@@ -1,125 +1,123 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const statusSelect = document.getElementById('status');
-    const purchaseDataDiv = document.getElementById('purchaseData');
+    const viewAllBtn = document.getElementById('viewAllBtn');
+    const searchForm = document.getElementById('searchForm');
+    const emailSearchInput = document.getElementById('emailSearch');
+    const paymentIdSearchInput = document.getElementById('paymentIdSearch');
+    const purchaseDataContainer = document.getElementById('purchaseDataContainer');
+    const purchaseTableBody = document.getElementById('purchaseTableBody');
+    const messageArea = document.getElementById('messageArea');
 
-    function fetchPurchases(status) {
-        fetch(`/get_purchases?status=${status}`)
-            .then(response => response.json())
+    viewAllBtn.addEventListener('click', fetchAllPurchases);
+    searchForm.addEventListener('submit', handleSearch);
+
+    function fetchAllPurchases() {
+        fetch('/get_all_purchases')
+            .then(handleResponse)
             .then(data => {
-                displayPurchases(data, status);
+                displayPurchases(data);
             })
-            .catch(error => {
-                console.error('Error fetching purchases:', error);
-                purchaseDataDiv.innerHTML = '<p class="no-data">Error loading purchases.</p>';
-            });
+            .catch(handleError);
     }
 
-    function displayPurchases(purchases, status) {
-        if (purchases.length === 0) {
-            purchaseDataDiv.innerHTML = `<p class="no-data">No ${status} purchases found.</p>`;
+    function handleSearch(event) {
+        event.preventDefault();
+        const email = emailSearchInput.value.trim();
+        const paymentId = paymentIdSearchInput.value.trim();
+
+        if (!email || !paymentId) {
+            showMessage('Please enter both email and payment ID.', 'error');
             return;
         }
 
-        let tableHtml = `
-            <table>
-                <thead>
-                    <tr>
-                        <th>Email</th>
-                        <th>Username</th>
-                        <th>Phone</th>
-                        <th>Course Code</th>
-                        <th>Title</th>
-                        <th>Subtitle</th>
-                        <th>Price</th>
-                        <th>Original Price</th>
-                        <th>Discount (%)</th>
-                        <th>Final Price</th>
-                        <th>Payment ID</th>
-                        <th>Payment Mode</th>
-                        <th>Payment Date</th>
-                        <th>Purchase Code</th>
-        `;
-        if (status === 'Pending') {
-            tableHtml += `<th>Action</th>`;
+        fetch(`/search_purchase?email=${encodeURIComponent(email)}&payment_id=${encodeURIComponent(paymentId)}`)
+            .then(handleResponse)
+            .then(data => {
+                if (data.length > 0) {
+                    displayPurchases(data, data[0].payment_id);
+                } else {
+                    showMessage('No purchase found for this Email and Payment ID.', 'info');
+                    purchaseDataContainer.style.display = 'none';
+                }
+            })
+            .catch(handleError);
+    }
+
+    function displayPurchases(purchases, highlightPaymentId = null) {
+        purchaseTableBody.innerHTML = '';
+        messageArea.innerHTML = '';
+
+        if (!purchases || purchases.length === 0) {
+            showMessage('No purchase data found.', 'info');
+            purchaseDataContainer.style.display = 'none';
+            return;
         }
-        tableHtml += `
-                    </tr>
-                </thead>
-                <tbody>
-        `;
 
         purchases.forEach(purchase => {
-            tableHtml += `
-                <tr>
-                    <td>${purchase.email}</td>
-                    <td>${purchase.username || 'N/A'}</td>
-                    <td>${purchase.phone || 'N/A'}</td>
-                    <td>${purchase.course_code}</td>
-                    <td>${purchase.title}</td>
-                    <td>${purchase.subtitle || 'N/A'}</td>
-                    <td>${purchase.price}</td>
-                    <td>${purchase.original_price}</td>
-                    <td>${purchase.discount_percent}</td>
-                    <td>${purchase.final_price}</td>
-                    <td>${purchase.payment_id}</td>
-                    <td>${purchase.payment_mode || 'N/A'}</td>
-                    <td>${new Date(purchase.payment_date).toLocaleString()}</td>
-                    <td>${purchase.purchase_code}</td>
-            `;
-            if (status === 'Pending') {
-                tableHtml += `<td><button class="delete-btn" data-id="${purchase.id}">Delete</button></td>`;
+            const row = purchaseTableBody.insertRow();
+            if (purchase.payment_id === highlightPaymentId) {
+                row.classList.add('highlight');
             }
-            tableHtml += `
-                </tr>
+
+            row.innerHTML = `
+                <td>${purchase.email || 'N/A'}</td>
+                <td>${purchase.username || 'N/A'}</td>
+                <td>${purchase.phone || 'N/A'}</td>
+                <td>${purchase.course_code || 'N/A'}</td>
+                <td>${purchase.title || 'N/A'}</td>
+                <td>${purchase.price || 0}</td>
+                <td>${purchase.final_price || 0}</td>
+                <td>${purchase.payment_id || 'N/A'}</td>
+                <td>${purchase.payment_date ? new Date(purchase.payment_date).toLocaleString() : 'N/A'}</td>
+                <td>${purchase.status || 'N/A'}</td>
+                <td>
+                    ${purchase.status === 'Pending' ? `<button class="delete-btn" data-id="${purchase.id}">Delete</button>` : 'N/A'}
+                </td>
             `;
         });
+        
+        purchaseDataContainer.style.display = 'block';
+        addDeleteEventListeners();
+    }
 
-        tableHtml += `
-                </tbody>
-            </table>
-        `;
-        purchaseDataDiv.innerHTML = tableHtml;
-
-        if (status === 'Pending') {
-            document.querySelectorAll('.delete-btn').forEach(button => {
-                button.addEventListener('click', function() {
-                    const purchaseId = this.dataset.id;
-                    if (confirm('Are you sure you want to delete this pending purchase? This action cannot be undone.')) {
-                        deletePurchase(purchaseId);
-                    }
-                });
+    function addDeleteEventListeners() {
+        document.querySelectorAll('.delete-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const purchaseId = this.dataset.id;
+                if (confirm('Are you sure you want to delete this pending purchase? This action cannot be undone.')) {
+                    deletePurchase(purchaseId);
+                }
             });
-        }
+        });
     }
 
     function deletePurchase(purchaseId) {
         fetch(`/delete_purchase/${purchaseId}`, {
             method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            }
         })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            }
-            throw new Error('Network response was not ok.');
-        })
+        .then(handleResponse)
         .then(data => {
-            alert(data.message);
-            fetchPurchases(statusSelect.value); 
+            showMessage(data.message, 'success');
+            fetchAllPurchases();
         })
-        .catch(error => {
-            console.error('Error deleting purchase:', error);
-            alert('Error deleting purchase. Please try again.');
-        });
+        .catch(handleError);
     }
 
-    
-    statusSelect.addEventListener('change', function() {
-        fetchPurchases(this.value);
-    });
+    function handleResponse(response) {
+        if (!response.ok) {
+            return response.json().then(errorData => {
+                throw new Error(errorData.error || 'Network response was not ok');
+            });
+        }
+        return response.json();
+    }
 
-   
-    fetchPurchases(statusSelect.value);
+    function handleError(error) {
+        console.error('Fetch Error:', error);
+        showMessage(error.message || 'An error occurred. Please check the console.', 'error');
+    }
+
+    function showMessage(message, type = 'info') {
+        messageArea.innerHTML = `<p class="${type}">${message}</p>`;
+        messageArea.style.color = type === 'error' ? 'red' : (type === 'success' ? 'green' : 'black');
+    }
 });

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detailed Analysis: {{ summary.overall.subject_title }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/users/mock_test/test_analysis.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/users/index/index.css') }}">
+    <style>
+        .list-group-item.user-correct {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+
+        .list-group-item.user-incorrect {
+            background-color: #f8d7da; 
+            border-color: #f5c6cb;
+        }
+        
+        .list-group-item.correct-only {
+            background-color: #c3e6cb; 
+            border-color: #a7d8b5;
+        }
+        .card.correct-answer {
+            border-left: 5px solid #28a745 !important;
+        }
+
+        .card.incorrect-answer {
+            border-left: 5px solid #dc3545 !important;
+        }
+
+        .card.skipped-answer {
+            border-left: 5px solid #6c757d !important;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar" id="navbar">
+    <a href="#" class="nav-logo"><i class="fas fa-book-open"></i> ShyamPracticePaper</a>
+    <div class="menu-toggle" id="menuToggle"><span></span><span></span><span></span></div>
+    <div class="nav-links" id="navLinks">
+        <a href="/"><i class="fas fa-home"></i> Home</a>
+        <a href="#"><i class="fas fa-envelope"></i> Contact</a>
+        <div class="profile-container">
+            {% if username %}
+                <div class="profile-circle">{{ username[0]|upper }}</div>
+                <div class="username">{{ username }}</div>
+                <div class="profile-dropdown">
+                    <a href="{{ url_for('users.user_logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            {% else %}
+                <a href="{{ url_for('users.user_login') }}" class="login-btn">Login</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="overlay" id="overlay"></div>
+</nav>
+
+<div class="main-content-wrapper">
+    <div class="container py-4 py-md-5 main-content-area">
+        <h1 class="main-title mb-4 text-center text-md-start">Detailed Question Analysis</h1>
+        <p class="test-title-detail text-muted mb-4 text-center text-md-start">
+            {{ summary.overall.subject_title }} - {{ summary.overall.subject_subtitle }}
+        </p>
+
+        <div class="mb-4 text-center text-md-start">
+            {% for section_name in sorted_sections %}
+                <button class="section-tab-button {% if loop.first %}active{% endif %}" data-section="{{ section_name | replace(' ', '-') | lower }}">
+                    {{ section_name }}
+                </button>
+            {% endfor %}
+        </div>
+
+        <div class="question-analysis-container mb-4">
+            {% for section_name in sorted_sections %}
+            <div class="section-content" id="section-{{ section_name | replace(' ', '-') | lower }}" style="display: none;">
+                <h3 class="mt-4 mb-3 text-center text-md-start">{{ section_name }}</h3>
+                <div class="mb-4 filter-buttons-container d-flex flex-wrap justify-content-center justify-content-md-start">
+                    <button class="filter-btn active" data-filter="all" data-section="{{ section_name | replace(' ', '-') | lower }}">All ({{ questions_by_section[section_name]|length }})</button>
+                    <button class="filter-btn correct" data-filter="correct" data-section="{{ section_name | replace(' ', '-') | lower }}">Correct</button>
+                    <button class="filter-btn incorrect" data-filter="incorrect" data-section="{{ section_name | replace(' ', '-') | lower }}">Incorrect</button>
+                    <button class="filter-btn skipped" data-filter="skipped" data-section="{{ section_name | replace(' ', '-') | lower }}">Skipped</button>
+                </div>
+
+                <div class="question-cards-container">
+                    {% if questions_by_section[section_name] %}
+                        {% for question in questions_by_section[section_name] %}
+                        <div class="card question-card mb-4 shadow-sm border-0
+                            {% if question.is_correct %}correct-answer{% elif question.is_correct == False and question.status_of_attempt not in ['unattempted', 'not_visited', 'not_answered', 'marked_review'] %}incorrect-answer{% else %}skipped-answer{% endif %}"
+                            id="question-card-{{ question.id }}"
+                            data-question-id="{{ question.id }}"
+                            data-section="{{ question.section_name | replace(' ', '-') | lower }}"
+                            data-status="{% if question.is_correct %}correct{% elif question.is_correct == False and question.status_of_attempt not in ['unattempted', 'not_visited', 'not_answered', 'marked_review'] %}incorrect{% else %}skipped{% endif %}">
+
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <div>
+                                        <h5 class="card-title mb-0">Question {{ question.question_number }}</h5>
+                                        <small class="text-muted">Type: {{ question.question_type }} | Level: {{ question.question_level | default('N/A') }}</small>
+                                    </div>
+                                    <div class="text-end">
+                                        <span class="badge bg-light text-dark py-2 px-3 me-2">Marks: +{{ question.correct_marks }} / -{{ question.negative_marks }}</span>
+                                        <span class="badge bg-light text-dark py-2 px-3">Awarded: {{ "%.2f"|format(question.marks_awarded if question.marks_awarded is not none else 0) }}</span>
+                                    </div>
+                                </div>
+                                <hr class="mb-3">
+
+                                <div class="question-text mb-3">
+                                    {{ question.question_text | safe }}
+                                </div>
+
+                                {% if question.question_type in ['MCQ', 'MSQ'] %}
+                                    {% set user_selected_display = (question.user_selected_option | default('Not Answered')) | upper %}
+                                    {% set correct_option_display = (question.correct_option | default('N/A')) | upper %}
+                                    <div class="mb-3 p-3 border rounded answer-summary-block mcq-msq shadow-sm">
+                                        <p class="mb-1 text-muted"><strong>Your Answer:</strong> <span class="fw-bold text-dark">{{ user_selected_display }}</span></p>
+                                        <p class="mb-0 text-success"><strong>Correct Answer:</strong> <span class="fw-bold">{{ correct_option_display }}</span></p>
+                                    </div>
+                                    <ul class="list-group list-group-flush mb-3 options-list">
+                                        {% set user_options = (question.user_selected_option | string | default('')).split(',') %}
+                                        {% set correct_options = (question.correct_option | string | default('')).split(',') %}
+                                        {% for opt_char, opt_text in [('A', question.option_a), ('B', question.option_b), ('C', question.option_c), ('D', question.option_d)] %}
+                                            {% if opt_text %}
+                                            <li class="list-group-item option-item
+                                                {% if opt_char in user_options and opt_char in correct_options %}user-correct{% elif opt_char in user_options and opt_char not in correct_options %}user-incorrect{% elif opt_char in correct_options %}correct-only{% endif %}">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <span><strong>({{ opt_char }})</strong> {{ opt_text | safe }}</span>
+                                                    <div class="option-badges">
+                                                        {% if opt_char in user_options %}<span class="badge bg-primary me-1"><i class="fas fa-hand-pointer"></i> Your Choice</span>{% endif %}
+                                                        {% if opt_char in correct_options %}<span class="badge bg-success"><i class="fas fa-check"></i> Correct</span>{% endif %}
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </ul>
+
+                                {% elif question.question_type == 'NAT' %}
+                                <div class="mb-3 p-3 border rounded answer-summary-block nat shadow-sm">
+                                    <p class="mb-1 text-muted"><strong>Your Answer:</strong> <span class="fw-bold
+                                        {% if question.is_correct %}text-success{% else %}text-danger{% endif %}">
+                                        {{ (question.user_written_answer | default('Not Answered')) | upper }}</span></p>
+                                    <p class="mb-0 text-success"><strong>Correct Answer:</strong> <span class="fw-bold">{{ (question.correct_option | default('N/A')) | upper }}</span></p>
+                                </div>
+                                {% endif %}
+
+                                <div class="result-info mb-3 d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>Status:</strong>
+                                        <span class="fw-bold fs-5
+                                            {% if question.is_correct %}text-success
+                                            {% elif question.is_correct == False %}text-danger
+                                            {% else %}text-secondary{% endif %}">
+                                            {% if question.is_correct %}Correct <i class="fas fa-check-circle"></i>
+                                            {% elif question.is_correct == False %}Incorrect <i class="fas fa-times-circle"></i>
+                                            {% else %}Skipped <i class="fas fa-minus-circle"></i>{% endif %}
+                                        </span>
+                                    </div>
+                                    <div class="text-end">
+                                        <strong class="text-muted">Time Spent:</strong> <span class="fw-bold">
+                                            {% set time_spent = question.time_spent_on_question_seconds | default(0) %}
+                                            {% if time_spent >= 60 %}{{ (time_spent // 60)|int }}m {{ (time_spent % 60)|int }}s{% else %}{{ time_spent | int }}s{% endif %}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                {% if question.answer_text or question.answer_link %}
+                                <button class="explanation-btn" type="button" data-bs-toggle="collapse" data-bs-target="#solution-{{ question.id }}">
+                                    <i class="fas fa-eye"></i> Show Explanation
+                                </button>
+                                <div class="collapse mt-3" id="solution-{{ question.id }}">
+                                    <div class="card card-body solution-content shadow-sm border-info bg-light-info">
+                                        {% if question.answer_text %}<p>{{ question.answer_text | safe }}</p>{% endif %}
+                                        {% if question.answer_link %}<a href="{{ question.answer_link }}" target="_blank">View Solution</a>{% endif %}
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                    <p class="text-center text-muted fs-5 py-4">No questions to display for this section.</p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ url_for('static', filename='js/users/navbar/navbar.js') }}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const sectionTabButtons = document.querySelectorAll('.section-tab-button');
+    const sectionContents = document.querySelectorAll('.section-content');
+
+    sectionTabButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const targetSectionId = this.dataset.section;
+            sectionTabButtons.forEach(btn => btn.classList.remove('active'));
+            sectionContents.forEach(content => content.style.display = 'none');
+            this.classList.add('active');
+            document.getElementById(`section-${targetSectionId}`).style.display = 'block';
+            const activeFilter = document.querySelector(`#section-${targetSectionId} .filter-btn.active`);
+            if (activeFilter) activeFilter.click();
+        });
+    });
+
+    if (sectionTabButtons.length > 0) {
+        sectionTabButtons[0].click();
+    }
+
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const filter = this.dataset.filter;
+            const section = this.dataset.section;
+            document.querySelectorAll(`#section-${section} .filter-btn`).forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            let count = 0;
+            document.querySelectorAll(`#section-${section} .question-card`).forEach(card => {
+                const show = (filter === 'all' || card.dataset.status === filter);
+                card.style.display = show ? 'block' : 'none';
+                if(show) count++;
+            });
+        });
+    });
+});
+</script>
+</body>
+</html>

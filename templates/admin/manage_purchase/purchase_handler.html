@@ -3,26 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Purchases</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/manage_purchase/purchase_handler.css') }}">
-
+    <title>Manage Purchases</title>
 </head>
 <body>
     <div class="container">
         <h1>Manage Purchases</h1>
-
-        <div class="status-selector">
-            <label for="status">Select Status:</label>
-            <select id="status">
-                <option value="Paid">Paid</option>
-                <option value="Pending">Pending</option>
-            </select>
+        <div id="flash-messages">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category|replace('admin_', '') }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
         </div>
+        <div class="controls">
+            <button id="viewAllBtn" class="btn btn-primary">View All Purchases</button>
+            <form id="searchForm" class="search-form">
+                <input type="email" id="emailSearch" placeholder="Enter user email..." required>
+                <input type="text" id="paymentIdSearch" placeholder="Enter payment ID..." required>
+                <button type="submit" class="btn btn-secondary">Search</button>
+            </form>
+        </div>
+        
+        <div id="messageArea"></div>
 
-        <div id="purchaseData" class="purchase-data">
-            </div>
+        <div id="purchaseDataContainer" class="table-wrapper">
+            <table id="purchaseDataTable">
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>Username</th>
+                        <th>Phone</th>
+                        <th>Course Code</th>
+                        <th>Title</th>
+                        <th>Price</th>
+                        <th>Final Price</th>
+                        <th>Payment ID</th>
+                        <th>Payment Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="purchaseTableBody">
+                </tbody>
+            </table>
+        </div>
     </div>
-
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ url_for('static', filename='js/admin/manage_purchase/purchase_handler.js') }}"></script>
 </body>
 </html>

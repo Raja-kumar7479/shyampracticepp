@@ -3,13 +3,43 @@
 {% block title %}Secure Payment{% endblock %}
 {% block body_attr %}onload="initiatePayment()"{% endblock %}
 
+{% block head %}
+<style>
+  .flash-message {
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-align: center;
+  }
+  .flash-message.payment_error {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+  }
+  .flash-message.payment_warning {
+      background-color: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffecb5;
+  }
+</style>
+{% endblock %}
+
 {% block content %}
-<!-- Watermark -->
-<div id="watermark-container">
-  <div class="floating-watermark">💳 Shyampracticepaper - Secure Payment</div>
+<div id="flash-container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash-message {{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
 </div>
 
-<!-- Initial Loader -->
+
 <div id="loader-overlay">
   <div class="spinner-container">
     <div class="spinner"></div>
@@ -17,7 +47,7 @@
   </div>
 </div>
 
-<!-- Post Payment Spinner -->
+
 <div id="post-payment-loader" style="display: none;">
   <div class="spinner-container">
     <div class="spinner"></div>
@@ -25,7 +55,7 @@
   </div>
 </div>
 
-<!-- Payment Success Form -->
+
 <form id="payment_success_form" method="POST"
       action="{{ url_for('users.payment_success', course_code=course_code, unique_code=unique_code) }}?razorpay_order_id={{ razorpay_order_id }}">
   <input type="hidden" name="razorpay_payment_id" id="payment_id">
@@ -70,8 +100,7 @@ function openRazorpay() {
     order_id: "{{ razorpay_order_id }}",
     handler: function (response) {
       clearInterval(colorInterval);
-
-      // Set values
+      
       document.getElementById('payment_id').value = response.razorpay_payment_id;
       document.getElementById('razorpay_signature').value = response.razorpay_signature;
 
@@ -117,5 +146,4 @@ function showPostPaymentLoader() {
   }
 }
 </script>
-
 {% endblock %}

@@ -1,60 +1,60 @@
+from functools import wraps
+from flask import session, redirect, url_for, flash, request, current_app
+import logging
 import time
+from users.mock_test.handler_db.user_db import UserOperation
 import hmac
 import hashlib
 import secrets
-from flask import current_app
-import logging
 
 logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
-TOKEN_EXPIRY_BUFFER_SECONDS = 30  
+user_op = UserOperation()
+TOKEN_EXPIRY_BUFFER_SECONDS = 30
+
 
 def generate_test_token(email, test_id, duration_seconds):
-    """
-    Generates a secure HMAC token for a test session.
-    """
-    secret_key = current_app.config['TEST_TOKEN_SECRET']
+    secret_key = current_app.config.get('TEST_TOKEN_SECRET')
+    if not secret_key:
+        logger.error("TEST_TOKEN_SECRET is not configured.")
+        return None
     timestamp = int(time.time())
     nonce = secrets.token_hex(16)
     data = f"{email}:{test_id}:{timestamp}:{nonce}:{duration_seconds}"
     signature = hmac.new(secret_key.encode(), data.encode(), hashlib.sha256).hexdigest()
     return f"{data}:{signature}"
 
-
 def validate_test_token(token, email, test_id):
-    """
-    Validates the HMAC token and checks for expiry.
-    """
     if not token:
+        logger.warning("Token validation failed: No token provided.")
         return False
-
     try:
         parts = token.split(':')
         if len(parts) != 6:
+            logger.warning(f"Token validation failed: Invalid token format. Parts: {len(parts)}")
             return False
-
         email_from_token, test_id_from_token, timestamp_str, nonce, duration_str, received_signature = parts
         timestamp = int(timestamp_str)
         duration = int(duration_str)
-
-        # Check for email/test ID match
         if email != email_from_token or test_id != test_id_from_token:
+            logger.warning(f"Token validation failed: Email or test ID mismatch. Email: {email}, Test ID: {test_id}")
             return False
-
-        # Recreate signature
         data = f"{email}:{test_id}:{timestamp}:{nonce}:{duration}"
-        secret_key = current_app.config['TEST_TOKEN_SECRET']
-        expected_signature = hmac.new(secret_key.encode(), data.encode(), hashlib.sha256).hexdigest()
-
-        if not hmac.compare_digest(expected_signature, received_signature):
+        secret_key = current_app.config.get('TEST_TOKEN_SECRET')
+        if not secret_key:
+            logger.error("TEST_TOKEN_SECRET is not configured for validation.")
             return False
-
-        # Check expiry
+        expected_signature = hmac.new(secret_key.encode(), data.encode(), hashlib.sha256).hexdigest()
+        if not hmac.compare_digest(expected_signature, received_signature):
+            logger.warning("Token validation failed: Signature mismatch.")
+            return False
         current_time = int(time.time())
         expiry_time = timestamp + duration + TOKEN_EXPIRY_BUFFER_SECONDS
         if current_time > expiry_time:
+            logger.warning(f"Token validation failed: Token has expired. Current time: {current_time}, Expiry time: {expiry_time}")
             return False
-
+        logger.info(f"Token validated successfully for user {email} and test {test_id}.")
         return True
     except Exception as e:
         logger.exception(f"[TOKEN VALIDATION ERROR] {e}")

@@ -1,0 +1,145 @@
+{% extends "users/dashboard/base.html" %}
+{% block title %}{{ course_name }} - Dashboard | Shyampracticepaper{% endblock %}
+
+{% block head %}
+<style>
+    .flash-message {
+        padding: 12px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        text-align: center;
+    }
+    .flash-message.dashboard_warning {
+        background-color: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffcba0;
+    }
+    .modal-content .modal-actions {
+        margin-top: 15px;
+        text-align: center;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="flash-container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash-message {{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+</div>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/users/dashboard/materials.css') }}">
+<section class="dashboard-wrapper py-5">
+  <div class="container">
+    {% if question_sections %}
+    <h2 class="section-title mb-4">Practice Questions - {{ course_name }} ({{ course_code }})</h2>
+    <div class="row g-4">
+      {% for section, link in question_sections.items() %}
+      <div class="col-md-4 col-sm-6">
+        <div class="glass-card text-center">
+          <div class="icon mb-3">
+            {% if 'Topic' in section %}<i class="fas fa-tags"></i>
+            {% elif 'Subject' in section %}<i class="fas fa-book-open"></i>
+            {% elif 'Year' in section %}<i class="fas fa-calendar-alt"></i>
+            {% else %}<i class="fas fa-layer-group"></i>
+            {% endif %}
+          </div>
+          <h5 class="card-heading">{{ section }}</h5>
+          <p class="card-text">Explore {{ section.lower() }} questions.</p>
+          <a href="{{ link }}" class="btn btn-sm btn-gradient">Explore <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if courses %}
+    <h2 class="section-title mt-5 mb-4">Free Resources - {{ course_name }}</h2>
+    <div class="row g-4">
+      {% for course in courses %}
+      <div class="col-md-4 col-sm-6">
+        <div class="glass-card">
+          <div class="image-box">
+            {% if course.image_url %}
+              {% set image_path = course.image_url.replace('\\', '/').replace('static/', '', 1) %}
+              <img src="{{ url_for('static', filename=image_path) }}" alt="{{ course.title }}">
+            {% else %}
+              <img src="{{ url_for('static', filename='default-course.jpg') }}" alt="Default">
+            {% endif %}
+            <span class="badge free-badge">Free</span>
+          </div>
+          <h5 class="card-heading mt-3">{{ course.title }}</h5>
+          <p class="card-text">{{ course.subtitle }}</p>
+          <div class="d-flex justify-content-between mt-3">
+            {% if course.section.lower() == 'mock test' %}
+              <a href="{{ url_for('users.open_mock_test_section', section_id=course.section_id, course_code=course_code, unique_code=unique_code) }}" target="_blank" class="btn btn-sm btn-primary">Open</a>
+            {% elif course.section.lower() == 'hnotes' %}
+              <a href="{{ url_for('users.open_hnotes_section', section_id=course.section_id, course_code=course_code, unique_code=unique_code) }}" target="_blank" class="btn btn-sm btn-primary">Open</a>
+            {% else %}
+              <a href="#" class="btn btn-sm btn-primary">Open</a>
+            {% endif %}
+            <button class="btn btn-sm btn-outline-dark open-details" 
+                    data-title="{{ course.title }}" 
+                    data-details="{{ course.details }}" 
+                    data-preview-url="{{ course.preview_url }}">
+              Details
+            </button>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    {% endif %}
+  </div>
+</section>
+
+<div id="details-modal" class="modal-overlay">
+  <div class="modal-content">
+    <span id="close-modal" class="close-btn">&times;</span>
+    <h4 id="modal-title"></h4>
+    <p id="modal-details"></p>
+    <div id="modal-actions" class="modal-actions"></div>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('.open-details').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const title = btn.getAttribute('data-title');
+      const details = btn.getAttribute('data-details');
+      const previewUrl = btn.getAttribute('data-preview-url');
+
+      document.getElementById('modal-title').textContent = title;
+      document.getElementById('modal-details').textContent = details;
+
+      const modalActions = document.getElementById('modal-actions');
+      modalActions.innerHTML = '';
+      
+      if (previewUrl && previewUrl !== 'None') {
+          const demoButton = document.createElement('a');
+          demoButton.href = previewUrl;
+          demoButton.target = '_blank';
+          demoButton.className = 'btn btn-info';
+          demoButton.textContent = 'View Demo';
+          modalActions.appendChild(demoButton);
+      }
+      
+      document.getElementById('details-modal').style.display = 'flex';
+    });
+  });
+  document.getElementById('close-modal').addEventListener('click', () => {
+    document.getElementById('details-modal').style.display = 'none';
+  });
+  document.getElementById('details-modal').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) e.currentTarget.style.display = 'none';
+  });
+</script>
+{% endblock %}

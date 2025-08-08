@@ -1,5 +1,7 @@
-from flask import session, redirect, url_for, flash
+from functools import wraps
+from flask import session, redirect, url_for, flash, request
 import logging
+import time
 from users.mock_test.handler_db.user_db import UserOperation
 
 logger = logging.getLogger(__name__)
@@ -8,26 +10,23 @@ logging.basicConfig(level=logging.INFO)
 user_op = UserOperation()
 
 def get_user_session():
-    email = session.get('email')
-    username = session.get('username')
+    user_email = session.get('user_email')
+    user_username = session.get('user_username')
 
-    if not email or not username:
-        logger.warning(f"USER_SESSION: Missing email/username. Email: {email}, Username: {username}, IP: {session.get('remote_addr')}")
+    if not user_email or not user_username:
+        logger.warning(f"USER_SESSION: Missing user_email/user_username. Email: {user_email}, Username: {user_username}, IP: {request.remote_addr}")
         flash("Session expired or invalid. Please log in again.", "warning")
         return redirect(url_for('users.user_login'))
 
-    logger.info(f"USER_SESSION: Session valid. Email: {email}, Username: {username}")
-    return email, username
+    logger.info(f"USER_SESSION: Session valid. Email: {user_email}, Username: {user_username}")
+    return user_email, user_username
 
-def redirect_if_test_not_found(test, route_name, test_id, course_code, unique_code):
+def redirect_if_test_not_found(test, endpoint, **kwargs):
     if not test:
-        logger.warning(f"TEST_ACCESS: Test not found. Test ID: {test_id}, Course: {course_code}, Code: {unique_code}")
+        logger.warning(f"TEST_ACCESS: Test not found with provided details.")
         flash('Test details not found.', 'danger')
-        return redirect(url_for(f'users.{route_name}',
-                                test_id=test_id,
-                                course_code=course_code,
-                                unique_code=unique_code))
-    logger.info(f"TEST_ACCESS: Test found. Test ID: {test_id}")
+        return redirect(url_for(endpoint, **kwargs))
+    logger.info(f"TEST_ACCESS: Test found.")
     return None
 
 def format_section_count(sections):

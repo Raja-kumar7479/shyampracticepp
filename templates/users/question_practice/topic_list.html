@@ -2,9 +2,10 @@
 {% block title %}Select Topic{% endblock %}
 {% block content %}
 <div class="container mt-4">
-    <h2 class="mb-3 fw-semibold text-center small-heading">
-        Topics in <span class="fw-bold" style="color: #008080;">{{ subject }}</span> ({{ paper_code }})
-    </h2>
+<h2 class="select-subject-heading">
+    Topics in {{ subject }}: 
+  <span class="paper-code">{{ paper_code }}</span>
+</h2>
     {% if topics %}
         <div class="row g-3">
             {% for t in topics %}

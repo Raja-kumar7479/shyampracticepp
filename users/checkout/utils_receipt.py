@@ -4,13 +4,20 @@ from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, 
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
-from reportlab.pdfgen import canvas 
+from reportlab.pdfgen import canvas
 from io import BytesIO
 import time
 import hmac
 import hashlib
 import base64
 import os
+import logging
+import random
+import string
+from datetime import datetime
+from flask import session, flash, redirect, url_for, request
+
+logger = logging.getLogger(__name__)
 
 DOWNLOAD_SECRET = os.getenv("DOWNLOAD_SECRET_KEY", "replace-this-secret").encode()
 
@@ -146,7 +153,7 @@ def generate_pdf_receipt(username, email, phone, payment_id, purchases, discount
             g = int(hex_color[3:5], 16) / 255.0
             b = int(hex_color[5:7], 16) / 255.0
             
-            canvas_obj.setFillColor(colors.Color(r, g, b, alpha=0.2)) 
+            canvas_obj.setFillColor(colors.Color(r, g, b, alpha=0.2))
             canvas_obj.setStrokeColor(colors.HexColor("#008080"))
             canvas_obj.setLineWidth(3)
 
@@ -154,13 +161,11 @@ def generate_pdf_receipt(username, email, phone, payment_id, purchases, discount
             center_x = A4[0] / 2
             center_y = A4[1] / 2
 
-            # Draw circle
             canvas_obj.circle(center_x, center_y, radius, fill=1, stroke=1)
 
-            # Add 'PAID' text
-            canvas_obj.setFillColor(colors.HexColor("#008080")) # Teal color
-            canvas_obj.setFont("Helvetica-Bold", 48) # Large and bold font
-            canvas_obj.drawCentredString(center_x, center_y - 20, "PAID") # Adjust Y for centering
+            canvas_obj.setFillColor(colors.HexColor("#008080"))
+            canvas_obj.setFont("Helvetica-Bold", 48)
+            canvas_obj.drawCentredString(center_x, center_y - 20, "PAID")
 
             canvas_obj.restoreState()
 
@@ -168,13 +173,12 @@ def generate_pdf_receipt(username, email, phone, payment_id, purchases, discount
     buffer.seek(0)
     return buffer
 
-def generate_download_token(payment_id, expires_in=600):  # 10 mins default
+def generate_download_token(payment_id, expires_in=600):
     expiry = int(time.time()) + expires_in
     message = f"{payment_id}:{expiry}".encode()
     signature = hmac.new(DOWNLOAD_SECRET, message, hashlib.sha256).hexdigest()
     token = base64.urlsafe_b64encode(f"{expiry}:{signature}".encode()).decode()
     return token
-
 
 def verify_download_token(payment_id, token):
     try:
@@ -182,7 +186,7 @@ def verify_download_token(payment_id, token):
         expiry_str, received_sig = decoded.split(":")
         expiry = int(expiry_str)
         if time.time() > expiry:
-            return False  # expired
+            return False
         message = f"{payment_id}:{expiry}".encode()
         expected_sig = hmac.new(DOWNLOAD_SECRET, message, hashlib.sha256).hexdigest()
         return hmac.compare_digest(expected_sig, received_sig)

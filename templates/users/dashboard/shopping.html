@@ -1,0 +1,175 @@
+{% extends "users/dashboard/base.html" %}
+{% block title %}Shop - {{ course_name }} | Shyampracticepaper{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/users/dashboard/shopping.css') }}">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+    .flash-message {
+        padding: 12px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        text-align: center;
+    }
+    .flash-message.dashboard_warning {
+        background-color: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffcbaf;
+    }
+    .modal-content .modal-actions {
+        margin-top: 15px;
+        text-align: center;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="wrapper">
+    <div id="flash-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+    
+    {% if purchased_courses %}
+        <h2 class="section-title">Purchased Items</h2>
+        <div class="container row gy-4 gx-4">
+            {% for course in purchased_courses %}
+                <div class="col-12 col-sm-6 col-lg-4 d-flex">
+                    <div class="card-custom w-100">
+                        <div class="image-wrapper">
+                            {% if course.image_url %}
+                                {% set image_path = course.image_url.replace('\\', '/').replace('static/', '', 1) %}
+                                <img src="{{ url_for('static', filename=image_path) }}" alt="{{ course.title }}">
+                            {% else %}
+                                <img src="{{ url_for('static', filename='default-course.jpg') }}" alt="Default Image">
+                            {% endif %}
+                            <div class="badge-label paid">Paid</div>
+                            <div class="purchased-label">Purchased</div>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-title">{{ course.title }}</div>
+                            <div class="subtitle">{{ course.subtitle }}</div>
+                            <div class="info">
+                                <span class="price">₹{{ "%.2f"|format(course.price) }}</span>
+                                <button class="btn btn-details open-details"
+                                        data-title="{{ course.title }}"
+                                        data-details="{{ course.details }}"
+                                        data-preview-url="{{ course.preview_url }}">
+                                    Details
+                                </button>
+                            </div>
+                            <button class="btn btn-cart mt-3" style="background-color: #6c757d;" disabled>Purchased</button>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if available_courses %}
+        <h2 class="section-title mt-5">Available For Purchase</h2>
+        <div class="container row gy-4 gx-4">
+            {% for course in available_courses %}
+                <div class="col-12 col-sm-6 col-lg-4 d-flex">
+                    <div class="card-custom w-100">
+                        <div class="image-wrapper">
+                            {% if course.image_url %}
+                                {% set image_path = course.image_url.replace('\\', '/').replace('static/', '', 1) %}
+                                <img src="{{ url_for('static', filename=image_path) }}" alt="{{ course.title }}">
+                            {% else %}
+                                <img src="{{ url_for('static', filename='default-course.jpg') }}" alt="Default Image">
+                            {% endif %}
+                            <div class="badge-label paid">Paid</div>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-title">{{ course.title }}</div>
+                            <div class="subtitle">{{ course.subtitle }}</div>
+                            <div class="info">
+                                <span class="price">₹{{ "%.2f"|format(course.price) }}</span>
+                                <button class="btn btn-details open-details"
+                                        data-title="{{ course.title }}"
+                                        data-details="{{ course.details }}"
+                                        data-preview-url="{{ course.preview_url }}">
+                                    Details
+                                </button>
+                            </div>
+                            <form method="POST" action="{{ url_for('users.add_cart', course_code=course_code, unique_code=unique_code) }}">
+                                <input type="hidden" name="course_code" value="{{ course.code }}">
+                                <input type="hidden" name="unique_code" value="{{ unique_code }}">
+                                <input type="hidden" name="title" value="{{ course.title }}">
+                                <input type="hidden" name="subtitle" value="{{ course.subtitle }}">
+                                <input type="hidden" name="price" value="{{ course.price }}">
+                                <input type="hidden" name="section" value="{{ course.section }}">
+                                <input type="hidden" name="section_id" value="{{ course.section_id }}">
+                                <button type="submit" name="add_cart" class="btn btn-cart mt-3">Add to Cart</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if not purchased_courses and not available_courses %}
+        <div class="text-center mt-5">
+            <p>There are no paid items available for this course yet.</p>
+        </div>
+    {% endif %}
+
+</div>
+
+<div id="details-modal" class="modal-overlay">
+    <div class="modal-content">
+        <span id="close-modal" class="close-btn">&times;</span>
+        <h4 id="modal-title"></h4>
+        <p id="modal-details"></p>
+        <div id="modal-actions" class="modal-actions"></div>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('.open-details').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const title = btn.getAttribute('data-title');
+            const details = btn.getAttribute('data-details');
+            const previewUrl = btn.getAttribute('data-preview-url');
+
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-details').textContent = details;
+            
+            const modalActions = document.getElementById('modal-actions');
+            modalActions.innerHTML = '';
+            
+            if (previewUrl && previewUrl !== 'None') {
+                const demoButton = document.createElement('a');
+                demoButton.href = previewUrl;
+                demoButton.target = '_blank';
+                demoButton.className = 'btn btn-info';
+                demoButton.textContent = 'View Demo';
+                modalActions.appendChild(demoButton);
+            }
+
+            document.getElementById('details-modal').style.display = 'flex';
+        });
+    });
+
+    document.getElementById('close-modal').addEventListener('click', () => {
+        document.getElementById('details-modal').style.display = 'none';
+    });
+
+    document.getElementById('details-modal').addEventListener('click', (e) => {
+        if (e.target === e.currentTarget) {
+            e.currentTarget.style.display = 'none';
+        }
+    });
+</script>
+{% endblock %}

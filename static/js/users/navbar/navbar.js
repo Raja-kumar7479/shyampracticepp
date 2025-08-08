@@ -1,30 +1,43 @@
-(function ($) {
-    "use strict";
+document.addEventListener('DOMContentLoaded', () => {
+    const menuToggle = document.getElementById('menuToggle');
+    const navLinks = document.getElementById('navLinks');
+    const overlay = document.getElementById('overlay');
+    const navbar = document.getElementById('navbar');
+    const navLinkItems = document.querySelectorAll('.nav-links a');
 
-    // Initiate WOW.js for animations
-    new WOW().init();
+    const toggleMenu = () => {
+        menuToggle.classList.toggle('active');
+        navLinks.classList.toggle('active');
+        overlay.classList.toggle('active');
 
-    // Sticky Navbar functionality
-    $(window).scroll(function () {
-        if ($(this).scrollTop() > 300) {
-            $('.sticky-top').css('top', '0px');
-        } else {
-            $('.sticky-top').css('top', '-100px');
+        document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
+    };
+
+    const closeMenu = () => {
+        menuToggle.classList.remove('active');
+        navLinks.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+    };
+
+    menuToggle.addEventListener('click', toggleMenu);
+    overlay.addEventListener('click', closeMenu);
+
+    navLinkItems.forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth <= 992) {
+                closeMenu();
+            }
+        });
+    });
+
+    window.addEventListener('scroll', () => {
+        navbar.classList.toggle('scrolled', window.scrollY > 20);
+    });
+
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 992) {
+            closeMenu();
         }
     });
-
-    // Back to top button functionality
-    $(window).scroll(function () {
-        if ($(this).scrollTop() > 300) {
-            $('.back-to-top').fadeIn('slow');
-        } else {
-            $('.back-to-top').fadeOut('slow');
-        }
-    });
-    
-    $('.back-to-top').click(function () {
-        $('html, body').animate({ scrollTop: 0 }, 1500, 'easeInOutExpo');
-        return false;
-    });
-
-})(jQuery);
+});

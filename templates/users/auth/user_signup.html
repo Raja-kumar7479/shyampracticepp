@@ -3,6 +3,64 @@
 {% block title %}Sign Up{% endblock %}
 
 {% block content %}
+<style>
+    .flash-message {
+        padding: 12px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        text-align: center;
+    }
+    .flash-message.signup_success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+    .flash-message.signup_error {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+    .flash-message.signup_warning {
+        background-color: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffecb5;
+    }
+    .flash-message.signup_info {
+        background-color: #d1ecf1;
+        color: #0c5460;
+        border: 1px solid #bee5eb;
+    }
+    .toggle-password {
+        cursor: pointer;
+        font-size: 0.9rem;
+        color: #008080;
+        font-weight: 500;
+        user-select: none;
+        position: absolute;
+        top: 10px; 
+        right: 10px;
+    }
+    .password-strength {
+        list-style-type: none;
+        padding-left: 0;
+    }
+    .form-group.position-relative {
+        position: relative;
+    }
+</style>
+<div class="flash-messages-container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash-message {{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+</div>
 <h3 class="text-center mb-4">Create an Account</h3>
 
 <!-- Step 1: Username -->
@@ -19,7 +77,7 @@
 {% elif step == 'email' %}
 <form action="{{ url_for('users.user_signup') }}" method="POST">
     <div class="form-group">
-        <input type="text" name="username" class="form-control" value="{{ signup_data.username }}" readonly>
+        <input type="text" name="username" class="form-control" value="{{ signup_data.user_signup_username }}" readonly>
         <label class="form-label">Username*</label>
     </div>
     <div class="form-group">
@@ -33,17 +91,17 @@
 {% elif step == 'password' %}
 <form action="{{ url_for('users.user_signup') }}" method="POST">
     <div class="form-group">
-        <input type="text" name="username" class="form-control" value="{{ signup_data.username }}" readonly>
+        <input type="text" name="username" class="form-control" value="{{ signup_data.user_signup_username }}" readonly>
         <label class="form-label">Username*</label>
     </div>
     <div class="form-group">
-        <input type="email" name="email" class="form-control" value="{{ signup_data.email }}" readonly>
+        <input type="email" name="email" class="form-control" value="{{ signup_data.user_signup_email }}" readonly>
         <label class="form-label">Email*</label>
     </div>
     <div class="form-group position-relative">
         <input type="password" id="password" name="password" class="form-control" placeholder=" " required>
         <label for="password" class="form-label" id="password-label">Password*</label>
-        <span id="toggle-password" class="toggle-password" style="cursor: pointer; position: absolute; top: 10px; right: 10px;">Show</span>
+        <span id="toggle-password" class="toggle-password">Show</span>
 
         <div id="password-strength" class="password-strength mt-2 text-muted small">
             Password must contain at least:
@@ -61,11 +119,11 @@
 {% elif step == 'otp' %}
 <form action="{{ url_for('users.user_email_otp_verify') }}" method="POST">
     <div class="form-group">
-        <input type="text" class="form-control" value="{{ signup_data.username }}" readonly>
+        <input type="text" class="form-control" value="{{ signup_data.user_signup_username }}" readonly>
         <label class="form-label">Username*</label>
     </div>
     <div class="form-group">
-        <input type="email" class="form-control" value="{{ signup_data.email }}" readonly>
+        <input type="email" class="form-control" value="{{ signup_data.user_signup_email }}" readonly>
         <label class="form-label">Email*</label>
     </div>
     <div class="form-group">
@@ -74,7 +132,7 @@
     </div>
     <button type="submit" class="btn btn-primary btn-continue btn-block">Verify</button>
 </form>
-<form action="{{ url_for('users.resend_otp') }}" method="POST" class="text-center mt-2">
+<form action="{{ url_for('users.user_resend_otp') }}" method="POST" class="text-center mt-2">
     <button type="submit" class="btn btn-link resend-otp-btn">Resend OTP</button>
 </form>
 {% endif %}

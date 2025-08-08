@@ -1,0 +1,180 @@
+:root {
+    --primary-accent: #008080;
+    --light-bg: #f7f9fc;
+    --card-bg: #ffffff;
+    --text-primary: #212529;
+    --text-secondary: #6c757d;
+    --border-color: #e9ecef;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.04);
+    --user-highlight-bg: #e6f2ff;
+}
+
+body {
+    background-color: var(--light-bg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: var(--text-primary);
+    position: relative;
+}
+
+body::after {
+    content: "shyampracticepaper";
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-45deg);
+    font-size: 10vw;
+    font-weight: 900;
+    color: rgba(0, 0, 0, 0.03);
+    z-index: -1;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+.main-container {
+    padding-top: 2.5rem;
+    padding-bottom: 3rem;
+}
+
+.page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.main-title {
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.test-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+}
+
+.content-card {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow);
+    margin-bottom: 1.5rem;
+}
+
+.content-card .card-header {
+    background-color: transparent;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 1rem 1.5rem;
+    color: var(--text-primary);
+}
+
+.key-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+    padding: 1.5rem;
+}
+
+.metric-item {
+    text-align: center;
+}
+
+.metric-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--primary-accent);
+}
+
+.metric-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.comparison-section {
+    padding: 1.5rem;
+}
+
+.comparison-chart .chart-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.comparison-chart .chart-label {
+    width: 70px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    flex-shrink: 0;
+}
+
+.comparison-chart .progress {
+    flex-grow: 1;
+    height: 18px;
+    border-radius: 50px;
+    background-color: #e9ecef;
+}
+
+.comparison-chart .progress-bar {
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: white;
+    background-color: var(--primary-accent);
+    width: 0%;
+    transition: width 1.5s ease-out;
+}
+
+.comparison-chart .progress-bar.bg-topper {
+    background-color: #28a745;
+}
+
+.table-responsive {
+    border-radius: 0 0 12px 12px;
+}
+
+.topper-table {
+    margin-bottom: 0;
+    font-size: 0.95rem;
+}
+
+.topper-table th {
+    background-color: transparent;
+    font-weight: 600;
+    color: var(--text-secondary);
+    border-bottom: 2px solid var(--border-color);
+    padding: 1rem;
+}
+
+.topper-table td {
+    vertical-align: middle;
+    padding: 1rem;
+}
+
+.topper-table .user-highlight {
+    background-color: var(--user-highlight-bg) !important;
+    font-weight: 700;
+    color: var(--primary-accent);
+}
+
+.topper-table .user-highlight td {
+    background-color: inherit !important;
+}
+
+.action-btn {
+    background: var(--primary-accent);
+    color: #fff;
+    border: none;
+    padding: 10px 25px;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.action-btn:hover {
+    color: #fff;
+    opacity: 0.9;
+    transform: translateY(-2px);
+}

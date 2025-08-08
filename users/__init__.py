@@ -59,11 +59,8 @@ from .mock_test.question_handler import (
 )
 
 from .mock_test.content_dashboard.free_dashboard import (
-    test_dashboard
+    test_dashboard,
+    notes_dashboard
     
 )
 
-from .mock_test.content_dashboard.paid_dashboard import (
-    test_dashboard
-    
-)

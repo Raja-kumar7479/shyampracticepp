@@ -3,78 +3,124 @@
 {% block title %}Questions{% endblock %}
 
 {% block content %}
-    {% if section == 'paper' %}
-        <h2 class="question-section-title">Paper Code: {{ paper_code }}</h2>
-    {% elif section == 'topic' %}
-        <h2 class="question-section-title">{{ subject }} - Topic: {{ topic }}</h2>
-    {% elif section == 'subject' %}
-        <h2 class="question-section-title">All Questions for {{ subject }}</h2>
-    {% elif section == 'year' %}
-        <h2 class="question-section-title">All Questions from {{ year }}</h2>
-    {% endif %}
+<style>
+</style>
 
-    {% for q in questions %}
-    <div class="question-container" id="question-{{ q.question_id }}">
-        {# Use display_question_html which now includes the img tag or just the text #}
-        <p><strong>Q{{ loop.index }}:</strong> {{ q.display_question_html | safe }}</p>
-        <p><strong>Type:</strong> {{ q.question_type }}</p>
+{% if section == 'paper' %}
+    <h2 class="question-section-title">Paper Code: {{ paper_code }}</h2>
+{% elif section == 'topic' %}
+    <h2 class="question-section-title">{{ subject }} - Topic: {{ topic }}</h2>
+{% elif section == 'subject' %}
+    <h2 class="question-section-title">All Questions for {{ subject }}</h2>
+{% elif section == 'year' %}
+    <h2 class="question-section-title">All Questions from {{ year }}</h2>
+{% endif %}
 
-        <form onsubmit="submitAnswer(event, '{{ q.question_id }}', '{{ q.question_type }}')">
-            {% if q.question_type == 'NAT' %}
-                <label>
-                    Enter your answer:
-                    <input type="number" step="any" name="selected_option_{{ q.question_id }}" required>
-                </label>
-            {% else %}
-                {% for option in ['A', 'B', 'C', 'D'] %}
-                    {% if q['option_' + option.lower()] %}
-                    <label class="option-label">
-                        {% if q.question_type == 'MSQ' %}
-                            <input type="checkbox" name="selected_option_{{ q.question_id }}" value="{{ option }}">
-                        {% else %}
-                            <input type="radio" name="selected_option_{{ q.question_id }}" value="{{ option }}">
-                        {% endif %}
-                        {{ option }}. {{ q['option_' + option.lower()] }}
-                    </label>
+{% for q in questions %}
+<div class="question-container" id="question-{{ q.question_id }}">
+    <div class="question-text"><strong>Q{{ loop.index }}:</strong> {{ q.question_text | safe }}</div>
+    <p><strong>Type:</strong> {{ q.question_type }}</p>
+
+    <form onsubmit="submitAnswer(event, '{{ q.question_id }}', '{{ q.question_type }}')">
+        {% if q.question_type == 'NAT' %}
+            <label>
+                Enter your answer:
+                <input type="number" step="any" name="selected_option_{{ q.question_id }}" required>
+            </label>
+        {% else %}
+            {% for option in ['A', 'B', 'C', 'D'] %}
+                {% if q['option_' + option.lower()] %}
+                <label class="option-label" data-option-value="{{ option }}">
+                    {% if q.question_type == 'MSQ' %}
+                        <input type="checkbox" name="selected_option_{{ q.question_id }}" value="{{ option }}">
+                    {% else %}
+                        <input type="radio" name="selected_option_{{ q.question_id }}" value="{{ option }}">
                     {% endif %}
-                {% endfor %}
-            {% endif %}
-            <button type="submit" class="submit-btn">Submit Answer</button>
-        </form>
-
-        <div class="result" id="result-{{ q.question_id }}" aria-live="polite"></div>
-
-        <p class="meta-info">
-            <strong>Subject:</strong> {{ q.subject }} |
-            <strong>Topic:</strong> {{ q.topic }} |
-            <strong>Year:</strong> {{ q.year }} |
-            <strong>Set:</strong> {{ q.paper_set }}
-        </p>
-    </div>
-    {% endfor %}
-
-    {% if total_pages > 1 %}
-    <div class="pagination-container">
-        <nav class="pagination-box">
-            {% if page > 1 %}
-                <a href="{{ request.path }}?page={{ page - 1 }}">⟨ Prev</a>
-            {% endif %}
-
-            {% for p in range(1, total_pages + 1) %}
-                {% if p == page %}
-                    <strong>{{ p }}</strong>
-                {% else %}
-                    <a href="{{ request.path }}?page={{ p }}">{{ p }}</a>
+                    {{ option }}. {{ q['option_' + option.lower()] | safe }}
+                </label>
                 {% endif %}
             {% endfor %}
-
-            {% if page < total_pages %}
-                <a href="{{ request.path }}?page={{ page + 1 }}">Next ⟩</a>
-            {% endif %}
-        </nav>
-    </div>
-    <style>
+        {% endif %}
         
-    </style>
-    {% endif %}
+        <div class="confidence-selector">
+            <label for="confidence-{{ q.question_id }}">Confidence:</label>
+            <select id="confidence-{{ q.question_id }}">
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+            </select>
+        </div>
+
+        <button type="submit" class="submit-btn">Submit Answer</button>
+    </form>
+
+    <div class="result" id="result-{{ q.question_id }}" aria-live="polite">
+        <div class="result-summary" id="summary-{{ q.question_id }}"></div>
+        <div class="result-controls" id="controls-{{ q.question_id }}" style="display:none;">
+            <button type="button" class="toggle-explanation-btn" id="toggle-btn-{{ q.question_id }}">Show Explanation</button>
+            <button type="button" class="report-issue-btn" id="report-btn-{{ q.question_id }}" data-question-id="{{ q.question_id }}">Report Issue</button>
+        </div>
+        <div class="explanation-content" id="explanation-{{ q.question_id }}" style="display:none;"></div>
+    </div>
+
+    <p class="meta-info">
+        <strong>Subject:</strong> {{ q.subject }} |
+        <strong>Topic:</strong> {{ q.topic }} |
+        <strong>Year:</strong> {{ q.year }} |
+        <strong>Set:</strong> {{ q.paper_set }}
+    </p>
+</div>
+{% endfor %}
+
+<div class="performance-summary" id="performance-summary">
+    <h3>Quiz Complete!</h3>
+    <p>Here's how you did:</p>
+    <div>
+        <span id="correct-count">0</span> Correct | 
+        <span id="incorrect-count">0</span> Incorrect
+    </div>
+</div>
+
+{% if total_pages > 1 %}
+<div class="pagination-container">
+    <nav class="pagination-box">
+        {% if page > 1 %}
+            <a href="{{ request.path }}?page={{ page - 1 }}">⟨ Prev</a>
+        {% endif %}
+        {% for p in range(1, total_pages + 1) %}
+            {% if p == page %}
+                <strong>{{ p }}</strong>
+            {% else %}
+                <a href="{{ request.path }}?page={{ p }}">{{ p }}</a>
+            {% endif %}
+        {% endfor %}
+        {% if page < total_pages %}
+            <a href="{{ request.path }}?page={{ page + 1 }}">Next ⟩</a>
+        {% endif %}
+    </nav>
+</div>
+{% endif %}
+
+<div id="report-issue-modal" class="report-issue-modal">
+    <div class="report-modal-content">
+        <span class="report-modal-close" id="report-modal-close-btn">&times;</span>
+        <div id="report-modal-body">
+            <h3>Report an Issue</h3>
+            <p>Please explain the problem with this question.</p>
+            <form id="report-issue-form">
+                <textarea id="report-problem-textarea" name="problem" placeholder="e.g., The correct option is wrong, there's a typo in the question, the explanation is unclear..."></textarea>
+                <div id="report-modal-feedback"></div>
+                <button type="submit" id="submit-report-btn" class="submit-btn">Submit Report</button>
+            </form>
+        </div>
+        <div id="report-success-message" style="display: none; text-align: center;">
+             <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2" style="width: 60px; display: block; margin: 0 auto 20px;">
+                <circle class="path circle" fill="none" stroke="#73AF55" stroke-width="6" stroke-miterlimit="10" cx="65.1" cy="65.1" r="62.1"/>
+                <polyline class="path check" fill="none" stroke="#73AF55" stroke-width="6" stroke-linecap="round" stroke-miterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
+            </svg>
+            <h4>Report Submitted!</h4>
+            <p>Thank you for your feedback. We will look into it as soon as possible.</p>
+        </div>
+    </div>
+</div>
 {% endblock %}

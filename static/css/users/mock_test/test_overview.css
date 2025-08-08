@@ -1,0 +1,188 @@
+   :root {
+            --primary-color: #008080;
+            --success-color: #198754;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --info-color: #0dcaf0;
+            --secondary-color: #6c757d;
+            --light-gray: #f8f9fa;
+            --dark-text: #212529;
+            --border-color: #dee2e6;
+        }
+
+        body {
+            background-color: var(--light-gray);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--dark-text);
+            position: relative; /* Needed for watermark positioning */
+        }
+
+        /* --- Watermark --- */
+        body::after {
+            content: "shyampracticepaper";
+            position: fixed; /* Fixed position stays in place on scroll */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 10vw; /* Responsive font size based on viewport width */
+            font-weight: 900; /* Bolder text */
+            color: rgba(0, 0, 0, 0.04); /* Very light and subtle color */
+            z-index: 0; /* Behind the content but above the background */
+            pointer-events: none; /* Ensures the watermark is not clickable */
+            white-space: nowrap; /* Prevents the text from wrapping */
+        }
+
+        .main-container {
+            padding-top: 3rem;
+            padding-bottom: 3rem;
+            position: relative; /* Ensure content is on top of watermark */
+            z-index: 1;
+        }
+
+        .main-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--info-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .test-subtitle {
+            font-size: 1.1rem;
+            color: var(--secondary-color);
+            margin-bottom: 3rem;
+        }
+
+        .result-card {
+            background-color: #ffffff;
+            border-radius: 15px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .result-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        /* Performance Summary Card (Left Column) */
+        .summary-card .card-body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .progress-circle {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            /* The --value custom property is now set via JavaScript */
+            background: conic-gradient(var(--primary-color) calc(var(--value) * 1%), #e9ecef 0);
+            position: relative;
+            margin-bottom: 1.5rem;
+            transition: background 0.5s ease-in-out;
+        }
+
+        .progress-circle::before {
+            content: '';
+            position: absolute;
+            width: 85%;
+            height: 85%;
+            background: #fff;
+            border-radius: 50%;
+        }
+
+        .percentage-text {
+            position: relative;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .percentage-text small {
+            font-size: 1.5rem;
+        }
+
+        .score-display {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--dark-text);
+        }
+
+        .rank-display {
+            font-size: 1.25rem;
+            color: var(--secondary-color);
+            margin-top: 0.5rem;
+        }
+        
+        .rank-display .fa-medal {
+            color: var(--warning-color);
+        }
+
+        /* Details Table Card (Right Column) */
+        .details-table .table {
+            margin-bottom: 0;
+        }
+        
+        .details-table .table td {
+            padding: 1rem 1.25rem;
+            vertical-align: middle;
+            font-size: 1rem;
+        }
+        
+        .details-table .table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .details-table .table td:first-child {
+            color: var(--secondary-color);
+            font-weight: 500;
+        }
+        
+        .details-table .table td:last-child {
+            font-weight: 700;
+            text-align: right;
+        }
+        
+        .details-table .fa-fw {
+            margin-right: 8px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Action Button */
+        .action-btn {
+            background: var(--primary-color);
+            color: #fff;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(13, 110, 253, 0.4);
+        }
+
+        /* --- Footer --- */
+        .page-footer {
+            border-top: 1px solid var(--border-color);
+            margin-top: 3rem;
+            padding: 1.5rem 0;
+            background-color: #fff;
+            position: relative;
+            z-index: 1;
+        }

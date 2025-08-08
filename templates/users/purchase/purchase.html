@@ -1,7 +1,29 @@
 {% extends 'users/purchase/base_3.html' %}
-
 {% block head %}
 <style>
+    .flash-message {
+        padding: 12px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        text-align: center;
+    }
+    .flash-message.purchase_notification {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+    .flash-message.cart_warning {
+        background-color: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffcba0;
+    }
+    .flash-message.download_warning {
+        background-color: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffcba0;
+    }
 </style>
 {% endblock %}
 
@@ -9,12 +31,18 @@
 <div class="wrapper">
   <div class="sidebar collapsed" id="sidebar">
     <div class="logo">
-      +91-{{ phone }}
+      <div class="user-initials">{{ initials }}</div>
+      <div>
+        <span class="premium-badge">Premium</span>
+
+      </div>
       <span class="close-btn" onclick="toggleSidebar()">&times;</span>
     </div>
-    <a href="{{ url_for('users.purchase_dashboard', course_code=course_name, unique_code=unique_code) }}"><i class="fas fa-user-circle"></i><span>Profile</span></a>
-    <a href="{{ url_for('users.course_shop', course_code=course_code, unique_code=unique_code) }}"><i class="fas fa-home"></i><span>Add to Cart</span></a>
-    <a href="{{ url_for('users.logout') }}"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
+
+    <a href="{{ url_for('users.purchase_dashboard', course_code=course_code, unique_code=unique_code) }}"><i class="fas fa-unlock-alt"></i>My Pakages</a>
+    <a href="{{ url_for('users.my_courses') }}"><i class="fas fa-user-graduate"></i>Enrolled Course</a>
+    <a href="{{ url_for('users.course_shop', course_code=course_code, unique_code=unique_code) }}"><i class="fas fa-shopping-cart"></i><span>Shop More</span></a>
+    <a href="{{ url_for('users.user_logout') }}"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
   </div>
 
   <div class="main" id="main">
@@ -22,18 +50,28 @@
       <div class="toggle-btn" onclick="toggleSidebar()">
         <i class="fas fa-bars"></i>
       </div>
-      <div class="page-title">Welcome {{ username }}</div>
+      <div class="page-title">Welcome, {{ username }}</div>
+      <span class="premium-badge">{{course_code}}</span>
+
       <button class="mode-toggle" onclick="toggleMode()" title="Toggle dark/light mode">
         <i class="fas fa-moon"></i>
       </button>
     </div>
+    <div id="flash-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
 
     {% if grouped_purchases %}
-      {% for section, section_purchases in grouped_purchases.items() %}
-        <div class="section-header">
-          <h4>{{ section }}</h4>
-        </div>
-        <div class="course-grid">
+      <div class="course-grid">
+        {% for section, section_purchases in grouped_purchases.items() %}
           {% for purchase in section_purchases %}
             <div class="course-card">
               <div>
@@ -42,25 +80,37 @@
                 <div class="purchase-info">
                   <strong>Purchased:</strong> {{ purchase.payment_date.strftime('%d-%m-%Y') }}
                 </div>
+                {% if purchase.validity_expires_at %}
+                <div class="purchase-info" style="color: #dc3545; font-weight: 600;">
+                  <strong>Expires:</strong> {{ purchase.validity_expires_at.strftime('%d-%m-%Y %I:%M %p') }}
+                </div>
+                {% endif %}
               </div>
               <div class="course-actions">
-                <a href="{{ url_for('users.open_' + purchase.section_id|lower|replace(' ', '_'), course_code=course_code, unique_code=unique_code) }}"
-                   target="_blank" class="btn btn-sm btn-primary btn-course">
-                  <i class="fas fa-file-pdf me-1"></i>Open
-                </a>
+                {% if purchase.section in ['mock test', 'hnotes'] %}
+                   <a href="{{ url_for('users.open_' ~ purchase.section.replace(' ', '_') ~ '_section', section_id=purchase.section_id, course_code=course_code, unique_code=unique_code) }}"
+                     target="_blank" class="btn btn-primary btn-course">
+                    <i class="fas fa-external-link-alt me-1"></i>Visit
+                  </a>
+                {% else %}
+                  <a href="#" class="btn btn-secondary btn-course disabled">
+                    <i class="fas fa-ban me-1"></i>Not Available
+                  </a>
+                {% endif %}
+
                 {% if purchase.download_link %}
-                  <a href="{{ purchase.download_link }}" class="btn btn-sm btn-outline-secondary btn-course" download>
+                  <a href="{{ purchase.download_link }}" class="btn btn-outline-secondary btn-course" download>
                     <i class="fas fa-file-invoice me-1"></i>Receipt
                   </a>
                 {% endif %}
               </div>
             </div>
           {% endfor %}
-        </div>
-      {% endfor %}
+        {% endfor %}
+      </div>
     {% else %}
       <div class="no-purchases">
-        <p>You have not purchased any courses yet.</p>
+        <p>You have not purchased any items yet.</p>
       </div>
     {% endif %}
   </div>
@@ -82,7 +132,7 @@
     icon.classList.toggle("fa-moon");
   }
 
-  window.addEventListener('load', () => {
+  function handleResize() {
     const sidebar = document.getElementById("sidebar");
     const main = document.getElementById("main");
     if (window.innerWidth > 768) {
@@ -94,20 +144,9 @@
       sidebar.classList.remove("show");
       main.classList.add("main-collapsed");
     }
-  });
+  }
 
-  window.addEventListener('resize', () => {
-    const sidebar = document.getElementById("sidebar");
-    const main = document.getElementById("main");
-    if (window.innerWidth > 768) {
-      sidebar.classList.remove("collapsed");
-      sidebar.classList.add("show");
-      main.classList.remove("main-collapsed");
-    } else {
-      sidebar.classList.add("collapsed");
-      sidebar.classList.remove("show");
-      main.classList.add("main-collapsed");
-    }
-  });
+  window.addEventListener('load', handleResize);
+  window.addEventListener('resize', handleResize);
 </script>
 {% endblock %}

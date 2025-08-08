@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (data.success) {
                 closePopup("enrollment-popup");
 
-                // Optional: Update UI visually if needed
+                
                 const boxes = document.querySelectorAll(".exam-box");
                 boxes.forEach(box => {
                     const codeDiv = box.querySelector(".exam-code");
@@ -104,11 +104,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 });
 
-                // Automatically redirect to dashboard after enrollment
+               
                 if (data.unique_code) {
                     window.location.href = `/dashboard/${encodeURIComponent(selectedCourseCode)}/${data.unique_code}`;
                 } else {
-                    // Fallback if unique_code not returned from enrollment response
+                    
                     redirectToCourse(selectedCourseCode);
                 }
             } else {

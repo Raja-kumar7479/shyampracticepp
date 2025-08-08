@@ -1,10 +1,27 @@
 import logging
 import random
 import string
-from flask import session
+from flask import session, flash, redirect, url_for
+from users.checkout.user_db import UserOperation
+from users.checkout.utils_payment import is_valid_session as is_valid_phone_session
+
+
+user_op = UserOperation()
+logger = logging.getLogger(__name__)
+
+
+def is_user_logged_in():
+    user_username = session.get('user_username')
+    user_email = session.get('user_email')
+    if not user_username or not user_email:
+        logger.warning("Session expired: user is not logged in.")
+        flash("Session expired. Please login again.", "login")
+        return False, user_username, user_email
+    logger.info(f"User {user_email} is logged in.")
+    return True, user_username, user_email
 
 def get_session_user():
-    return session.get('username'), session.get('email'), session.get('validated_phone')
+    return session.get('user_username'), session.get('user_email'), session.get('validated_phone')
 
 def is_valid_session(username, email, phone):
     return all([username, email, phone])

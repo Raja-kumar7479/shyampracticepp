@@ -1,10 +1,10 @@
 {% extends 'users/question_practice/base.html' %}
 {% block title %}Select Year{% endblock %}
 {% block content %}
-<h2 class="mb-3 fw-semibold text-center small-heading">
-    Select Year for Paper: 
-    <span class="fw-bold" style="color: #008080;">{{ paper_code }}</span>
-  </h2>
+<h2 class="select-subject-heading">
+  Select Year for Paper: 
+  <span class="paper-code">{{ paper_code }}</span>
+</h2>
 <div class="d-flex flex-column gap-3">
     {% for year in years %}
         <a href="{{ url_for('users.show_year_questions',unique_code = unique_code, paper_code=paper_code, year=year.year) }}{% if unique_code %}?code={{ unique_code }}{% endif %}"

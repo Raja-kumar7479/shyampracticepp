@@ -6,20 +6,16 @@ from datetime import datetime
 
 from flask import session
 
+
+
 def get_session_user():
-    username = session.get('username')
-    email = session.get('email')
-    phone = session.get('validated_phone')
-    if not all([username, email, phone]):
-        return None, None, None
-    return username, email, phone
+    return session.get('user_username'), session.get('user_email'), session.get('validated_phone')
 
 def calculate_final_price(cart_courses, discount=0):
     total = sum(c['price'] for c in cart_courses)
     discount_amount = round(total * discount / 100, 2)
     final_amount = round(total - discount_amount, 2)
     return total, discount_amount, final_amount
-
 
 def verify_hmac_signature(order_id, payment_id, signature, secret):
     generated_signature = hmac.new(
@@ -40,7 +36,6 @@ def validate_unique_code(user_op, email, course_code, unique_code):
 
 def process_cart_purchases(cart_courses, email, username, phone, payment_id,
                            amount_paid, discount_percent, original_price, course_code, payment_mode, status):
-
     purchases_data = []
     for course in cart_courses:
         price = course['price']
@@ -48,9 +43,9 @@ def process_cart_purchases(cart_courses, email, username, phone, payment_id,
         final_price = round(price - course_discount_amt, 2)
         purchase_code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
         
-        section = course.get('section')     
+        section = course.get('section')
         section_id = course.get('section_id')
-
+        
         purchase_entry = {
             'email': email,
             'username': username,
@@ -72,7 +67,6 @@ def process_cart_purchases(cart_courses, email, username, phone, payment_id,
         }
         purchases_data.append(purchase_entry)
     return purchases_data
-
 
 def clear_payment_session(user_cart_key):
     keys_to_clear = [

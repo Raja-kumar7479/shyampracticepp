@@ -8,22 +8,76 @@ body {
     padding: 0;
 }
 
+/* SECTION TITLE */
 .section-title {
-    font-size: 1.0rem;
-    font-weight: 500;
-    color: var(--primary-color);
-    padding: 5px 15px;
-    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 40px auto 30px;
+    padding: 0 20px;
+    background: #fff;
+    color: #00b8b8;
+    width: fit-content;
+    max-width: 100%;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
-/* Container Layout */
-.ccard, .ccardbox {
+/* Decorative lines */
+.section-title::before,
+.section-title::after {
+    content: "";
+    flex: 1;
+    height: 2px;
+    background-color: #00e6e6;
+    margin: 0 10px;
+}
+
+/* CONTAINER LAYOUT */
+.ccard,
+.ccardbox {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 18px;
     padding: 30px 15px;
 }
+
+/* MEDIA QUERIES */
+
+/* Tablet */
+@media (max-width: 768px) {
+    .section-title {
+        font-size: 16px;
+        padding: 0 15px;
+    }
+
+    .ccard,
+    .ccardbox {
+        gap: 12px;
+        padding: 20px 10px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+    .section-title {
+        font-size: 15px;
+        padding: 0 10px;
+    }
+
+    .ccard,
+    .ccardbox {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        padding: 15px 8px;
+    }
+}
+
 
 /* Course Card Base */
 .dcard {

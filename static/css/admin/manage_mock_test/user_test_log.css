@@ -1,0 +1,129 @@
+/* Ensure full height for sticky layout */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #f9fafa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Sticky Footer Support */
+.main-content {
+    flex: 1;
+}
+
+/* Container & Headings */
+.container {
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.07);
+}
+
+h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+h2::after {
+    content: "";
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: #3498db;
+    margin: 8px auto 0;
+    border-radius: 3px;
+}
+
+/* Flash & Alerts */
+.flashes {
+    margin-bottom: 1rem;
+}
+
+.alert {
+    font-size: 0.95rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: 8px;
+}
+
+/* Highlight */
+.highlighted-count {
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #17a2b8;
+    padding: 0.3rem 0.7rem;
+    border-radius: 20px;
+    font-size: 1rem;
+}
+
+/* Table */
+.table-responsive {
+    margin-top: 1.5rem;
+}
+
+.table {
+    background-color: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    font-size: 0.95rem;
+}
+
+.table th {
+    background-color: #2e86de;
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    padding: 12px;
+    text-align: center;
+}
+
+.table td {
+    padding: 12px;
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid #e1e1e1;
+}
+
+.table-striped tbody tr:nth-child(odd) {
+    background-color: #f4f7fa;
+}
+
+.table td:first-child,
+.table th:first-child {
+    border-left: none;
+}
+.table td:last-child,
+.table th:last-child {
+    border-right: none;
+}
+
+.table tbody tr td[colspan="5"] {
+    color: #999;
+    font-style: italic;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    h2 {
+        font-size: 1.4rem;
+    }
+
+    .container {
+        padding: 1rem;
+    }
+
+    .table {
+        font-size: 0.85rem;
+    }
+
+    .highlighted-count {
+        font-size: 0.9rem;
+    }
+}

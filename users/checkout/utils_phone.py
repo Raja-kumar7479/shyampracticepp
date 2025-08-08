@@ -1,6 +1,10 @@
-from flask import flash, redirect,  request, session, url_for
+import logging
+from flask import flash, redirect, request, session, url_for
 from users import users_bp
+from extensions import user_login_required
+from users.checkout.user_db import UserOperation
 
+logger = logging.getLogger(__name__)
 
 def validate_phone_number(phone_number):
     phone_number = phone_number.strip()
@@ -9,20 +13,23 @@ def validate_phone_number(phone_number):
     return True, None
 
 @users_bp.route('/validate_phone/<course_code>/<unique_code>', methods=['POST'])
+@user_login_required
 def validate_phone(course_code, unique_code):
-    username = session.get('username')
-    email = session.get('email')
-    if not username or not email:
+    user_username = session.get('user_username')
+    user_email = session.get('user_email')
+    if not user_username or not user_email:
         flash("Login first.", "login")
+        logger.warning("Phone validation attempt failed: user not logged in.")
         return redirect(url_for('users.user_login'))
 
     phone = request.form.get('phone_number', '').strip()
     valid, error = validate_phone_number(phone)
     if not valid:
         flash(error, "cart_warning")
+        logger.warning(f"Phone validation failed for user {user_email}: {error}")
         return redirect(url_for('users.add_cart', course_code=course_code, unique_code=unique_code))
 
     session['validated_phone'] = phone
     flash("Phone number validated. Fill billing details.", "cart_notification")
-    # 🛠 Redirect with query param show_billing=true
+    logger.info(f"Phone number validated for user {user_email}.")
     return redirect(url_for('users.add_cart', course_code=course_code, unique_code=unique_code, show_billing='true'))

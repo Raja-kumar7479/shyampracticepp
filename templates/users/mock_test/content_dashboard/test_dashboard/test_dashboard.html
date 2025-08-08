@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Test Dashboard - shyampracticepaper</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/users/mock_test/test_dashboard.css') }}" rel="stylesheet" />
+    <style>
+        .report-card.highlight {
+            border: 2px solid #0d6efd;
+            box-shadow: 0 0 15px rgba(13, 110, 253, 0.5);
+            transform: scale(1.02);
+            transition: all 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body class="{% if dashboard_type == 'paid' %}premium-dashboard{% endif %}">
+
+    {% if dashboard_type == 'paid' %}
+        <div class="watermark">Premium</div>
+    {% endif %}
+
+    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header d-md-none">
+            <h5 class="mb-0">Menu</h5>
+            <button class="btn btn-icon btn-sm" onclick="toggleSidebar()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="sidebar-profile text-center py-4 border-bottom">
+            <div class="avatar-initials mx-auto mb-2">
+                {% set parts = username.split(' ') %}
+                {{ parts[0][0] }}{% if parts|length > 1 %}{{ parts[1][0] }}{% endif %}
+            </div>
+            <h5 class="mb-0">{{ username }}</h5>
+            <small class="text-muted">{{ stream }} ({{ course_code }})</small>
+        </div>
+        <ul class="nav flex-column px-3 mt-3">
+            <li class="nav-item"><a class="nav-link" href="/"><i class="fas fa-home me-2"></i>HOME</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('users.my_courses') }}"><i class="fas fa-home me-2"></i>Enrolled courses</a></li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('users.purchase_dashboard', course_code=course_code, unique_code=unique_code) }}">
+              <i class="fas fa-box-open me-2"></i>MY PACKAGES
+             </a>
+            </li>
+            <li class="nav-item"><a class="nav-link" href=""><i class="fas fa-calendar-alt me-2"></i>TEST SCHEDULE</a></li>
+        </ul>
+    </aside>
+
+    <div class="page-container">
+        <nav class="navbar bg-light px-3 d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <button class="btn btn-outline-secondary d-md-none me-2" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <div class="main-content-header p-4 pb-0">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="mb-0 d-flex align-items-center">
+                        TAKE A TEST <span class="badge bg-danger ms-2">{{ course_name }}</span>
+                        {% if dashboard_type == 'paid' %}
+                            <span class="premium-badge"><i class="fas fa-crown me-1"></i>PREMIUM</span>
+                        {% endif %}
+                    </h4>
+                </div>
+                <div class="mb-3 d-flex flex-wrap gap-2">
+                    <button class="btn btn-secondary btn-sm" id="allTestsBtn">ALL</button>
+                    <button class="btn btn-secondary btn-sm" id="unperformedTestsBtn">UNPERFORMED</button>
+                    <button class="btn btn-secondary btn-sm" id="resultBtn">RESULT</button>
+                </div>
+            </div>
+
+            <div id="testCardsContainer">
+                {% for test in tests %}
+                    <div class="test-card p-3 mb-3 border rounded shadow-sm position-relative" data-status="{{ test.user_test_status }}">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <div class="mb-1">
+                                    <span class="text-primary fw-bold">TEST {{ loop.index }}</span>
+                                    {% if test.label %}
+                                    <span class="badge test-type-label {{ 'bg-warning text-dark' if test.label == 'Paid' else 'bg-info text-dark' }} ms-2">
+                                        {{ test.label }}
+                                    </span>
+                                    {% endif %}
+                                    {% if test.is_newly_added %}
+                                    <span class="badge bg-success ms-2">New</span>
+                                    {% endif %}
+                                </div>
+                                <div class="test-title fw-semibold mt-1">{{ test.subject_title }}</div>
+                                <small class="text-muted">{{ test.subject_subtitle }}</small>
+                                <br />
+                                <small>
+                                    Total Questions: <strong>{{ test.total_questions }}</strong> |
+                                    Marks: <strong>{{ test.total_marks }}</strong> |
+                                    Duration: <strong>{{ test.total_duration_minutes }} min</strong>
+                                </small>
+                                <br />
+                                <small class="text-muted fst-italic">
+                                    Added/Updated: {{ test.updated_at.strftime('%d-%b-%Y') }}
+                                </small>
+                                <br />
+                                {% if test.user_test_status == 'unperformed' %}
+                                    <a href="{{ url_for('users.test_login', test_key=test.test_key, course_code=course_code, unique_code=unique_code) }}" class="btn btn-warning btn-sm mt-2">Continue Test</a>
+                                {% else %}
+                                    <a href="{{ url_for('users.test_login', test_key=test.test_key, course_code=course_code, unique_code=unique_code) }}" class="btn btn-primary btn-sm mt-2">Start Test</a>
+                                {% endif %}
+                            </div>
+                            <div>
+                                <span class="badge {{ 'bg-warning' if test.user_test_status == 'unperformed' else 'bg-secondary' }}">
+                                    {{ test.user_test_status.replace('_', ' ').title() }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                <p>No tests available.</p>
+                {% endfor %}
+            </div>
+
+            <div id="reportsSection" class="p-4 pt-0" style="display: none;">
+                <h5 class="section-title mb-3">Completed Test Reports</h5>
+                {% if completed_tests %}
+                    {% for test in completed_tests %}
+                    <div class="report-card mb-3 shadow-sm position-relative" data-test-key="{{ test.test_key }}">
+                        <div class="report-card-body">
+                            <div class="report-info">
+                                <span class="text-primary fw-bold">TEST {{ loop.index }}</span>
+                                <div class="test-title fw-semibold mt-1">{{ test.subject_title }}</div>
+                                <small class="text-muted">{{ test.subject_subtitle }}</small>
+                                <div class="score-container mt-2">
+                                    <small class="submission-timestamp">Submitted: {{ test.submission_timestamp.strftime('%Y-%m-%d %H:%M') if test.submission_timestamp else 'N/A' }}</small>
+                                    <div class="score-details">
+                                        <small class="net-score">Net Score: <span class="score-value">{{ '%.2f'|format(test.net_score) }}</span></small>
+                                        <small class="percentage">Percentage: <span class="percentage-value">{{ '%.2f'|format(test.percentage) }}%</span></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="report-actions">
+                                <a href="{{ url_for('users.test_result', test_key=test.test_key, course_code=course_code, unique_code=unique_code) }}" target="_blank" class="view-result-btn">View Result</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="no-reports-message">No completed tests to display reports for yet.</p>
+                {% endif %}
+            </div>
+        </main>
+        <footer class="footer text-center py-3 border-top">
+            <small>All Rights Reserved © shyampracticepaper</small>
+        </footer>
+    </div>
+    <script src="{{ url_for('static', filename='js/users/mock_test/test_dashboard.js') }}"></script>
+<script>
+</script>
+
+</body>
+</html>

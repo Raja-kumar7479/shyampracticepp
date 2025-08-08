@@ -2,10 +2,11 @@
 {% block title %}Select Subject{% endblock %}
 
 {% block content %}
-<h2 class="mb-3 fw-semibold text-center small-heading">
+<h2 class="select-subject-heading">
   Select Subject for Paper: 
-  <span class="fw-bold" style="color: #008080;">{{ paper_code }}</span>
+  <span class="paper-code">{{ paper_code }}</span>
 </h2>
+
  
 <div class="d-flex flex-column gap-3">
     {% for sub in subjects %}

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Course Content</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/manage_modules/course_content.css') }}">
+    <style>
+        .modal-overlay { display: none; position: fixed; z-index: 1050; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; outline: 0; background-color: rgba(0, 0, 0, 0.5); justify-content: center; align-items: center; }
+        .modal-content-custom { background: white; padding: 20px; border-radius: 8px; max-width: 500px; width: 90%; position: relative; }
+        .close-btn { position: absolute; top: 10px; right: 20px; font-size: 2rem; font-weight: bold; cursor: pointer; }
+        .image-preview { max-width: 100%; border-radius: 5px; }
+        .editable:not(.owner-editable) { cursor: not-allowed; }
+        .action-btn-owner.disabled { cursor: not-allowed; opacity: 0.65; }
+    </style>
+</head>
+<body>
+<div class="container-fluid mt-4">
+    <h2>Manage Course Content</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category|replace('admin_', '') }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <h3>Add New Content</h3>
+    <form id="addContentForm" method="POST" action="{{ url_for('admin.manage_course_content') }}" enctype="multipart/form-data" class="mb-4 p-4 border rounded bg-light">
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="addCourseCode" class="form-label"><strong>1. Select Course</strong></label>
+                <select class="form-control" id="addCourseCode" name="code" required>
+                    <option value="" disabled selected>-- Select a Course --</option>
+                    {% for course in all_courses %}
+                        <option value="{{ course.code }}" data-name="{{ course.name }}">{{ course.name }} ({{ course.code }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="name" class="form-label">Course Name (Auto-filled)</label>
+                <input type="text" class="form-control" id="name" name="name" readonly required>
+            </div>
+        </div>
+        
+        <div id="remainingFields" style="display:none;">
+            <hr>
+            <p><strong>2. Enter Content Details</strong></p>
+            <div class="row">
+                <div class="col-md-6 mb-3"><label for="stream" class="form-label">Stream</label><input type="text" class="form-control" id="stream" name="stream" required></div>
+                <div class="col-md-6 mb-3">
+                    <label for="section" class="form-label">Section</label>
+                    <select class="form-control" id="section" name="section" required>
+                        <option value="" disabled selected>-- Select Section --</option>
+                        {% for option in section_options %}<option value="{{ option }}">{{ option.replace('_', ' ').title() }}</option>{% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3"><label for="title" class="form-label">Title</label><input type="text" class="form-control" id="title" name="title" required></div>
+                <div class="col-md-6 mb-3"><label for="subtitle" class="form-label">Subtitle (Optional)</label><input type="text" class="form-control" id="subtitle" name="subtitle"></div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label for="label" class="form-label">Label</label>
+                    <select class="form-control" id="label" name="label" required><option value="Free">Free</option><option value="Paid">Paid</option></select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="price" class="form-label">Price</label>
+                    <input type="number" step="0.01" class="form-control" id="price" name="price" value="0.00" disabled required>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="status" class="form-label">Status</label>
+                    <select class="form-control" id="status" name="status" required><option value="active">Active</option><option value="inactive">Inactive</option></select>
+                </div>
+            </div>
+            <div class="mb-3" id="validityField" style="display: none;">
+                <label for="validity_expires_at">Validity (Expires At)</label>
+                <input type="datetime-local" class="form-control" id="validity_expires_at" name="validity_expires_at">
+                <small class="form-text text-muted">For 'Paid' content only. The content access will expire after this date.</small>
+            </div>
+            <div class="mb-3"><label for="details" class="form-label">Details</label><textarea class="form-control" id="details" name="details" rows="3"></textarea></div>
+            <div class="mb-3"><label for="preview_url" class="form-label">Preview URL (Optional)</label><input type="text" class="form-control" id="preview_url" name="preview_url"></div>
+            <div class="mb-3"><label for="image_file" class="form-label">Image File (Optional)</label><input type="file" class="form-control-file" id="image_file" name="image_file"></div>
+            <button type="submit" class="btn btn-success">Add Content</button>
+        </div>
+    </form>
+
+    <h3 class="mt-5">Existing Content</h3>
+    <div class="form-group">
+        <label for="courseFilter"><strong>Select a Course to View/Edit Its Content</strong></label>
+        <select class="form-control" id="courseFilter">
+             <option value="" disabled selected>-- Select a Course --</option>
+             {% for course in all_courses %}<option value="{{ course.code }}">{{ course.name }} ({{ course.code }})</option>{% endfor %}
+        </select>
+    </div>
+    
+    <div id="tableSpinner" class="text-center my-4" style="display: none;"><div class="spinner-border text-primary" role="status"><span class="sr-only">Loading...</span></div></div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped table-hover" id="contentTable">
+            <thead class="thead-dark">
+                <tr>
+                    <th>ID</th><th>Code</th><th>Name</th><th>Stream</th><th>Section</th>
+                    <th>Section ID</th><th>Title</th><th>Subtitle</th><th>Price</th>
+                    <th>Details</th><th>Label</th><th>Status</th><th>Expires At</th><th>Image</th><th>Preview URL</th><th>Actions</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<div id="imageModal" class="modal-overlay">
+    <div class="modal-content-custom">
+        <span class="close-btn" id="closeImageModal">&times;</span>
+        <h4 id="imageModalTitle">Image Preview</h4>
+        <img id="modalImage" src="" alt="Course Image" class="image-preview mb-3">
+        <div class="text-right">
+            <input type="file" id="newImageFile" class="form-control-file d-none">
+            {% if admin_role == 'owner' %}
+            <button id="updateImageBtn" class="btn btn-primary btn-sm action-btn-owner">Update</button>
+            <button id="deleteImageBtn" class="btn btn-warning btn-sm action-btn-owner">Delete</button>
+            {% else %}
+            <small class="text-muted">Image updates restricted to owners.</small>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    const ADMIN_ROLE = "{{ admin_role|e }}";
+</script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ url_for('static', filename='js/admin/manage_modules/course_content.js') }}"></script>
+</body>
+</html>

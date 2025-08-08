@@ -20,24 +20,24 @@ def is_password_secure(password):
 def generate_otp():
     otp_secret = pyotp.random_base32()
     otp_value = pyotp.TOTP(otp_secret, interval=OTP_VALIDITY_PERIOD).now()
-    session['otp'] = {'value': otp_value, 'expiry': time.time() + OTP_VALIDITY_PERIOD}
-    session['otp_secret'] = otp_secret
+    session['signup_otp'] = {'value': otp_value, 'expiry': time.time() + OTP_VALIDITY_PERIOD}
+    session['signup_otp_secret'] = otp_secret
     return otp_value
 
 def validate_otp(user_otp):
-    otp_data = session.get('otp')
+    otp_data = session.get('signup_otp')
     if not otp_data or time.time() > otp_data['expiry']:
         return False, "OTP expired or invalid."
     return user_otp == otp_data['value'], "Invalid OTP."
 
 def clear_signup_session():
-    for key in ['signup_data', 'otp_data', 'otp', 'otp_secret', 'otp_last_sent', 'otp_attempts']:
+    for key in ['user_signup_data', 'user_signup_otp_data', 'signup_otp', 'signup_otp_secret', 'user_signup_otp_last_sent', 'user_signup_otp_attempts']:
         session.pop(key, None)
 
 def send_signup_email_otp(username, email, otp_value, mail):
     msg = Message(
         subject='Signup OTP Verification',
-        sender='your-email@example.com',  
+        sender='your-email@example.com',
         recipients=[email]
     )
 
@@ -115,7 +115,7 @@ def send_signup_email_otp(username, email, otp_value, mail):
 def send_signup_success_email(username, email, mail):
     msg = Message(
         subject='Welcome to Shyam Practice Paper!',
-        sender='your-email@example.com',  # replace with your actual sender
+        sender='your-email@example.com',
         recipients=[email]
     )
 

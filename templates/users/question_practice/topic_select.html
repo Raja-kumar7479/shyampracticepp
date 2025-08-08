@@ -2,12 +2,11 @@
 {% block title %}Select Subject (Topic-wise){% endblock %}
 
 {% block content %}
-<h2 class="mb-3 fw-semibold text-center small-heading">
-    Topic-wise Questions 
-    <span class="fw-normal">(Paper Code: 
-      <span class="fw-bold" style="color: #008080;">{{ paper_code }}</span>)
-    </span>
-  </h2>  
+  
+<h2 class="select-subject-heading">
+  Select Topic for Paper: 
+  <span class="paper-code">{{ paper_code }}</span>
+</h2>
 <div class="d-flex flex-column gap-3">
     {% for sub in subjects %}
         <a href="{{ url_for('users.browse_topic_subject', unique_code = unique_code,paper_code=paper_code, subject=sub.subject) }}"
@@ -20,4 +19,3 @@
     {% endfor %}
 </div>
 {% endblock %}
-
