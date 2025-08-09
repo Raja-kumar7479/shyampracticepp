@@ -1,29 +1,22 @@
 import logging
-import time
-import bcrypt
-from functools import wraps
 from flask import (
     flash, redirect, render_template, request, session, url_for, current_app as app, Response
 )
 from flask_mail import Mail
-from extensions import admin_login_required, limiter
-from users.auth.user_db import UserOperation as UserDb
-from admin.auth.admin_db import UserOperation as AdminDb
+from users.auth.user_db import UserOperation 
+
 from users.auth.utils_login import (
     increment_user_login_attempts, is_user_locked_out, reset_user_login_attempts
 )
-from users.auth.utils_login import (
-    increment_admin_login_attempts, is_admin_locked_out, reset_admin_login_attempts
-)
+
 from users.auth.utils_login import verify_password as verify_user_password
-from admin.auth.admin_utils import verify_password as verify_admin_password
-from admin.auth.admin_utils import hash_password as hash_admin_password
+
 
 from users import users_bp
-from admin import admin_bp
 
-user_db = UserDb()
-admin_db = AdminDb()
+
+user_op = UserOperation()
+
 mail = Mail()
 
 logging.basicConfig(level=logging.INFO)
@@ -53,7 +46,7 @@ def user_login():
                 flash("Please enter your email.", 'login_warning')
                 return redirect(url_for('users.user_login'))
 
-            user = user_db.get_user_by_email(email)
+            user = user_op.get_user_by_email(email)
             if not user:
                 flash("No account found with this email.", 'login_error')
                 return redirect(url_for('users.user_login'))
@@ -77,7 +70,7 @@ def user_login():
                 session.pop('user_login_step', None)
                 return redirect(url_for('users.user_login'))
 
-            user = user_db.get_user_by_email(email)
+            user = user_op.get_user_by_email(email)
             if not user:
                 flash("No account found. Please start again.", 'login_error')
                 session.pop('user_email_pending', None)

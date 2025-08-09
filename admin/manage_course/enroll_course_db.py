@@ -1,7 +1,7 @@
 import logging
 import mysql.connector
 from mysql.connector import Error
-from database_pool import db_pool
+from app import db_pool
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(levelname)s] %(message)s')
 logger = logging.getLogger(__name__)

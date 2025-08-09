@@ -1,6 +1,6 @@
 import mysql.connector
 from mysql.connector import Error
-from database_pool import db_pool
+from app import db_pool
 import logging
 import uuid
 import os
@@ -437,3 +437,84 @@ class UserOperation:
         finally:
             if cursor: cursor.close()
             if conn: conn.close()
+
+    def insert_question(self, code, section, title):
+        """Inserts a new practice question into the database."""
+        conn = None
+        cursor = None
+        try:
+            conn = self._get_connection()
+            cursor = conn.cursor()
+            query = "INSERT INTO practice_questions (code, section, title) VALUES (%s, %s, %s)"
+            cursor.execute(query, (code, section, title))
+            conn.commit()
+            logger.info(f"Successfully inserted practice question '{title}' with ID {cursor.lastrowid}.")
+            return cursor.lastrowid
+        except Exception as e:
+            logger.exception(f"Error inserting practice question for code {code}. Error: {e}")
+            if conn: conn.rollback()
+            return None
+        finally:
+            if cursor: cursor.close()
+            if conn: conn.close()
+    
+    def get_question_by_id(self, question_id):
+        """Fetches a single practice question by its ID."""
+        conn = None
+        cursor = None
+        try:
+            conn = self._get_connection()
+            cursor = conn.cursor(dictionary=True)
+            query = "SELECT * FROM practice_questions WHERE id = %s"
+            cursor.execute(query, (question_id,))
+            return cursor.fetchone()
+        except Exception as e:
+            logger.exception(f"Error fetching practice question with ID {question_id}. Error: {e}")
+            return None
+        finally:
+            if cursor: cursor.close()
+            if conn: conn.close()
+    
+    def update_question_field(self, question_id, field, value):
+        """Updates a specific field of a practice question."""
+        conn = None
+        cursor = None
+        # Whitelist of editable fields to prevent SQL injection
+        allowed_fields = ['title', 'section']
+        if field not in allowed_fields:
+            logger.warning(f"Attempt to update a non-allowed field '{field}' for question ID {question_id}.")
+            return False
+        try:
+            conn = self._get_connection()
+            cursor = conn.cursor()
+            # Safely format the query
+            query = f"UPDATE practice_questions SET {field} = %s WHERE id = %s"
+            cursor.execute(query, (value, question_id))
+            conn.commit()
+            return cursor.rowcount > 0
+        except Exception as e:
+            logger.exception(f"Error updating question ID {question_id}. Error: {e}")
+            if conn: conn.rollback()
+            return False
+        finally:
+            if cursor: cursor.close()
+            if conn: conn.close()
+    def delete_question(self, question_id):
+        """Deletes a practice question from the database."""
+        conn = None
+        cursor = None
+        try:
+            conn = self._get_connection()
+            cursor = conn.cursor()
+            query = "DELETE FROM practice_questions WHERE id = %s"
+            cursor.execute(query, (question_id,))
+            conn.commit()
+            return cursor.rowcount > 0
+        except Exception as e:
+            logger.exception(f"Error deleting question ID {question_id}. Error: {e}")
+            if conn: conn.rollback()
+            return False
+        finally:
+            if cursor: cursor.close()
+            if conn: conn.close()
+

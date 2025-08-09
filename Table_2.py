@@ -1,0 +1,154 @@
+"""
+
+1-
+
+CREATE TABLE auth (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(100) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255),
+    oauth_id VARCHAR(255),
+    auth_type ENUM('manual', 'google', 'both'),
+    is_verified BOOLEAN DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    INDEX idx_email (email),           
+    INDEX idx_username (username),     
+    INDEX idx_auth_type (auth_type),   
+    INDEX idx_created_at (created_at) 
+) ENGINE=InnoDB;
+
+
+2-
+
+CREATE TABLE enrollment (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(100) NOT NULL,
+    name VARCHAR(100) NOT NULL,                
+    code VARCHAR(100) NOT NULL,                
+    unique_code TEXT NOT NULL,
+    enrollment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (email) REFERENCES auth(email) ON DELETE CASCADE,
+
+    UNIQUE KEY unique_enrollment (email, code),  
+    INDEX idx_email (email),
+    INDEX idx_name (name),
+    INDEX idx_enrollment_date (enrollment_date)
+) ENGINE=InnoDB;
+
+
+3-
+
+CREATE TABLE coupone (
+    coupon_id INT AUTO_INCREMENT PRIMARY KEY,
+    coupon_code VARCHAR(50) NOT NULL,
+    discount DECIMAL(5,2) NOT NULL,
+    min_purchase DECIMAL(10,2) NOT NULL,
+    uses_count INT DEFAULT 0,
+    status BOOLEAN DEFAULT TRUE,
+    expiry_date DATE,
+    valid_until DATE,
+    email VARCHAR(255),
+    FOREIGN KEY (email) REFERENCES auth(email) ON DELETE SET NULL,
+
+    UNIQUE INDEX idx_coupon_code (coupon_code),     
+    INDEX idx_email (email),                        
+    INDEX idx_status (status),                      
+    INDEX idx_expiry (expiry_date),               
+    INDEX idx_valid_until (valid_until)
+) ENGINE=InnoDB;
+
+
+4-
+
+CREATE TABLE purchase (
+  id INT NOT NULL AUTO_INCREMENT,
+  email VARCHAR(255) NOT NULL,
+  username VARCHAR(255) DEFAULT NULL,
+  phone VARCHAR(20) DEFAULT NULL,
+  course_code VARCHAR(100) NOT NULL,
+  section_id VARCHAR(255) DEFAULT NULL,        
+  section VARCHAR(255) DEFAULT NULL,
+  title VARCHAR(255) NOT NULL,
+  subtitle VARCHAR(255) DEFAULT NULL,
+  price DECIMAL(10, 2) NOT NULL,
+  original_price DECIMAL(10, 2) NOT NULL,
+  discount_percent DECIMAL(5, 2) DEFAULT 0.00,
+  final_price DECIMAL(10, 2) NOT NULL,
+  payment_id VARCHAR(255) NOT NULL,
+  payment_mode VARCHAR(50) DEFAULT NULL,
+  payment_date DATETIME NOT NULL,
+  status VARCHAR(20) NOT NULL DEFAULT 'Pending',
+  purchase_code VARCHAR(50) NOT NULL,
+
+  PRIMARY KEY (id),
+  INDEX idx_email (email),
+  INDEX idx_payment_id (payment_id),
+  INDEX idx_course_code (course_code),
+  INDEX idx_purchase_code (purchase_code),
+  FOREIGN KEY (section_id) REFERENCES course_content(section_id) ON DELETE SET NULL
+) ENGINE=InnoDB;
+
+
+5-
+
+
+CREATE TABLE notes_content (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    test_id VARCHAR(100),
+    code VARCHAR(100),
+    type ENUM('notes', 'sub_notes', 'books', 'practice_questions', 'pyq', 'news') NOT NULL,
+    heading TEXT,
+    sub_heading TEXT,
+    title TEXT,
+    sub_title TEXT, 
+    file_path TEXT,
+    uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_test_id (test_id), 
+
+    CONSTRAINT fk_notes_content
+        FOREIGN KEY (test_id) REFERENCES course_content(section_id)
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+
+6-
+
+CREATE TABLE questions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    paper_code VARCHAR(255) NOT NULL,
+    subject VARCHAR(255) NOT NULL,
+    question_id INT NOT NULL,
+    question_type ENUM('MCQ', 'MSQ', 'NAT') NOT NULL,
+    topic VARCHAR(255),
+
+    question_text TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+    option_a TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+    option_b TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+    option_c TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+    option_d TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+
+    correct_option VARCHAR(255),
+    answer_text TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+
+    year INT,
+    paper_set VARCHAR(255),
+    explanation_link TEXT,
+
+    last_updated DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+    UNIQUE KEY idx_paper_subject_question (paper_code, subject, question_id),
+
+    INDEX idx_topic (topic),
+    INDEX idx_question_type (question_type),
+    INDEX idx_year (year)
+) ENGINE=InnoDB
+  DEFAULT CHARSET=utf8mb4
+  COLLATE=utf8mb4_unicode_ci;
+
+
+"""
+
+

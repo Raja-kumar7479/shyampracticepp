@@ -10978,3 +10978,372 @@ werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'users_
 2025-08-09 01:07:30,316 - users.auth.login - INFO - User login successful for rajakumarshyam@gmail.com
 2025-08-09 01:07:30,322 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 01:07:30] "[32mPOST /user_login HTTP/1.1[0m" 302 -
 2025-08-09 01:07:30,411 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 01:07:30] "GET /login_success HTTP/1.1" 200 -
+2025-08-09 18:53:36,392 - mysql.connector - INFO - package: mysql.connector.plugins
+2025-08-09 18:53:36,395 - mysql.connector - INFO - plugin_name: caching_sha2_password
+2025-08-09 18:53:36,397 - mysql.connector - INFO - AUTHENTICATION_PLUGIN_CLASS: MySQLCachingSHA2PasswordAuthPlugin
+2025-08-09 18:53:36,695 - database_pool - INFO - Successfully created shared database connection pool.
+2025-08-09 18:53:39,092 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-08-09 18:53:39,092 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-08-09 18:53:47,388 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 18:53:47] "GET /user_login HTTP/1.1" 200 -
+2025-08-09 18:53:47,557 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 18:53:47] "GET /static/css/users/auth/auth.css HTTP/1.1" 200 -
+2025-08-09 18:53:47,562 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 18:53:47] "GET /static/css/users/flash.css HTTP/1.1" 200 -
+2025-08-09 18:53:47,569 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 18:53:47] "GET /static/js/users/flash.js HTTP/1.1" 200 -
+2025-08-09 18:53:47,601 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 18:53:47] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-08-09 18:53:56,013 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 18:53:56] "GET /admin_login HTTP/1.1" 200 -
+2025-08-09 18:53:56,077 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 18:53:56] "[33mGET /static/css/users/flash HTTP/1.1[0m" 404 -
+2025-08-09 18:53:56,078 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 18:53:56] "GET /static/css/users/auth/auth.css HTTP/1.1" 200 -
+2025-08-09 18:53:56,088 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 18:53:56] "GET /static/js/users/flash.js HTTP/1.1" 200 -
+2025-08-09 18:53:59,891 - root - INFO - Fetched admin for email: rajakumarshyam7479@gmail.com
+2025-08-09 18:53:59,901 - admin.auth.admin_login - INFO - Admin email found: rajakumarshyam7479@gmail.com
+2025-08-09 18:53:59,918 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 18:53:59] "[32mPOST /admin_login HTTP/1.1[0m" 302 -
+2025-08-09 18:53:59,967 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 18:53:59] "GET /admin_login HTTP/1.1" 200 -
+2025-08-09 18:54:00,065 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 18:54:00] "GET /static/js/users/flash.js HTTP/1.1" 200 -
+2025-08-09 18:54:00,074 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 18:54:00] "[33mGET /static/css/users/flash HTTP/1.1[0m" 404 -
+2025-08-09 18:54:00,076 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 18:54:00] "GET /static/css/users/auth/auth.css HTTP/1.1" 200 -
+2025-08-09 18:54:00,191 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 18:54:00] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-08-09 18:54:01,341 - root - INFO - Fetched admin for email: rajakumarshyam7479@gmail.com
+2025-08-09 18:54:01,717 - admin.auth.admin_login - INFO - Admin login successful for rajakumarshyam7479@gmail.com
+2025-08-09 18:54:01,717 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 18:54:01] "[32mPOST /admin_login HTTP/1.1[0m" 302 -
+2025-08-09 18:54:01,819 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 18:54:01] "GET /admin_dashboard HTTP/1.1" 200 -
+2025-08-09 18:54:01,849 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 18:54:01] "GET /static/css/admin/admin.css HTTP/1.1" 200 -
+2025-08-09 18:54:01,879 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 18:54:01] "GET /static/js/admin/admin.js HTTP/1.1" 200 -
+2025-08-09 18:54:06,574 - admin.manage_course.enroll_course_db - INFO - Fetched all courses successfully.
+2025-08-09 18:54:06,646 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 18:54:06] "GET /courses HTTP/1.1" 200 -
+2025-08-09 18:54:06,681 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 18:54:06] "GET /static/js/admin/manage_course/enroll_course.js HTTP/1.1" 200 -
+2025-08-09 18:54:06,690 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 18:54:06] "GET /static/css/admin/manage_course/enroll_course.css HTTP/1.1" 200 -
+2025-08-09 18:54:13,019 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 18:54:13] "GET /admin_dashboard HTTP/1.1" 200 -
+2025-08-09 18:54:13,054 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 18:54:13] "GET /static/js/admin/admin.js HTTP/1.1" 200 -
+2025-08-09 18:54:13,055 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 18:54:13] "GET /static/css/admin/admin.css HTTP/1.1" 200 -
+2025-08-09 18:54:15,734 - admin.manage_modules.content_db - INFO - Successfully fetched all courses from the database.
+2025-08-09 18:54:15,879 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 18:54:15] "GET /manage_course_content HTTP/1.1" 200 -
+2025-08-09 18:54:15,921 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 18:54:15] "GET /static/css/admin/manage_modules/course_content.css HTTP/1.1" 200 -
+2025-08-09 18:54:15,932 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 18:54:15] "GET /static/js/admin/manage_modules/course_content.js HTTP/1.1" 200 -
+2025-08-09 18:54:18,485 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 18:54:18] "GET /admin_dashboard HTTP/1.1" 200 -
+2025-08-09 18:54:18,521 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 18:54:18] "GET /static/js/admin/admin.js HTTP/1.1" 200 -
+2025-08-09 18:54:18,522 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 18:54:18] "GET /static/css/admin/admin.css HTTP/1.1" 200 -
+2025-08-09 18:54:21,867 - admin.manage_modules.practice_questions - INFO - Fetching data for the practice questions management page.
+2025-08-09 18:54:21,867 - admin.manage_modules.content_db - INFO - Successfully fetched distinct course codes from the database.
+2025-08-09 18:54:21,936 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 18:54:21] "GET /admin/practice_questions HTTP/1.1" 200 -
+2025-08-09 18:54:21,974 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 18:54:21] "GET /static/css/admin/manage_modules/practice_question.css HTTP/1.1" 200 -
+2025-08-09 18:54:21,984 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 18:54:21] "GET /static/js/admin/manage_modules/practice_questions.js HTTP/1.1" 200 -
+2025-08-09 18:54:24,393 - admin.manage_modules.practice_questions - INFO - Fetching questions for course code: CS
+2025-08-09 18:54:24,420 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 18:54:24] "GET /api/questions_by_code?code=CS HTTP/1.1" 200 -
+2025-08-09 18:54:30,134 - admin.manage_modules.practice_questions - INFO - Attempting to create a new practice question with title: 'explore topic wise'
+2025-08-09 18:59:56,468 - mysql.connector - INFO - package: mysql.connector.plugins
+2025-08-09 18:59:56,468 - mysql.connector - INFO - plugin_name: caching_sha2_password
+2025-08-09 18:59:56,480 - mysql.connector - INFO - AUTHENTICATION_PLUGIN_CLASS: MySQLCachingSHA2PasswordAuthPlugin
+2025-08-09 18:59:56,681 - database_pool - INFO - Successfully created shared database connection pool.
+2025-08-09 18:59:58,636 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-08-09 18:59:58,637 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-08-09 19:00:52,393 - mysql.connector - INFO - package: mysql.connector.plugins
+2025-08-09 19:00:52,394 - mysql.connector - INFO - plugin_name: caching_sha2_password
+2025-08-09 19:00:52,396 - mysql.connector - INFO - AUTHENTICATION_PLUGIN_CLASS: MySQLCachingSHA2PasswordAuthPlugin
+2025-08-09 19:00:52,574 - database_pool - INFO - Successfully created shared database connection pool.
+2025-08-09 19:00:54,020 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-08-09 19:00:54,020 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-08-09 19:01:13,939 - admin.manage_modules.practice_questions - INFO - Fetching data for the practice questions management page.
+2025-08-09 19:01:13,939 - admin.manage_modules.content_db - INFO - Successfully fetched distinct course codes from the database.
+2025-08-09 19:01:14,023 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 19:01:14] "GET /admin/practice_questions HTTP/1.1" 200 -
+2025-08-09 19:01:14,144 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 19:01:14] "GET /static/css/admin/manage_modules/practice_question.css HTTP/1.1" 200 -
+2025-08-09 19:01:14,145 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 19:01:14] "GET /static/js/admin/manage_modules/practice_questions.js HTTP/1.1" 200 -
+2025-08-09 19:01:16,901 - admin.manage_modules.practice_questions - INFO - Fetching questions for course code: CS
+2025-08-09 19:01:16,917 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 19:01:16] "GET /api/questions_by_code?code=CS HTTP/1.1" 200 -
+2025-08-09 19:01:23,361 - admin.manage_modules.practice_questions - INFO - Attempting to create a new practice question with title: 'explore topic wise'
+2025-08-09 19:01:23,396 - admin.manage_modules.content_db - INFO - Successfully inserted practice question 'explore topic wise' with ID 4.
+2025-08-09 19:01:23,396 - admin.manage_modules.practice_questions - INFO - Successfully created practice question with ID 4.
+2025-08-09 19:01:23,407 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 19:01:23] "POST /admin/practice_questions HTTP/1.1" 200 -
+2025-08-09 19:01:32,673 - admin.manage_modules.practice_questions - INFO - Attempting to update question ID 3: setting field 'title'
+2025-08-09 19:01:32,685 - admin.manage_modules.practice_questions - INFO - Successfully updated question ID 3.
+2025-08-09 19:01:32,700 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 19:01:32] "POST /admin/practice_questions/update/3 HTTP/1.1" 200 -
+2025-08-09 19:01:43,045 - admin.manage_modules.practice_questions - INFO - Attempting to delete question with ID 2.
+2025-08-09 19:01:43,061 - admin.manage_modules.practice_questions - INFO - Successfully deleted question ID 2.
+2025-08-09 19:01:43,069 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 19:01:43] "POST /admin/practice_questions/delete/2 HTTP/1.1" 200 -
+2025-08-09 20:03:40,719 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 20:03:40] "GET /admin_login HTTP/1.1" 200 -
+2025-08-09 20:03:41,286 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 20:03:41] "[33mGET /static/css/users/flash HTTP/1.1[0m" 404 -
+2025-08-09 20:03:41,286 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 20:03:41] "GET /static/css/users/auth/auth.css HTTP/1.1" 200 -
+2025-08-09 20:03:41,307 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 20:03:41] "GET /static/js/users/flash.js HTTP/1.1" 200 -
+2025-08-09 20:09:55,329 [INFO] package: mysql.connector.plugins
+2025-08-09 20:09:55,329 [INFO] plugin_name: caching_sha2_password
+2025-08-09 20:09:55,329 [INFO] AUTHENTICATION_PLUGIN_CLASS: MySQLCachingSHA2PasswordAuthPlugin
+2025-08-09 20:09:55,915 [INFO] Successfully created shared database connection pool.
+2025-08-09 20:09:56,232 [INFO] Successfully created shared database connection pool.
+2025-08-09 20:09:58,861 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-08-09 20:09:58,862 [INFO] [33mPress CTRL+C to quit[0m
+2025-08-09 20:11:33,270 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 20:11:33] "GET /admin_login HTTP/1.1" 200 -
+2025-08-09 20:11:33,360 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 20:11:33] "[33mGET /static/css/users/flash HTTP/1.1[0m" 404 -
+2025-08-09 20:11:33,366 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 20:11:33] "GET /static/css/users/auth/auth.css HTTP/1.1" 200 -
+2025-08-09 20:11:33,368 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 20:11:33] "GET /static/js/users/flash.js HTTP/1.1" 200 -
+2025-08-09 20:11:33,393 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 20:11:33] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-08-09 20:11:37,450 - root - INFO - Fetched admin for email: rajakumarshyam7479@gmail.com
+2025-08-09 20:11:37,457 - admin.auth.admin_login - INFO - Admin email found: rajakumarshyam7479@gmail.com
+2025-08-09 20:11:37,494 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 20:11:37] "[32mPOST /admin_login HTTP/1.1[0m" 302 -
+2025-08-09 20:11:37,550 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 20:11:37] "GET /admin_login HTTP/1.1" 200 -
+2025-08-09 20:11:37,659 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 20:11:37] "[33mGET /static/css/users/flash HTTP/1.1[0m" 404 -
+2025-08-09 20:11:37,661 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 20:11:37] "GET /static/css/users/auth/auth.css HTTP/1.1" 200 -
+2025-08-09 20:11:37,662 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 20:11:37] "GET /static/js/users/flash.js HTTP/1.1" 200 -
+2025-08-09 20:11:37,681 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 20:11:37] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-08-09 20:11:38,556 - root - INFO - Fetched admin for email: rajakumarshyam7479@gmail.com
+2025-08-09 20:11:38,768 - admin.auth.admin_login - INFO - Admin login successful for rajakumarshyam7479@gmail.com
+2025-08-09 20:11:38,782 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 20:11:38] "[32mPOST /admin_login HTTP/1.1[0m" 302 -
+2025-08-09 20:11:38,862 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 20:11:38] "GET /admin_dashboard HTTP/1.1" 200 -
+2025-08-09 20:11:38,898 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 20:11:38] "GET /static/css/admin/admin.css HTTP/1.1" 200 -
+2025-08-09 20:11:38,900 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 20:11:38] "GET /static/js/admin/admin.js HTTP/1.1" 200 -
+2025-08-09 20:11:42,869 - admin.manage_modules.content_db - INFO - Successfully fetched all courses from the database.
+2025-08-09 20:11:42,949 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 20:11:42] "GET /manage_course_content HTTP/1.1" 200 -
+2025-08-09 20:11:42,987 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 20:11:42] "GET /static/css/admin/manage_modules/course_content.css HTTP/1.1" 200 -
+2025-08-09 20:11:42,988 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 20:11:42] "GET /static/js/admin/manage_modules/course_content.js HTTP/1.1" 200 -
+2025-08-09 20:11:49,968 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 20:11:49] "GET /get_content_for_course/CS HTTP/1.1" 200 -
+2025-08-09 20:11:52,168 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 20:11:52] "GET /admin_dashboard HTTP/1.1" 200 -
+2025-08-09 20:11:52,204 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 20:11:52] "GET /static/js/admin/admin.js HTTP/1.1" 200 -
+2025-08-09 20:11:52,205 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 20:11:52] "GET /static/css/admin/admin.css HTTP/1.1" 200 -
+2025-08-09 20:11:53,234 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 20:11:53] "[32mGET /admin_login HTTP/1.1[0m" 302 -
+2025-08-09 20:11:53,256 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 20:11:53] "GET /admin_dashboard HTTP/1.1" 200 -
+2025-08-09 20:11:53,278 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 20:11:53] "GET /static/css/admin/admin.css HTTP/1.1" 200 -
+2025-08-09 20:11:53,278 - werkzeug - INFO - 127.0.0.1 - - [09/Aug/2025 20:11:53] "GET /static/js/admin/admin.js HTTP/1.1" 200 -
+2025-08-09 20:27:56,877 [INFO] package: mysql.connector.plugins
+2025-08-09 20:27:56,877 [INFO] plugin_name: caching_sha2_password
+2025-08-09 20:27:56,877 [INFO] AUTHENTICATION_PLUGIN_CLASS: MySQLCachingSHA2PasswordAuthPlugin
+2025-08-09 20:27:57,326 [INFO] Successfully created shared database connection pool.
+2025-08-09 20:27:57,624 [INFO] Successfully created shared database connection pool.
+2025-08-09 20:27:59,470 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-08-09 20:27:59,470 [INFO] [33mPress CTRL+C to quit[0m
+2025-08-09 20:31:30,294 [INFO] package: mysql.connector.plugins
+2025-08-09 20:31:30,294 [INFO] plugin_name: caching_sha2_password
+2025-08-09 20:31:30,294 [INFO] AUTHENTICATION_PLUGIN_CLASS: MySQLCachingSHA2PasswordAuthPlugin
+2025-08-09 20:31:30,764 [INFO] Successfully created shared database connection pool.
+2025-08-09 20:31:31,045 [INFO] Successfully created shared database connection pool.
+2025-08-09 20:31:32,618 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-08-09 20:31:32,618 [INFO] [33mPress CTRL+C to quit[0m
+2025-08-09 20:31:40,643 [INFO] 127.0.0.1 - - [09/Aug/2025 20:31:40] "[32mGET /admin_login HTTP/1.1[0m" 302 -
+2025-08-09 20:31:40,741 [INFO] 127.0.0.1 - - [09/Aug/2025 20:31:40] "GET /admin_dashboard HTTP/1.1" 200 -
+2025-08-09 20:31:41,048 [INFO] 127.0.0.1 - - [09/Aug/2025 20:31:41] "GET /static/js/admin/admin.js HTTP/1.1" 200 -
+2025-08-09 20:31:41,048 [INFO] 127.0.0.1 - - [09/Aug/2025 20:31:41] "GET /static/css/admin/admin.css HTTP/1.1" 200 -
+2025-08-09 20:31:44,680 [INFO] Successfully fetched all courses from the database.
+2025-08-09 20:31:44,768 [INFO] 127.0.0.1 - - [09/Aug/2025 20:31:44] "GET /manage_course_content HTTP/1.1" 200 -
+2025-08-09 20:31:44,803 [INFO] 127.0.0.1 - - [09/Aug/2025 20:31:44] "GET /static/css/admin/manage_modules/course_content.css HTTP/1.1" 200 -
+2025-08-09 20:31:44,811 [INFO] 127.0.0.1 - - [09/Aug/2025 20:31:44] "GET /static/js/admin/manage_modules/course_content.js HTTP/1.1" 200 -
+2025-08-09 20:31:46,903 [INFO] Successfully fetched all courses from the database.
+2025-08-09 20:31:46,919 [INFO] 127.0.0.1 - - [09/Aug/2025 20:31:46] "GET /manage_course_content HTTP/1.1" 200 -
+2025-08-09 20:31:46,954 [INFO] 127.0.0.1 - - [09/Aug/2025 20:31:46] "GET /static/css/admin/manage_modules/course_content.css HTTP/1.1" 200 -
+2025-08-09 20:31:46,956 [INFO] 127.0.0.1 - - [09/Aug/2025 20:31:46] "GET /static/js/admin/manage_modules/course_content.js HTTP/1.1" 200 -
+2025-08-09 20:31:51,155 [INFO] 127.0.0.1 - - [09/Aug/2025 20:31:51] "GET /get_content_for_course/CS HTTP/1.1" 200 -
+2025-08-09 20:31:54,269 [INFO] 127.0.0.1 - - [09/Aug/2025 20:31:54] "GET /admin_dashboard HTTP/1.1" 200 -
+2025-08-09 20:31:54,308 [INFO] 127.0.0.1 - - [09/Aug/2025 20:31:54] "GET /static/css/admin/admin.css HTTP/1.1" 200 -
+2025-08-09 20:31:54,309 [INFO] 127.0.0.1 - - [09/Aug/2025 20:31:54] "GET /static/js/admin/admin.js HTTP/1.1" 200 -
+2025-08-09 20:31:57,343 [INFO] Fetching data for the practice questions management page.
+2025-08-09 20:31:57,343 [INFO] Successfully fetched distinct course codes from the database.
+2025-08-09 20:31:57,392 [INFO] 127.0.0.1 - - [09/Aug/2025 20:31:57] "GET /admin/practice_questions HTTP/1.1" 200 -
+2025-08-09 20:31:57,426 [INFO] 127.0.0.1 - - [09/Aug/2025 20:31:57] "GET /static/css/admin/manage_modules/practice_question.css HTTP/1.1" 200 -
+2025-08-09 20:31:57,427 [INFO] 127.0.0.1 - - [09/Aug/2025 20:31:57] "GET /static/js/admin/manage_modules/practice_questions.js HTTP/1.1" 200 -
+2025-08-09 20:31:59,475 [INFO] Fetching questions for course code: CS
+2025-08-09 20:31:59,515 [INFO] 127.0.0.1 - - [09/Aug/2025 20:31:59] "GET /api/questions_by_code?code=CS HTTP/1.1" 200 -
+2025-08-09 20:43:44,438 [INFO] package: mysql.connector.plugins
+2025-08-09 20:43:44,439 [INFO] plugin_name: caching_sha2_password
+2025-08-09 20:43:44,440 [INFO] AUTHENTICATION_PLUGIN_CLASS: MySQLCachingSHA2PasswordAuthPlugin
+2025-08-09 20:43:45,075 [INFO] Successfully created shared database connection pool.
+2025-08-09 20:43:46,995 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-08-09 20:43:46,995 [INFO] [33mPress CTRL+C to quit[0m
+2025-08-09 20:43:56,178 [INFO] 127.0.0.1 - - [09/Aug/2025 20:43:56] "GET / HTTP/1.1" 200 -
+2025-08-09 20:43:56,277 [INFO] 127.0.0.1 - - [09/Aug/2025 20:43:56] "GET /static/css/users/enroll/enroll.css HTTP/1.1" 200 -
+2025-08-09 20:43:56,277 [INFO] 127.0.0.1 - - [09/Aug/2025 20:43:56] "GET /static/css/users/index/index.css HTTP/1.1" 200 -
+2025-08-09 20:43:56,277 [INFO] 127.0.0.1 - - [09/Aug/2025 20:43:56] "GET /static/css/users/enroll/popup.css HTTP/1.1" 200 -
+2025-08-09 20:43:56,299 [INFO] 127.0.0.1 - - [09/Aug/2025 20:43:56] "GET /static/css/users/flash.css HTTP/1.1" 200 -
+2025-08-09 20:43:56,299 [INFO] 127.0.0.1 - - [09/Aug/2025 20:43:56] "GET /static/img/users/login.png HTTP/1.1" 200 -
+2025-08-09 20:43:56,307 [INFO] 127.0.0.1 - - [09/Aug/2025 20:43:56] "GET /static/img/users/instruction.png HTTP/1.1" 200 -
+2025-08-09 20:43:56,308 [INFO] 127.0.0.1 - - [09/Aug/2025 20:43:56] "GET /static/img/users/mocktestinterface.png HTTP/1.1" 200 -
+2025-08-09 20:43:56,310 [INFO] 127.0.0.1 - - [09/Aug/2025 20:43:56] "GET /static/img/users/result.png HTTP/1.1" 200 -
+2025-08-09 20:43:56,341 [INFO] 127.0.0.1 - - [09/Aug/2025 20:43:56] "GET /static/js/users/flash.js HTTP/1.1" 200 -
+2025-08-09 20:43:56,341 [INFO] 127.0.0.1 - - [09/Aug/2025 20:43:56] "GET /static/js/users/navbar/navbar.js HTTP/1.1" 200 -
+2025-08-09 20:43:57,162 [INFO] 127.0.0.1 - - [09/Aug/2025 20:43:57] "[33mGET /static/img/icon.png HTTP/1.1[0m" 404 -
+2025-08-09 20:43:59,213 [INFO] 127.0.0.1 - - [09/Aug/2025 20:43:59] "GET /user_login HTTP/1.1" 200 -
+2025-08-09 20:43:59,239 [INFO] 127.0.0.1 - - [09/Aug/2025 20:43:59] "GET /static/css/users/auth/auth.css HTTP/1.1" 200 -
+2025-08-09 20:43:59,245 [INFO] 127.0.0.1 - - [09/Aug/2025 20:43:59] "GET /static/js/users/flash.js HTTP/1.1" 200 -
+2025-08-09 20:43:59,245 [INFO] 127.0.0.1 - - [09/Aug/2025 20:43:59] "GET /static/css/users/flash.css HTTP/1.1" 200 -
+2025-08-09 20:44:00,789 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:00] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-08-09 20:44:01,641 [INFO] Google login initiated
+2025-08-09 20:44:01,683 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:01] "[32mGET /google_login HTTP/1.1[0m" 302 -
+2025-08-09 20:44:11,284 [INFO] Google token fetched successfully
+2025-08-09 20:44:12,201 [INFO] Google ID token verified
+2025-08-09 20:44:12,219 [INFO] User login successful via Google for rajakumarvijeta7087@gmail.com
+2025-08-09 20:44:12,226 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:12] "[32mGET /callback?state=uyywZ4EaiHvktX24QcN1wDQGKaMSNB&code=4/0AVMBsJgSh8OzqDazw-vq_URJZpjeaLxLGcDCHviLi5BmaKHVFzwMTuC065ldRG_pqMwB6w&scope=email+profile+https://www.googleapis.com/auth/userinfo.profile+https://www.googleapis.com/auth/userinfo.email+openid&authuser=0&prompt=consent HTTP/1.1[0m" 302 -
+2025-08-09 20:44:12,288 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:12] "GET /login_success HTTP/1.1" 200 -
+2025-08-09 20:44:14,386 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:14] "GET / HTTP/1.1" 200 -
+2025-08-09 20:44:14,425 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:14] "GET /static/css/users/enroll/enroll.css HTTP/1.1" 200 -
+2025-08-09 20:44:14,426 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:14] "GET /static/css/users/index/index.css HTTP/1.1" 200 -
+2025-08-09 20:44:14,426 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:14] "GET /static/img/users/login.png HTTP/1.1" 200 -
+2025-08-09 20:44:14,429 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:14] "GET /static/css/users/flash.css HTTP/1.1" 200 -
+2025-08-09 20:44:14,430 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:14] "GET /static/css/users/enroll/popup.css HTTP/1.1" 200 -
+2025-08-09 20:44:14,437 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:14] "GET /static/img/users/instruction.png HTTP/1.1" 200 -
+2025-08-09 20:44:14,453 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:14] "GET /static/img/users/mocktestinterface.png HTTP/1.1" 200 -
+2025-08-09 20:44:14,456 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:14] "GET /static/js/users/navbar/navbar.js HTTP/1.1" 200 -
+2025-08-09 20:44:14,456 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:14] "GET /static/img/users/result.png HTTP/1.1" 200 -
+2025-08-09 20:44:14,457 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:14] "GET /static/js/users/flash.js HTTP/1.1" 200 -
+2025-08-09 20:44:18,240 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:18] "GET / HTTP/1.1" 200 -
+2025-08-09 20:44:18,281 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:18] "GET /static/css/users/index/index.css HTTP/1.1" 200 -
+2025-08-09 20:44:18,282 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:18] "GET /static/css/users/enroll/enroll.css HTTP/1.1" 200 -
+2025-08-09 20:44:18,285 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:18] "GET /static/css/users/flash.css HTTP/1.1" 200 -
+2025-08-09 20:44:18,289 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:18] "GET /static/css/users/enroll/popup.css HTTP/1.1" 200 -
+2025-08-09 20:44:18,289 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:18] "GET /static/img/users/instruction.png HTTP/1.1" 200 -
+2025-08-09 20:44:18,290 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:18] "GET /static/img/users/login.png HTTP/1.1" 200 -
+2025-08-09 20:44:18,310 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:18] "GET /static/js/users/navbar/navbar.js HTTP/1.1" 200 -
+2025-08-09 20:44:18,311 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:18] "GET /static/img/users/result.png HTTP/1.1" 200 -
+2025-08-09 20:44:18,314 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:18] "GET /static/js/users/flash.js HTTP/1.1" 200 -
+2025-08-09 20:44:18,315 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:18] "GET /static/img/users/mocktestinterface.png HTTP/1.1" 200 -
+2025-08-09 20:44:19,724 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:19] "GET / HTTP/1.1" 200 -
+2025-08-09 20:44:19,775 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:19] "GET /static/css/users/index/index.css HTTP/1.1" 200 -
+2025-08-09 20:44:19,777 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:19] "GET /static/css/users/enroll/popup.css HTTP/1.1" 200 -
+2025-08-09 20:44:19,780 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:19] "GET /static/img/users/instruction.png HTTP/1.1" 200 -
+2025-08-09 20:44:19,782 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:19] "GET /static/img/users/login.png HTTP/1.1" 200 -
+2025-08-09 20:44:19,782 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:19] "GET /static/css/users/enroll/enroll.css HTTP/1.1" 200 -
+2025-08-09 20:44:19,784 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:19] "GET /static/css/users/flash.css HTTP/1.1" 200 -
+2025-08-09 20:44:19,806 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:19] "GET /static/js/users/navbar/navbar.js HTTP/1.1" 200 -
+2025-08-09 20:44:19,807 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:19] "GET /static/img/users/mocktestinterface.png HTTP/1.1" 200 -
+2025-08-09 20:44:19,810 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:19] "GET /static/js/users/flash.js HTTP/1.1" 200 -
+2025-08-09 20:44:19,810 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:19] "GET /static/img/users/result.png HTTP/1.1" 200 -
+2025-08-09 20:44:40,428 [INFO] User rajakumarvijeta7087@gmail.com is viewing all available courses.
+2025-08-09 20:44:40,613 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:40] "GET /course HTTP/1.1" 200 -
+2025-08-09 20:44:40,658 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:40] "GET /static/css/users/index/index.css HTTP/1.1" 200 -
+2025-08-09 20:44:40,659 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:40] "GET /static/css/users/flash.css HTTP/1.1" 200 -
+2025-08-09 20:44:40,660 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:40] "GET /static/css/users/enroll/enroll.css HTTP/1.1" 200 -
+2025-08-09 20:44:40,665 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:40] "GET /static/js/users/navbar/navbar.js HTTP/1.1" 200 -
+2025-08-09 20:44:40,666 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:40] "GET /static/css/users/enroll/popup.css HTTP/1.1" 200 -
+2025-08-09 20:44:40,668 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:40] "GET /static/js/users/flash.js HTTP/1.1" 200 -
+2025-08-09 20:44:40,701 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:40] "GET /static/js/users/enroll/enroll_courses.js HTTP/1.1" 200 -
+2025-08-09 20:44:40,703 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:40] "GET /static/js/users/enroll/enroll_popup.js HTTP/1.1" 200 -
+2025-08-09 20:44:40,711 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:40] "GET /static/js/users/enroll/available_courses.js HTTP/1.1" 200 -
+2025-08-09 20:44:44,571 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:44] "GET / HTTP/1.1" 200 -
+2025-08-09 20:44:44,615 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:44] "GET /static/css/users/enroll/popup.css HTTP/1.1" 200 -
+2025-08-09 20:44:44,617 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:44] "GET /static/js/users/navbar/navbar.js HTTP/1.1" 200 -
+2025-08-09 20:44:44,618 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:44] "GET /static/css/users/flash.css HTTP/1.1" 200 -
+2025-08-09 20:44:44,620 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:44] "GET /static/css/users/enroll/enroll.css HTTP/1.1" 200 -
+2025-08-09 20:44:44,620 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:44] "GET /static/css/users/index/index.css HTTP/1.1" 200 -
+2025-08-09 20:44:44,622 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:44] "GET /static/js/users/flash.js HTTP/1.1" 200 -
+2025-08-09 20:44:52,695 [INFO] User rajakumarvijeta7087@gmail.com is viewing all available courses.
+2025-08-09 20:44:52,721 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:52] "GET /course HTTP/1.1" 200 -
+2025-08-09 20:44:52,752 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:52] "GET /static/js/users/flash.js HTTP/1.1" 200 -
+2025-08-09 20:44:52,753 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:52] "GET /static/css/users/index/index.css HTTP/1.1" 200 -
+2025-08-09 20:44:52,753 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:52] "GET /static/js/users/navbar/navbar.js HTTP/1.1" 200 -
+2025-08-09 20:44:52,754 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:52] "GET /static/css/users/flash.css HTTP/1.1" 200 -
+2025-08-09 20:44:52,760 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:52] "GET /static/css/users/enroll/enroll.css HTTP/1.1" 200 -
+2025-08-09 20:44:52,760 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:52] "GET /static/css/users/enroll/popup.css HTTP/1.1" 200 -
+2025-08-09 20:44:52,775 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:52] "GET /static/js/users/enroll/enroll_courses.js HTTP/1.1" 200 -
+2025-08-09 20:44:52,775 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:52] "GET /static/js/users/enroll/available_courses.js HTTP/1.1" 200 -
+2025-08-09 20:44:52,775 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:52] "GET /static/js/users/enroll/enroll_popup.js HTTP/1.1" 200 -
+2025-08-09 20:44:56,532 [INFO] User rajakumarvijeta7087@gmail.com is viewing their enrolled courses.
+2025-08-09 20:44:56,577 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:56] "GET /my_courses HTTP/1.1" 200 -
+2025-08-09 20:44:56,608 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:56] "GET /static/css/users/flash.css HTTP/1.1" 200 -
+2025-08-09 20:44:56,609 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:56] "GET /static/css/users/enroll/enroll.css HTTP/1.1" 200 -
+2025-08-09 20:44:56,610 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:56] "GET /static/css/users/enroll/popup.css HTTP/1.1" 200 -
+2025-08-09 20:44:56,615 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:56] "GET /static/js/users/navbar/navbar.js HTTP/1.1" 200 -
+2025-08-09 20:44:56,615 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:56] "GET /static/js/users/flash.js HTTP/1.1" 200 -
+2025-08-09 20:44:56,615 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:56] "GET /static/css/users/index/index.css HTTP/1.1" 200 -
+2025-08-09 20:44:56,634 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:56] "GET /static/js/users/enroll/enroll_courses.js HTTP/1.1" 200 -
+2025-08-09 20:44:56,636 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:56] "GET /static/js/users/enroll/available_courses.js HTTP/1.1" 200 -
+2025-08-09 20:44:56,640 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:56] "GET /static/js/users/enroll/enroll_popup.js HTTP/1.1" 200 -
+2025-08-09 20:44:58,420 [INFO] User rajakumarvijeta7087@gmail.com accessing dashboard for course CS.
+2025-08-09 20:44:58,603 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:58] "GET /dashboard/CS/tkzWer1ADfYjIDMclfXrlCccMJDq4UNvNsn2-c8l HTTP/1.1" 200 -
+2025-08-09 20:44:58,649 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:58] "[33mGET /static/css/users/bootstrap.min.css HTTP/1.1[0m" 404 -
+2025-08-09 20:44:58,650 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:58] "GET /static/css/users/index/index.css HTTP/1.1" 200 -
+2025-08-09 20:44:58,656 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:58] "GET /static/css/users/flash.css HTTP/1.1" 200 -
+2025-08-09 20:44:58,657 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:58] "[33mGET /static/default-course.jpg HTTP/1.1[0m" 404 -
+2025-08-09 20:44:58,658 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:58] "GET /static/js/users/navbar/navbar.js HTTP/1.1" 200 -
+2025-08-09 20:44:58,672 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:58] "GET /static/css/users/dashboard/materials.css HTTP/1.1" 200 -
+2025-08-09 20:44:58,674 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:58] "GET /static/js/users/flash.js HTTP/1.1" 200 -
+2025-08-09 20:44:58,685 [INFO] 127.0.0.1 - - [09/Aug/2025 20:44:58] "[33mGET /static/default-course.jpg HTTP/1.1[0m" 404 -
+2025-08-09 20:45:01,355 [INFO] User 'rajakumarvijeta7087@gmail.com' starting topic-wise browse for paper: CS
+2025-08-09 20:45:01,366 [INFO] 127.0.0.1 - - [09/Aug/2025 20:45:01] "[32mGET /questions/topic/CS?unique_code=tkzWer1ADfYjIDMclfXrlCccMJDq4UNvNsn2-c8l HTTP/1.1[0m" 302 -
+2025-08-09 20:45:01,372 [INFO] User 'rajakumarvijeta7087@gmail.com' fetching subjects for paper: CS
+2025-08-09 20:45:01,471 [INFO] 127.0.0.1 - - [09/Aug/2025 20:45:01] "GET /questions/topic/tkzWer1ADfYjIDMclfXrlCccMJDq4UNvNsn2-c8l/CS HTTP/1.1" 200 -
+2025-08-09 20:45:01,505 [INFO] 127.0.0.1 - - [09/Aug/2025 20:45:01] "GET /static/css/users/index/index.css HTTP/1.1" 200 -
+2025-08-09 20:45:01,506 [INFO] 127.0.0.1 - - [09/Aug/2025 20:45:01] "GET /static/js/users/navbar/navbar.js HTTP/1.1" 200 -
+2025-08-09 20:45:01,517 [INFO] 127.0.0.1 - - [09/Aug/2025 20:45:01] "GET /static/css/admin/manage_qpractice/question_display.css HTTP/1.1" 200 -
+2025-08-09 20:45:01,526 [INFO] 127.0.0.1 - - [09/Aug/2025 20:45:01] "GET /static/js/users/practice_question/resultHandler.js HTTP/1.1" 200 -
+2025-08-09 20:45:02,836 [INFO] User 'rajakumarvijeta7087@gmail.com' fetching topics for subject: General Science, paper: CS
+2025-08-09 20:45:02,873 [INFO] 127.0.0.1 - - [09/Aug/2025 20:45:02] "GET /questions/topic/tkzWer1ADfYjIDMclfXrlCccMJDq4UNvNsn2-c8l/CS/General%20Science HTTP/1.1" 200 -
+2025-08-09 20:45:02,903 [INFO] 127.0.0.1 - - [09/Aug/2025 20:45:02] "GET /static/css/users/index/index.css HTTP/1.1" 200 -
+2025-08-09 20:45:02,904 [INFO] 127.0.0.1 - - [09/Aug/2025 20:45:02] "GET /static/js/users/navbar/navbar.js HTTP/1.1" 200 -
+2025-08-09 20:45:02,906 [INFO] 127.0.0.1 - - [09/Aug/2025 20:45:02] "GET /static/css/admin/manage_qpractice/question_display.css HTTP/1.1" 200 -
+2025-08-09 20:45:02,910 [INFO] 127.0.0.1 - - [09/Aug/2025 20:45:02] "GET /static/js/users/practice_question/resultHandler.js HTTP/1.1" 200 -
+2025-08-09 20:45:03,940 [INFO] User 'rajakumarvijeta7087@gmail.com' viewing questions for topic: Human Body, page: 1
+2025-08-09 20:45:04,088 [INFO] 127.0.0.1 - - [09/Aug/2025 20:45:04] "GET /questions/topic/tkzWer1ADfYjIDMclfXrlCccMJDq4UNvNsn2-c8l/CS/General%20Science/Human%20Body HTTP/1.1" 200 -
+2025-08-09 20:45:04,116 [INFO] 127.0.0.1 - - [09/Aug/2025 20:45:04] "GET /static/js/users/navbar/navbar.js HTTP/1.1" 200 -
+2025-08-09 20:45:04,116 [INFO] 127.0.0.1 - - [09/Aug/2025 20:45:04] "GET /static/css/users/index/index.css HTTP/1.1" 200 -
+2025-08-09 20:45:04,117 [INFO] 127.0.0.1 - - [09/Aug/2025 20:45:04] "GET /static/css/admin/manage_qpractice/question_display.css HTTP/1.1" 200 -
+2025-08-09 20:45:04,118 [INFO] 127.0.0.1 - - [09/Aug/2025 20:45:04] "GET /static/js/users/practice_question/resultHandler.js HTTP/1.1" 200 -
+2025-08-09 20:45:06,045 [INFO] User 'rajakumarvijeta7087@gmail.com' checking answer for question_id: 1 with option: A
+2025-08-09 20:45:06,046 [INFO] Answer for QID:1 by user 'rajakumarvijeta7087@gmail.com' was incorrect.
+2025-08-09 20:45:06,055 [INFO] 127.0.0.1 - - [09/Aug/2025 20:45:06] "POST /check_answer/1 HTTP/1.1" 200 -
+2025-08-09 20:45:10,662 [INFO] User 'rajakumarvijeta7087@gmail.com' checking answer for question_id: 2 with option: A
+2025-08-09 20:45:10,681 [INFO] Answer for QID:2 by user 'rajakumarvijeta7087@gmail.com' was correct.
+2025-08-09 20:45:10,684 [INFO] 127.0.0.1 - - [09/Aug/2025 20:45:10] "POST /check_answer/2 HTTP/1.1" 200 -
+2025-08-09 20:45:13,437 [INFO] User 'rajakumarvijeta7087@gmail.com' checking answer for question_id: 3 with option: A
+2025-08-09 20:45:13,440 [INFO] Answer for QID:3 by user 'rajakumarvijeta7087@gmail.com' was incorrect.
+2025-08-09 20:45:13,445 [INFO] 127.0.0.1 - - [09/Aug/2025 20:45:13] "POST /check_answer/3 HTTP/1.1" 200 -
+2025-08-09 20:57:29,988 [INFO] package: mysql.connector.plugins
+2025-08-09 20:57:29,988 [INFO] plugin_name: caching_sha2_password
+2025-08-09 20:57:29,988 [INFO] AUTHENTICATION_PLUGIN_CLASS: MySQLCachingSHA2PasswordAuthPlugin
+2025-08-09 20:57:30,971 [INFO] Successfully created shared database connection pool.
+2025-08-09 20:59:29,521 [INFO] package: mysql.connector.plugins
+2025-08-09 20:59:29,521 [INFO] plugin_name: caching_sha2_password
+2025-08-09 20:59:29,524 [INFO] AUTHENTICATION_PLUGIN_CLASS: MySQLCachingSHA2PasswordAuthPlugin
+2025-08-09 20:59:29,793 [INFO] Successfully created shared database connection pool.
+2025-08-09 20:59:32,257 [INFO] [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-08-09 20:59:32,257 [INFO] [33mPress CTRL+C to quit[0m
+2025-08-09 20:59:41,880 [INFO] User 'rajakumarvijeta7087@gmail.com' viewing questions for topic: Human Body, page: 1
+2025-08-09 20:59:42,208 [INFO] 127.0.0.1 - - [09/Aug/2025 20:59:42] "GET /questions/topic/tkzWer1ADfYjIDMclfXrlCccMJDq4UNvNsn2-c8l/CS/General%20Science/Human%20Body HTTP/1.1" 200 -
+2025-08-09 20:59:42,574 [INFO] 127.0.0.1 - - [09/Aug/2025 20:59:42] "GET /static/js/users/navbar/navbar.js HTTP/1.1" 200 -
+2025-08-09 20:59:42,576 [INFO] 127.0.0.1 - - [09/Aug/2025 20:59:42] "GET /static/css/users/index/index.css HTTP/1.1" 200 -
+2025-08-09 20:59:42,578 [INFO] 127.0.0.1 - - [09/Aug/2025 20:59:42] "GET /static/js/users/practice_question/resultHandler.js HTTP/1.1" 200 -
+2025-08-09 20:59:42,583 [INFO] 127.0.0.1 - - [09/Aug/2025 20:59:42] "GET /static/css/admin/manage_qpractice/question_display.css HTTP/1.1" 200 -
+2025-08-09 20:59:44,016 [INFO] User 'rajakumarvijeta7087@gmail.com' fetching topics for subject: General Science, paper: CS
+2025-08-09 20:59:44,064 [INFO] 127.0.0.1 - - [09/Aug/2025 20:59:44] "GET /questions/topic/tkzWer1ADfYjIDMclfXrlCccMJDq4UNvNsn2-c8l/CS/General%20Science HTTP/1.1" 200 -
+2025-08-09 20:59:44,121 [INFO] 127.0.0.1 - - [09/Aug/2025 20:59:44] "GET /static/js/users/practice_question/resultHandler.js HTTP/1.1" 200 -
+2025-08-09 20:59:44,128 [INFO] 127.0.0.1 - - [09/Aug/2025 20:59:44] "GET /static/css/users/index/index.css HTTP/1.1" 200 -
+2025-08-09 20:59:44,129 [INFO] 127.0.0.1 - - [09/Aug/2025 20:59:44] "GET /static/js/users/navbar/navbar.js HTTP/1.1" 200 -
+2025-08-09 20:59:44,131 [INFO] 127.0.0.1 - - [09/Aug/2025 20:59:44] "GET /static/css/admin/manage_qpractice/question_display.css HTTP/1.1" 200 -
+2025-08-09 20:59:45,445 [INFO] User 'rajakumarvijeta7087@gmail.com' fetching subjects for paper: CS
+2025-08-09 20:59:45,482 [INFO] 127.0.0.1 - - [09/Aug/2025 20:59:45] "GET /questions/topic/tkzWer1ADfYjIDMclfXrlCccMJDq4UNvNsn2-c8l/CS HTTP/1.1" 200 -
+2025-08-09 20:59:45,528 [INFO] 127.0.0.1 - - [09/Aug/2025 20:59:45] "GET /static/js/users/navbar/navbar.js HTTP/1.1" 200 -
+2025-08-09 20:59:45,536 [INFO] 127.0.0.1 - - [09/Aug/2025 20:59:45] "GET /static/css/admin/manage_qpractice/question_display.css HTTP/1.1" 200 -
+2025-08-09 20:59:45,536 [INFO] 127.0.0.1 - - [09/Aug/2025 20:59:45] "GET /static/js/users/practice_question/resultHandler.js HTTP/1.1" 200 -
+2025-08-09 20:59:45,536 [INFO] 127.0.0.1 - - [09/Aug/2025 20:59:45] "GET /static/css/users/index/index.css HTTP/1.1" 200 -
+2025-08-09 20:59:46,307 [INFO] User rajakumarvijeta7087@gmail.com accessing dashboard for course CS.
+2025-08-09 20:59:46,525 [INFO] 127.0.0.1 - - [09/Aug/2025 20:59:46] "GET /dashboard/CS/tkzWer1ADfYjIDMclfXrlCccMJDq4UNvNsn2-c8l HTTP/1.1" 200 -
+2025-08-09 20:59:46,581 [INFO] 127.0.0.1 - - [09/Aug/2025 20:59:46] "[33mGET /static/default-course.jpg HTTP/1.1[0m" 404 -
+2025-08-09 20:59:46,589 [INFO] 127.0.0.1 - - [09/Aug/2025 20:59:46] "GET /static/css/users/index/index.css HTTP/1.1" 200 -
+2025-08-09 20:59:46,593 [INFO] 127.0.0.1 - - [09/Aug/2025 20:59:46] "GET /static/css/users/flash.css HTTP/1.1" 200 -
+2025-08-09 20:59:46,597 [INFO] 127.0.0.1 - - [09/Aug/2025 20:59:46] "GET /static/js/users/navbar/navbar.js HTTP/1.1" 200 -
+2025-08-09 20:59:46,598 [INFO] 127.0.0.1 - - [09/Aug/2025 20:59:46] "[33mGET /static/css/users/bootstrap.min.css HTTP/1.1[0m" 404 -
+2025-08-09 20:59:46,598 [INFO] 127.0.0.1 - - [09/Aug/2025 20:59:46] "GET /static/css/users/dashboard/materials.css HTTP/1.1" 200 -
+2025-08-09 20:59:46,618 [INFO] 127.0.0.1 - - [09/Aug/2025 20:59:46] "GET /static/js/users/flash.js HTTP/1.1" 200 -
+2025-08-09 20:59:46,631 [INFO] 127.0.0.1 - - [09/Aug/2025 20:59:46] "[33mGET /static/default-course.jpg HTTP/1.1[0m" 404 -
+2025-08-09 20:59:50,108 [INFO] Displaying purchase dashboard for user rajakumarvijeta7087@gmail.com.
+2025-08-09 20:59:50,399 [INFO] 127.0.0.1 - - [09/Aug/2025 20:59:50] "GET /purchase/CS/tkzWer1ADfYjIDMclfXrlCccMJDq4UNvNsn2-c8l HTTP/1.1" 200 -
+2025-08-09 20:59:50,467 [INFO] 127.0.0.1 - - [09/Aug/2025 20:59:50] "GET /static/css/users/purchase/dashboard.css HTTP/1.1" 200 -
+2025-08-09 20:59:53,421 [INFO] Access granted for user rajakumarvijeta7087@gmail.com to course CS with code tkzWer1ADfYjIDMclfXrlCccMJDq4UNvNsn2-c8l
+2025-08-09 20:59:53,422 [INFO] USER_SESSION: Session valid. Email: rajakumarvijeta7087@gmail.com, Username: Raja Kumar
+2025-08-09 20:59:53,700 [INFO] 127.0.0.1 - - [09/Aug/2025 20:59:53] "GET /open/mock_test/cspaidmocktestecc6c90ac3524d5c/CS/tkzWer1ADfYjIDMclfXrlCccMJDq4UNvNsn2-c8l HTTP/1.1" 200 -
+2025-08-09 20:59:53,761 [INFO] 127.0.0.1 - - [09/Aug/2025 20:59:53] "GET /static/css/users/mock_test/test_dashboard.css HTTP/1.1" 200 -
+2025-08-09 20:59:53,781 [INFO] 127.0.0.1 - - [09/Aug/2025 20:59:53] "GET /static/js/users/mock_test/test_dashboard.js HTTP/1.1" 200 -
+2025-08-09 20:59:56,681 [INFO] Access granted for user rajakumarvijeta7087@gmail.com to course CS with code tkzWer1ADfYjIDMclfXrlCccMJDq4UNvNsn2-c8l
+2025-08-09 20:59:56,681 [INFO] USER_SESSION: Session valid. Email: rajakumarvijeta7087@gmail.com, Username: Raja Kumar
+2025-08-09 20:59:56,747 [INFO] User rajakumarvijeta7087@gmail.com is viewing test result for test_key: bc6af0f5ad1cdb09b551acdf
+2025-08-09 20:59:57,159 [INFO] 127.0.0.1 - - [09/Aug/2025 20:59:57] "GET /test_result/bc6af0f5ad1cdb09b551acdf/CS/tkzWer1ADfYjIDMclfXrlCccMJDq4UNvNsn2-c8l HTTP/1.1" 200 -
+2025-08-09 20:59:57,198 [INFO] 127.0.0.1 - - [09/Aug/2025 20:59:57] "GET /static/css/users/index/index.css HTTP/1.1" 200 -
+2025-08-09 20:59:57,198 [INFO] 127.0.0.1 - - [09/Aug/2025 20:59:57] "GET /static/js/users/navbar/navbar.js HTTP/1.1" 200 -
+2025-08-09 20:59:57,215 [INFO] 127.0.0.1 - - [09/Aug/2025 20:59:57] "GET /static/css/users/mock_test/test_result.css HTTP/1.1" 200 -
+2025-08-09 20:59:59,562 [INFO] Access granted for user rajakumarvijeta7087@gmail.com to course CS with code tkzWer1ADfYjIDMclfXrlCccMJDq4UNvNsn2-c8l
+2025-08-09 20:59:59,562 [INFO] USER_SESSION: Session valid. Email: rajakumarvijeta7087@gmail.com, Username: Raja Kumar
+2025-08-09 20:59:59,610 [INFO] User rajakumarvijeta7087@gmail.com is viewing test analysis for test_key: bc6af0f5ad1cdb09b551acdf
+2025-08-09 21:00:00,067 [INFO] 127.0.0.1 - - [09/Aug/2025 21:00:00] "GET /test_analysis/bc6af0f5ad1cdb09b551acdf/CS/tkzWer1ADfYjIDMclfXrlCccMJDq4UNvNsn2-c8l HTTP/1.1" 200 -
+2025-08-09 21:00:00,119 [INFO] 127.0.0.1 - - [09/Aug/2025 21:00:00] "GET /static/css/users/index/index.css HTTP/1.1" 200 -
+2025-08-09 21:00:00,119 [INFO] 127.0.0.1 - - [09/Aug/2025 21:00:00] "GET /static/js/users/navbar/navbar.js HTTP/1.1" 200 -
+2025-08-09 21:00:00,128 [INFO] 127.0.0.1 - - [09/Aug/2025 21:00:00] "GET /static/css/users/mock_test/test_analysis.css HTTP/1.1" 200 -
